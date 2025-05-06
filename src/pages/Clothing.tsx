@@ -2,7 +2,7 @@
 import React from 'react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
-import { TShirt } from 'lucide-react';
+import { Shirt } from 'lucide-react';
 
 const Clothing: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ const Clothing: React.FC = () => {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
-                    <TShirt size={80} className="text-gray-400" />
+                    <Shirt size={80} className="text-gray-400" />
                   </div>
                 )}
               </div>
