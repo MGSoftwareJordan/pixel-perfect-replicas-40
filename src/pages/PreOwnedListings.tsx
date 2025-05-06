@@ -3,7 +3,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, ArrowLeft, Star } from 'lucide-react';
+import { Heart, ArrowLeft, Star, Info } from 'lucide-react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 
@@ -26,7 +26,11 @@ const PreOwnedListings: React.FC = () => {
       condition: "9/10",
       originalPrice: "€178",
       discount: "-28%",
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/478bc0398700d77556d57437a15fa378fc43d838?placeholderIfAbsent=true",
+      images: [
+        "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?q=80&w=2121&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1587&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?q=80&w=1965&auto=format&fit=crop"
+      ],
       seller: {
         name: "SneakerHeads",
         rating: 4.8,
@@ -40,7 +44,11 @@ const PreOwnedListings: React.FC = () => {
       condition: "8/10",
       originalPrice: "€178",
       discount: "-24%",
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/ef61aa1780cbf7c1996fd43b23a51284b2603945?placeholderIfAbsent=true",
+      images: [
+        "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1621665421558-831f91fd0500?q=80&w=1974&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?q=80&w=2112&auto=format&fit=crop"
+      ],
       seller: {
         name: "SneakerLover",
         rating: 4.6,
@@ -54,7 +62,11 @@ const PreOwnedListings: React.FC = () => {
       condition: "9.5/10",
       originalPrice: "€178",
       discount: "-16%",
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/81da93ff12d5208ef959a4f82a8cf15021032e44?placeholderIfAbsent=true",
+      images: [
+        "https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=2031&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1605348532760-6753d2c43329?q=80&w=2020&auto=format&fit=crop"
+      ],
       seller: {
         name: "KickKings",
         rating: 4.9,
@@ -68,7 +80,11 @@ const PreOwnedListings: React.FC = () => {
       condition: "7/10",
       originalPrice: "€178",
       discount: "-33%",
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8ac83ea04bc480ea93ab3dbfd95bab4b25dffd9f?placeholderIfAbsent=true",
+      images: [
+        "https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1543508282-6319a3e2621f?q=80&w=1915&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1521093470119-a3acdc43374a?q=80&w=1974&auto=format&fit=crop"
+      ],
       seller: {
         name: "ShoeMaster",
         rating: 4.2,
@@ -92,9 +108,9 @@ const PreOwnedListings: React.FC = () => {
           </Link>
         </div>
         
-        <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 shadow-sm mb-8">
+        <div className="bg-white rounded-xl p-6 shadow-sm mb-8 border border-gray-100">
           <div className="flex items-center gap-4">
-            <div className="h-20 w-20 bg-white rounded-lg p-2 flex items-center justify-center">
+            <div className="h-20 w-20 bg-gray-50 rounded-lg p-2 flex items-center justify-center">
               <img 
                 src={product.image} 
                 alt={product.name}
@@ -119,29 +135,29 @@ const PreOwnedListings: React.FC = () => {
           {listings.map(listing => (
             <div 
               key={listing.id}
-              className="bg-gradient-to-br from-white to-gray-50 rounded-xl overflow-hidden hover:shadow-md transition-shadow"
+              className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all"
             >
               <Link to={`/pre-owned/${listing.id}`} className="flex">
-                <div className="relative w-1/3">
+                <div className="relative w-2/5">
                   <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white">
                     PRE-OWNED
                   </Badge>
-                  <div className="h-full bg-gray-50 p-2 flex items-center justify-center">
+                  <div className="h-full bg-gray-50 flex items-center justify-center overflow-hidden">
                     <img 
-                      src={listing.image} 
+                      src={listing.images[0]} 
                       alt={product.name}
-                      className="max-h-full max-w-full object-contain"
+                      className="h-full w-full object-cover"
                     />
                   </div>
                 </div>
                 
-                <div className="w-2/3 p-4">
+                <div className="w-3/5 p-4">
                   <div className="flex justify-between items-start">
                     <div>
                       <div className="text-sm text-gray-600">{product.brand}</div>
                       <h3 className="font-medium text-[#00262F]">{product.name}</h3>
                     </div>
-                    <button className="text-gray-400 hover:text-red-500 transition-colors">
+                    <button className="text-gray-400 hover:text-red-500 transition-colors p-1">
                       <Heart className="h-5 w-5" />
                     </button>
                   </div>
@@ -165,7 +181,7 @@ const PreOwnedListings: React.FC = () => {
                   
                   <div className="mt-2 flex justify-between items-center">
                     <div className="flex items-center gap-1">
-                      <div className="text-xs bg-gray-100 px-2 py-1 rounded flex items-center">
+                      <div className="text-xs bg-gray-50 px-2 py-1 rounded flex items-center">
                         <span className="font-medium">{listing.seller.name}</span>
                         {listing.seller.verified && (
                           <span className="ml-1 text-[#1EC0A3] text-xs">✓</span>
@@ -189,10 +205,13 @@ const PreOwnedListings: React.FC = () => {
           ))}
         </div>
         
-        <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 mb-16">
-          <h3 className="text-xl font-bold text-[#00262F] mb-4">
-            Over pre-owned {product.name}
-          </h3>
+        <div className="bg-white rounded-xl p-6 mb-16 shadow-sm border border-gray-100">
+          <div className="flex items-start gap-2 mb-4">
+            <Info className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" />
+            <h3 className="text-xl font-bold text-[#00262F]">
+              Over pre-owned {product.name}
+            </h3>
+          </div>
           <p className="text-gray-600 mb-4">
             Bij Boxstock vindt je de beste pre-owned {product.name} sneakers 
             die door onze authenticatie experts zijn gecontroleerd. Elke sneaker 

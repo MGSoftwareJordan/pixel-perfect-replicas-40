@@ -2,7 +2,14 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, Heart, ShoppingCart } from 'lucide-react';
+import { Star, Heart, ShoppingCart, MessageCircle, Shield, Info } from 'lucide-react';
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const PreOwnedProductDetail: React.FC = () => {
   // Sample pre-owned product
@@ -13,10 +20,10 @@ const PreOwnedProductDetail: React.FC = () => {
     price: '€178',
     originalPrice: '€220',
     images: [
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/56c5b409cc96b961d2c99ebaa3e2ba425f3dd0b9?placeholderIfAbsent=true',
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/1209df7af3652089ec3aab75c4ce28741fb2e7f5?placeholderIfAbsent=true',
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/9329571d02ed75d5d09d00213aebb56db78270a0?placeholderIfAbsent=true',
-      'https://cdn.builder.io/api/v1/image/assets/TEMP/a0e5727e94ca808e4b40131e58d738956d1b42ea?placeholderIfAbsent=true',
+      'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?q=80&w=2121&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1587&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600269452121-4f2416e55c28?q=80&w=1965&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1621665421558-831f91fd0500?q=80&w=1974&auto=format&fit=crop',
     ],
     condition: '9/10',
     size: 'EU 42',
@@ -38,7 +45,6 @@ const PreOwnedProductDetail: React.FC = () => {
     }
   };
 
-  const [selectedImage, setSelectedImage] = useState(0);
   const [liked, setLiked] = useState(false);
 
   return (
@@ -46,15 +52,27 @@ const PreOwnedProductDetail: React.FC = () => {
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Product Gallery - Left side */}
         <div className="lg:w-[55%] space-y-4">
-          <div className="relative">
+          <div className="relative bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
             <Badge className="absolute top-4 left-4 z-10 bg-[#1EC0A3] text-white">PRE-OWNED</Badge>
-            <div className="aspect-[4/3] bg-gray-50 rounded-xl overflow-hidden">
-              <img 
-                src={product.images[selectedImage]} 
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            
+            <Carousel className="w-full" opts={{ loop: true }}>
+              <CarouselContent>
+                {product.images.map((img, index) => (
+                  <CarouselItem key={index}>
+                    <div className="aspect-[4/3] flex items-center justify-center bg-gray-50 p-1">
+                      <img 
+                        src={img} 
+                        alt={`${product.name} - image ${index + 1}`}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-2" />
+              <CarouselNext className="right-2" />
+            </Carousel>
+            
             <button 
               onClick={() => setLiked(!liked)} 
               className={`absolute top-4 right-4 p-2 rounded-full ${liked ? 'bg-[#E41A36] text-white' : 'bg-white text-gray-600'} shadow-md`}
@@ -67,26 +85,30 @@ const PreOwnedProductDetail: React.FC = () => {
             {product.images.map((image, idx) => (
               <div 
                 key={idx} 
-                className={`aspect-square bg-gray-50 rounded-lg overflow-hidden cursor-pointer ${selectedImage === idx ? 'ring-2 ring-[#1EC0A3]' : ''}`}
-                onClick={() => setSelectedImage(idx)}
+                className="aspect-square bg-white rounded-lg overflow-hidden cursor-pointer border border-gray-100 p-1"
               >
                 <img 
                   src={image} 
                   alt={`${product.name} view ${idx+1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover rounded"
                 />
               </div>
             ))}
           </div>
           
-          <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 shadow-sm">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex flex-col items-start text-[#00262F]">
-              <div className="text-xl font-bold mb-4 text-[#00262F]">
-                Verkoper Informatie
+              <div className="flex items-center gap-2 mb-4 w-full">
+                <div className="text-xl font-bold text-[#00262F]">
+                  Verkoper
+                </div>
+                <Badge variant="outline" className="bg-[#1EC0A3]/10 text-[#1EC0A3] border-[#1EC0A3]/20">
+                  Geverifieerd
+                </Badge>
               </div>
               
               <div className="flex items-center gap-4 w-full mb-4">
-                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold">
+                <div className="w-12 h-12 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-lg font-bold text-[#1EC0A3]">
                   {product.seller.name[0]}
                 </div>
                 <div className="flex-1">
@@ -109,7 +131,8 @@ const PreOwnedProductDetail: React.FC = () => {
                 </div>
               </div>
               
-              <Button className="w-full mt-4 bg-[#00262F] hover:bg-[#064559] text-white">
+              <Button className="w-full mt-4 bg-white text-[#00262F] border border-[#00262F] hover:bg-gray-50 flex gap-2 items-center justify-center">
+                <MessageCircle className="w-4 h-4" />
                 Contact verkoper
               </Button>
             </div>
@@ -118,7 +141,7 @@ const PreOwnedProductDetail: React.FC = () => {
         
         {/* Product Info - Right side */}
         <div className="lg:w-[45%]">
-          <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 shadow-sm h-full">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 h-full">
             <div className="space-y-6">
               <div>
                 <div className="text-gray-600 text-lg">{product.brand}</div>
@@ -160,13 +183,16 @@ const PreOwnedProductDetail: React.FC = () => {
               </div>
               
               <div>
-                <h3 className="font-medium text-[#00262F] mb-3">Beschrijving</h3>
+                <h3 className="font-medium text-[#00262F] mb-3">Beschrijving van verkoper</h3>
                 <p className="text-gray-600">{product.description}</p>
               </div>
               
-              <div>
-                <h3 className="font-medium text-[#00262F] mb-3">Pre-owned kenmerken</h3>
-                <ul className="space-y-2 text-gray-600">
+              <div className="bg-[#F8F8F8] rounded-lg p-4">
+                <div className="flex items-start gap-2 mb-3">
+                  <Info className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" />
+                  <h3 className="font-medium text-[#00262F]">Pre-owned kenmerken</h3>
+                </div>
+                <ul className="space-y-2 text-gray-600 ml-7">
                   {product.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start">
                       <div className="text-[#1EC0A3] mr-2">✓</div>
@@ -186,18 +212,16 @@ const PreOwnedProductDetail: React.FC = () => {
                 </Button>
               </div>
               
-              <div className="flex justify-between text-sm text-gray-500">
+              <div className="flex flex-col gap-3 text-sm text-gray-500 pt-4 border-t border-gray-200">
                 <div className="flex items-center">
-                  <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <Shield className="w-5 h-5 mr-2 text-[#1EC0A3]" />
+                  <span>Echtheidscontrole door Boxstock experts</span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="w-5 h-5 mr-2 text-[#1EC0A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <span>Voor 23:59 besteld, morgen in huis</span>
-                </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                  </svg>
-                  <span>Echtheidscontrole</span>
                 </div>
               </div>
             </div>
