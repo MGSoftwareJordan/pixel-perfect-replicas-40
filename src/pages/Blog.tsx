@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
@@ -28,7 +27,7 @@ const blogPosts = [
   {
     id: 3,
     title: 'De opkomst van digitale mode en NFT sneakers',
-    excerpt: 'Hoe digitale mode en NFT's de sneakerwereld transformeren en wat dit betekent voor verzamelaars en investeerders.',
+    excerpt: "Hoe digitale mode en NFT's de sneakerwereld transformeren en wat dit betekent voor verzamelaars en investeerders.",
     image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true',
     date: '15 april 2025',
     author: 'Thomas Visser',
