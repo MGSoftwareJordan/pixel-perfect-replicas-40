@@ -2,7 +2,7 @@
 import React from 'react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
-import { Button } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import PreOwnedProductDetail from '@/components/boxstock/PreOwnedProductDetail';
 import PreOwnedProducts from '@/components/boxstock/PreOwnedProducts';
 
