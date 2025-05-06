@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -98,4 +99,59 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Blog prose styling */
+.prose h2 {
+  @apply text-2xl font-bold mt-8 mb-4 text-[#00262F];
+}
+
+.prose h3 {
+  @apply text-xl font-bold mt-6 mb-3 text-[#00262F];
+}
+
+.prose p {
+  @apply mb-4 text-gray-700 leading-relaxed;
+}
+
+.prose .lead {
+  @apply text-lg text-gray-800 font-medium mb-6;
+}
+
+.prose ul, .prose ol {
+  @apply my-6 pl-6;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose ul li {
+  @apply list-disc;
+}
+
+.prose ol li {
+  @apply list-decimal;
+}
+
+.prose figure {
+  @apply my-8;
+}
+
+.prose figure img {
+  @apply w-full rounded-lg shadow-sm;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }

@@ -1,9 +1,18 @@
+
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
   return (
     <>
       <div className="flex items-center gap-5 mr-[118px] max-md:mr-2.5">
+        <Link to="/blog" className="self-stretch text-sm text-[#00262f] font-bold whitespace-nowrap leading-6 my-auto hover:text-[#05414F] transition-colors">
+          <div className="flex min-h-10 items-stretch">
+            <div className="self-stretch gap-2 h-full py-3 rounded-[20px]">
+              Blog
+            </div>
+          </div>
+        </Link>
         <div className="self-stretch text-sm text-[#00262f] font-bold whitespace-nowrap leading-6 my-auto">
           <div className="flex min-h-10 items-stretch">
             <div className="self-stretch gap-2 h-full py-3 rounded-[20px]">
@@ -30,11 +39,13 @@ const Header: React.FC = () => {
         </div>
       </div>
       <div className="self-center flex w-full max-w-[1199px] items-stretch gap-5 text-base text-[rgba(204,204,204,1)] font-medium flex-wrap justify-between mt-3 max-md:max-w-full">
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/e1ad84d1ff291f4f339854893a1c0bfa59bc73ca?placeholderIfAbsent=true"
-          className="aspect-[6.62] object-contain w-[179px] shrink-0 max-w-full my-auto"
-          alt="Boxstock logo"
-        />
+        <Link to="/">
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e1ad84d1ff291f4f339854893a1c0bfa59bc73ca?placeholderIfAbsent=true"
+            className="aspect-[6.62] object-contain w-[179px] shrink-0 max-w-full my-auto"
+            alt="Boxstock logo"
+          />
+        </Link>
         <div className="justify-center items-stretch border border-[color:var(--Neutrals-Black-200,#C3C5DB)] flex min-h-10 flex-col overflow-hidden bg-white py-[7px] rounded-lg border-solid max-md:max-w-full">
           <div className="flex min-h-[27px] w-full items-center gap-2 flex-wrap px-4 max-md:max-w-full">
             <img
