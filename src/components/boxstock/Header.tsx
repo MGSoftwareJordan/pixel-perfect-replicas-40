@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Search, User, ShoppingBag, Heart, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -24,6 +25,7 @@ const Header: React.FC = () => {
       <div className="border-b border-gray-100">
         <div className="container mx-auto max-w-6xl px-4 py-2">
           <div className="flex items-center justify-end gap-5 text-sm">
+            <LanguageSwitcher />
             <Link to="/blog" className="text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
               Blog
             </Link>

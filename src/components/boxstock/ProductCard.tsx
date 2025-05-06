@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <img
               src={image}
               alt={`${brand} ${name}`}
-              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
