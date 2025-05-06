@@ -188,78 +188,48 @@ const PreOwnedListings: React.FC = () => {
                     size="sm"
                     variant="outline"
                     className="hidden sm:flex items-center gap-2"
+                    asChild
                   >
-                    <User className="h-4 w-4" />
-                    Bekijk profiel
+                    <Link to={`/profile/${seller.id}`}>
+                      <User className="h-4 w-4" />
+                      Bekijk profiel
+                    </Link>
                   </Button>
                 </div>
                 <p className="text-sm text-gray-600 mt-3 line-clamp-2">{seller.bio}</p>
               </div>
               
-              {/* Seller listings */}
+              {/* Seller listings - Simplified as requested */}
               <div className="p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {seller.listings.map((listing) => (
                     <Card 
                       key={listing.id}
                       className="overflow-hidden hover:shadow-md transition-all border-gray-100 group"
                     >
                       <Link to={`/pre-owned/${listing.id}`} className="block">
-                        <div className="flex flex-col sm:flex-row h-full">
-                          {/* Left side - Photos */}
-                          <div className="sm:w-2/5 relative">
-                            <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white text-xs">
-                              PRE-OWNED
-                            </Badge>
-                            <AspectRatio ratio={1/1} className="bg-gray-50">
-                              <img 
-                                src={listing.images[0]} 
-                                alt={`${product.name} door ${seller.name}`}
-                                className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
-                              />
-                            </AspectRatio>
-                            <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors">
-                              <Heart className="h-4 w-4" />
-                            </button>
-                          </div>
-                          
-                          {/* Right side - Info */}
-                          <CardContent className="p-3 sm:p-4 sm:w-3/5 flex flex-col h-full">
-                            <div className="mb-1">
-                              <div className="text-xs text-gray-600">{product.brand}</div>
-                              <h3 className="font-medium text-[#00262F] line-clamp-1 text-sm">{product.name}</h3>
-                            </div>
-                            
-                            <div className="flex items-center gap-2 mb-1">
-                              <div className="text-lg font-bold text-[#E41A36]">{listing.price}</div>
-                              <div className="text-xs text-gray-500 line-through">{listing.originalPrice}</div>
-                              <div className="bg-[#E41A36]/10 text-[#E41A36] text-xs px-1.5 py-0.5 rounded">
-                                {listing.discount}
-                              </div>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-2 text-xs mb-2">
-                              <div>
-                                <span className="text-gray-500">Conditie:</span> {listing.condition}
-                              </div>
-                              <div>
-                                <span className="text-gray-500">Maat:</span> {listing.size}
-                              </div>
-                            </div>
-                            
-                            <p className="text-gray-600 text-xs line-clamp-2 mb-3">{listing.description}</p>
-                            
-                            <div className="mt-auto">
-                              <Button 
-                                size="sm" 
-                                className="w-full bg-[#00262F] hover:bg-[#001520] text-white text-xs flex items-center justify-center gap-1"
-                              >
-                                <ShoppingBag className="h-3 w-3" />
-                                Bekijk details
-                              </Button>
-                            </div>
-                          </CardContent>
+                        <div className="relative">
+                          <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white text-xs">
+                            PRE-OWNED
+                          </Badge>
+                          <AspectRatio ratio={1/1} className="bg-gray-50">
+                            <img 
+                              src={listing.images[0]} 
+                              alt={`${product.name} door ${seller.name}`}
+                              className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
+                            />
+                          </AspectRatio>
+                          <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors">
+                            <Heart className="h-4 w-4" />
+                          </button>
                         </div>
+                        
+                        <CardContent className="p-3">
+                          <div className="flex items-center justify-between">
+                            <div className="font-bold text-[#E41A36]">{listing.price}</div>
+                            <div className="text-sm font-medium">{listing.size}</div>
+                          </div>
+                        </CardContent>
                       </Link>
                     </Card>
                   ))}
@@ -267,26 +237,6 @@ const PreOwnedListings: React.FC = () => {
               </div>
             </div>
           ))}
-        </div>
-        
-        <div className="bg-white rounded-xl p-6 mb-16 shadow-sm border border-gray-100">
-          <div className="flex items-start gap-2 mb-4">
-            <Info className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" />
-            <h3 className="text-xl font-bold text-[#00262F]">
-              Over pre-owned {product.name}
-            </h3>
-          </div>
-          <p className="text-gray-600 mb-4">
-            Bij Boxstock vindt je de beste pre-owned {product.name} sneakers 
-            die door onze authenticatie experts zijn gecontroleerd. Elke sneaker 
-            ondergaat een grondige controle en wordt professioneel gereinigd voordat 
-            deze in onze collectie wordt opgenomen.
-          </p>
-          <p className="text-gray-600">
-            Door te kiezen voor een pre-owned item bespaar je niet alleen geld, 
-            maar draag je ook bij aan een duurzamere sneakercultuur. Alle aanbieders 
-            zijn geverifieerd en beoordeeld door onze community.
-          </p>
         </div>
       </div>
       
