@@ -1,8 +1,8 @@
 
 import React, { useState } from 'react';
-import ProductCard from './ProductCard';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Filter, Search, Star } from 'lucide-react';
+import { ArrowRight, Filter, Search, Star, Heart } from 'lucide-react';
 
 interface PreOwnedProductsProps {
   limit?: number;
@@ -113,9 +113,9 @@ const PreOwnedProducts: React.FC<PreOwnedProductsProps> = ({
               className="text-[#00262F] hover:text-[#E41A36] flex items-center"
               asChild
             >
-              <a href="/pre-owned">
+              <Link to="/pre-owned">
                 Bekijk meer <ArrowRight size={16} className="ml-1" />
-              </a>
+              </Link>
             </Button>
           </div>
           
@@ -126,21 +126,21 @@ const PreOwnedProducts: React.FC<PreOwnedProductsProps> = ({
               <input 
                 type="text" 
                 placeholder="Zoek pre-owned items..." 
-                className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 focus:border-[#00262F] focus:ring-1 focus:ring-[#00262F] focus:outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 focus:border-[#00262F] focus:ring-1 focus:ring-[#00262F] focus:outline-none"
               />
             </div>
-            <Button variant="outline" className="flex items-center gap-2 bg-white border-gray-200">
+            <Button variant="outline" className="flex items-center gap-2 bg-white border-gray-200 py-3">
               <Filter size={16} /> Filters
             </Button>
           </div>
           
           {/* Categories */}
-          <div className="flex flex-wrap items-center gap-2 mb-6">
+          <div className="flex flex-wrap items-center gap-2 mb-8">
             {categories.map((category) => (
               <Button
                 key={category.id}
                 variant={activeCategory === category.id ? "default" : "outline"}
-                className={`rounded-full px-4 py-2 text-sm ${
+                className={`rounded-full px-6 py-2 text-sm ${
                   activeCategory === category.id 
                     ? "bg-[#00262F] text-white" 
                     : "bg-white text-gray-700 hover:bg-gray-100"
@@ -159,30 +159,51 @@ const PreOwnedProducts: React.FC<PreOwnedProductsProps> = ({
           <p className="text-lg text-gray-500">Geen artikelen gevonden in deze categorie.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {displayProducts.map(product => (
-            <div key={product.id} className="group">
-              <ProductCard
-                brand={product.brand}
-                name={product.name}
-                price={product.price}
-                image={product.image}
-                rating={product.rating}
-                preOwned={true}
-              />
-              <div className="mt-2 flex items-center justify-between text-sm">
-                <div className="flex items-center">
-                  <div className="h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center text-xs mr-2">
-                    {product.sellerName[0]}
+            <Link to="/pre-owned" key={product.id} className="group">
+              <div className="relative rounded-xl overflow-hidden bg-gray-50">
+                <div className="absolute top-3 left-3 z-10">
+                  <div className="bg-[#1EC0A3] text-white text-xs font-semibold px-2 py-1 rounded">
+                    PRE-OWNED
                   </div>
-                  <span className="text-gray-700">{product.sellerName}</span>
                 </div>
-                <div className="flex items-center text-gray-700">
-                  <Star size={14} className="fill-yellow-400 text-yellow-400 mr-1" />
-                  <span>{product.sellerRating}</span>
+                <div className="absolute top-3 right-3 z-10">
+                  <Button variant="outline" size="icon" className="h-8 w-8 rounded-full bg-white border-gray-200 shadow-sm">
+                    <Heart className="h-4 w-4 text-gray-600 group-hover:text-[#E41A36]" />
+                  </Button>
+                </div>
+                <div className="aspect-[4/5] w-full">
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform group-hover:scale-105 duration-500"
+                  />
                 </div>
               </div>
-            </div>
+              
+              <div className="mt-3 space-y-1">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium text-gray-500">{product.brand}</div>
+                  <div className="flex items-center">
+                    <Star className="h-3.5 w-3.5 text-yellow-400 fill-yellow-400 mr-1" />
+                    <span className="text-xs font-medium text-gray-700">{product.sellerRating}</span>
+                  </div>
+                </div>
+                <h3 className="font-bold text-[#00262F] group-hover:text-[#E41A36] transition-colors line-clamp-1">
+                  {product.name}
+                </h3>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="font-bold text-[#E41A36]">{product.price}</div>
+                  <div className="flex items-center text-xs text-gray-600">
+                    <div className="h-5 w-5 rounded-full bg-gray-200 flex items-center justify-center text-[10px] mr-1">
+                      {product.sellerName[0]}
+                    </div>
+                    {product.sellerName}
+                  </div>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       )}

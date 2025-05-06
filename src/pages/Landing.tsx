@@ -1,56 +1,95 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
-import { Link } from 'react-router-dom';
 import { ArrowRight, Star } from 'lucide-react';
 
 const Landing: React.FC = () => {
+  // Brand logos for the brand bar
+  const brands = [
+    { name: 'Nike', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6aacf4fc34eb3f87e49e2c4c6287d8c917b09a11?placeholderIfAbsent=true' },
+    { name: 'Adidas', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/20aaa695d05117101e3a4a54402efc557d037b95?placeholderIfAbsent=true' },
+    { name: 'Reebok', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/f3e534223adb9fcb6c53c3669f5a2a57b8bcc7b4?placeholderIfAbsent=true' },
+    { name: 'Converse', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/0463316156002c7c56a5f05c6839aab7f3a5e204?placeholderIfAbsent=true' },
+    { name: 'Puma', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/058f9f5ebe09d28cd5868383d08be31fe8629847?placeholderIfAbsent=true' },
+    { name: 'Vans', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7dfcb06640a07bff110f3a711dbd3d84d15e62fe?placeholderIfAbsent=true' },
+  ];
+
   const featuredProducts = [
     {
       id: 1,
       name: "Jordan XXXIII University Red",
       price: "€178",
+      sale: true,
+      originalPrice: "€200",
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
       brand: "Air Jordan",
-      rating: 4.5
+      rating: 4.5,
+      tag: "BESTSELLER"
     },
     {
       id: 2,
       name: "Nike Air Mowabb Comme des Garcons Black",
       price: "€210",
+      sale: true,
+      originalPrice: "€240",
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1151fbe94e56faf832add68dff4fd394e96e331e?placeholderIfAbsent=true",
       brand: "Nike",
-      rating: 4.8
+      rating: 4.8,
+      tag: "NIEUW"
     },
     {
       id: 3,
       name: "Nike Dunk Low Off-White",
       price: "€245",
+      sale: false,
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/20139938ade4dd7d58525cbf8fb332b18060cf34?placeholderIfAbsent=true",
       brand: "Nike",
-      rating: 5.0
+      rating: 5.0,
+      tag: "TRENDING"
+    },
+    {
+      id: 4,
+      name: "Adidas Orketro Cream",
+      price: "€199",
+      sale: true,
+      originalPrice: "€220",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/5b1b65f705bc681b0bdfb2c25e65f8d939142459?placeholderIfAbsent=true",
+      brand: "Adidas",
+      rating: 4.2,
+      tag: "SALE"
+    },
+    {
+      id: 5,
+      name: "Vans Old Skool Black",
+      price: "€89",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/b3525f8e789f93fdf9069e290822e3cc6271a324?placeholderIfAbsent=true",
+      brand: "Vans",
+      rating: 4.6
     }
   ];
 
+  // Categories with images
   const categories = [
-    { name: "Sneakers", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/478bc0398700d77556d57437a15fa378fc43d838?placeholderIfAbsent=true", count: 462 },
-    { name: "Accessoires", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/ef61aa1780cbf7c1996fd43b23a51284b2603945?placeholderIfAbsent=true", count: 124 },
-    { name: "Kleding", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/81da93ff12d5208ef959a4f82a8cf15021032e44?placeholderIfAbsent=true", count: 286 },
-    { name: "Tassen", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8ac83ea04bc480ea93ab3dbfd95bab4b25dffd9f?placeholderIfAbsent=true", count: 92 }
+    { name: "DAMES", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/3ef3bd9f9ad579c25ada5f64b24a86af2750850e?placeholderIfAbsent=true", path: "/product" },
+    { name: "HEREN", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/a9e31490770c0f0aca97fed6fe494ad78c6b3959?placeholderIfAbsent=true", path: "/product" },
+    { name: "KINDEREN", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/69e0e5f62d38686d3ee665e8954a1ae7830c3e96?placeholderIfAbsent=true", path: "/product" },
+    { name: "BABY", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8ff4920a29a60a5882ad1e3a361e3e005dffcf77?placeholderIfAbsent=true", path: "/product" }
   ];
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white">
       <Header />
       
       {/* Hero Section */}
-      <section className="relative h-[650px] flex items-center">
+      <section className="relative h-[580px] flex items-center">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#00262F]/90 to-[#05414F]/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60" />
           <img 
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true" 
+            src={`${import.meta.env.BASE_URL}lovable-uploads/aeabc203-3777-4648-8357-a3052d2c16aa.png`}
             alt="Hero background" 
             className="w-full h-full object-cover object-center"
           />
@@ -58,95 +97,138 @@ const Landing: React.FC = () => {
         
         <div className="container mx-auto px-6 z-10 relative">
           <div className="max-w-xl">
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight tracking-tight">
-              Exclusieve sneakers voor 2025
+            <h1 className="text-4xl md:text-5xl font-bold text-white uppercase mb-4">
+              ONE SNEAKERSITE<br />TO RULE THEM ALL
             </h1>
-            <p className="text-xl text-[#AEDDE8] mb-10 leading-relaxed">
-              De meest exclusieve en limited edition sneakers nu verkrijgbaar. Ontdek onze collectie.
-            </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 mt-8">
               <Link to="/product">
-                <button className="bg-[#E41A36] text-white px-8 py-4 text-lg font-bold rounded-md hover:bg-[#c01730] transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-lg flex items-center gap-2">
-                  Shop nu
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </Link>
-              <Link to="/blog">
-                <button className="bg-transparent border-2 border-white text-white px-8 py-4 text-lg font-bold rounded-md hover:bg-white/10 transition-all duration-300">
-                  Bekijk blog
+                <button className="bg-white text-black px-6 py-3 text-sm font-bold uppercase hover:bg-gray-200 transition-colors">
+                  SHOP NU
                 </button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Brands Bar */}
+      <section className="bg-black py-6">
+        <div className="container mx-auto px-6">
+          <div className="flex justify-between items-center flex-wrap gap-6">
+            {brands.map((brand, index) => (
+              <div key={index} className="flex items-center">
+                <img 
+                  src={brand.logo} 
+                  alt={brand.name}
+                  className="h-8 md:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Welcome Section */}
+      <section className="py-16 px-6">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <h2 className="uppercase text-3xl font-bold mb-6">
+                WELKOM BIJ<br />
+                <span className="text-4xl">DE SNEAKERBARON</span>
+              </h2>
+              <p className="text-gray-700 mb-4">
+                We hebben de grootste collectie sneakers in Europa. Met meer dan 10.000 paar van 50+ merken op voorraad heb je altijd genoeg keus.
+              </p>
+              <p className="text-gray-700 mb-6">
+                We zijn 100% authorized retailer en verkopen alleen originele items rechtstreeks bij de merken. Dat zie je terug in onze reviews, omdat service en kwaliteit voor ons op de eerste plaats staan.
+              </p>
+              <button className="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition-colors">
+                LEES MEER
+              </button>
+            </div>
+            <div>
+              <div className="bg-black text-white p-8 rotate-3 transform">
+                <h3 className="uppercase text-2xl font-bold rotate-[-3deg] transform">
+                  AUTHENTIEKE<br />
+                  SNEAKERS<br />
+                  BUY NEW KICKS
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Hot Products Section */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto">
+          <h2 className="uppercase text-3xl font-bold mb-12">
+            HITTING HEAT<br />
+            <span className="text-4xl">VAN SNEAKERBARON</span>
+          </h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {featuredProducts.map((product) => (
+              <Link to="/product" key={product.id} className="group">
+                <div className="bg-white border border-gray-200 relative">
+                  {product.tag && (
+                    <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
+                      {product.tag}
+                    </div>
+                  )}
+                  {product.sale && (
+                    <div className="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
+                      SALE
+                    </div>
+                  )}
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-gray-700">{product.brand}</span>
+                      <div className="flex items-center">
+                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        <span className="text-xs ml-1">{product.rating}</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-center h-32 mb-4">
+                      <img
+                        src={product.image}
+                        className="h-full w-auto object-contain group-hover:scale-105 transition-transform duration-500"
+                        alt={product.name}
+                      />
+                    </div>
+                    <h3 className="text-sm font-bold truncate group-hover:text-red-600 transition-colors">
+                      {product.name}
+                    </h3>
+                    <div className="flex items-center mt-2">
+                      <span className="font-bold">{product.price}</span>
+                      {product.sale && product.originalPrice && (
+                        <span className="text-xs text-gray-500 line-through ml-2">{product.originalPrice}</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Categories */}
-      <section className="py-20 px-6 bg-[#F8F8F8]">
+      <section className="py-16 px-6">
         <div className="container mx-auto">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-[#00262F] text-3xl font-bold">Categorieën</h2>
-            <Link to="/product" className="text-[#00262F] font-bold flex items-center gap-2 hover:text-[#E41A36] transition-colors">
-              Alle categorieën
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {categories.map((category, index) => (
-              <div key={index} className="group cursor-pointer">
-                <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={category.image}
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-                      alt={category.name}
-                    />
+              <Link to={category.path} key={index} className="group relative">
+                <div className="aspect-[1/1] overflow-hidden bg-gray-100">
+                  <img 
+                    src={category.image}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    alt={category.name}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                    <h3 className="text-white text-2xl font-bold">{category.name}</h3>
                   </div>
-                  <div className="p-6">
-                    <h3 className="text-[#00262F] text-xl font-bold">{category.name}</h3>
-                    <p className="text-gray-500 mt-1">{category.count} producten</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className="py-20 px-6">
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-[#00262F] text-3xl font-bold">Uitgelichte producten</h2>
-            <Link to="/product" className="text-[#00262F] font-bold flex items-center gap-2 hover:text-[#E41A36] transition-colors">
-              Alle producten
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProducts.map((product) => (
-              <Link to="/product" key={product.id} className="group">
-                <div className="bg-[#F1F1F1] rounded-2xl p-6 transition-all duration-300 group-hover:shadow-md">
-                  <div className="flex justify-between items-center mb-4">
-                    <span className="text-sm font-semibold text-[#00262F]">{product.brand}</span>
-                    <div className="flex items-center gap-1 text-[#E41A36]">
-                      <Star className="w-4 h-4 fill-[#E41A36] text-[#E41A36]" />
-                      <span className="text-sm font-semibold">{product.rating}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center py-8">
-                    <img
-                      src={product.image}
-                      className="w-full h-56 object-contain transform group-hover:scale-110 transition-transform duration-700"
-                      alt={product.name}
-                    />
-                  </div>
-                </div>
-                <div className="mt-4 px-2">
-                  <h3 className="text-[#00262F] font-bold text-lg line-clamp-1 group-hover:text-[#E41A36] transition-colors">{product.name}</h3>
-                  <p className="text-[#00262F] mt-2 font-semibold">{product.price}</p>
                 </div>
               </Link>
             ))}
@@ -154,149 +236,109 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Pre-owned Banner */}
-      <section className="py-16 px-6 bg-[#F8F8F8]">
+      {/* Benefits */}
+      <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
-          <div className="bg-gradient-to-br from-[#AEDDE8] to-[#93D0DE] rounded-2xl overflow-hidden">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="p-10 md:p-16 md:w-1/2">
-                <span className="inline-block text-[#00262F] bg-white/50 px-3 py-1 rounded-full text-sm font-semibold mb-4">Premium Reselling</span>
-                <h2 className="text-[#00262F] text-3xl md:text-4xl font-bold mb-4">Verkoop je items</h2>
-                <p className="text-[#00262F] text-xl mb-8 leading-relaxed">
-                  Word onderdeel van de Boxstock community. Verkoop je premium sneakers en streetwear items.
-                </p>
-                <button className="bg-[#E41A36] text-white px-8 py-4 text-lg font-bold rounded-md hover:bg-[#c01730] transition-all duration-300 transform hover:translate-y-[-2px] hover:shadow-lg">
-                  Word reseller
-                </button>
-              </div>
-              <div className="md:w-1/2 p-10">
-                <img 
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/30b223d18d93a5d0fd9c840e00271b7e9387ba30?placeholderIfAbsent=true"
-                  className="w-full h-auto max-h-[300px] object-contain transform hover:scale-105 transition-transform duration-500"
-                  alt="Pre-owned sneakers"
-                />
-              </div>
+          <h2 className="uppercase text-3xl font-bold mb-12">
+            ZOEKEN, KIEZEN, SCOREN<br />
+            <span className="text-4xl">MET DE SNEAKERBARON</span>
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <p className="text-gray-700">
+                Je favoriete sneakers shop je makkelijk en snel bij de Sneakerbaron. Met meer dan 10.000 paar sneakers op voorraad heb je altijd genoeg keus. We hebben alle topsellers, limited editions en de nieuwste releases.
+              </p>
+              <p className="text-gray-700">
+                We zijn een 100% authorized retailer. Dat betekent dat we samenwerken met alle topmerken en dat alle sneakers op onze site 100% origineel en authentiek zijn.
+              </p>
+              <p className="text-gray-700">
+                Vandaag voor 23:59 besteld? Dan heb je je sneakers morgen al in huis! We versturen met DHL en je kan de bestelling volgen via track & trace.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <p className="text-gray-700">
+                Niet blij met je aankoop? Je kan binnen 30 dagen je bestelling retourneren. Erg makkelijk met ons retourportaal en de verzendkosten zijn voor ons.
+              </p>
+              <p className="text-gray-700">
+                We worden beoordeeld met een 9.2 door duizenden klanten. Service, kwaliteit, snelheid van leveren en goede prijzen zijn de redenen dat klanten ons aanraden.
+              </p>
+              <p className="text-gray-700">
+                Vragen of wil je gewoon even kletsen? We zijn bereikbaar via WhatsApp, mail en telefoon. Ons team staat altijd voor je klaar.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Why Boxstock */}
-      <section className="py-20 px-6">
+      {/* Blog Section */}
+      <section className="py-16 px-6">
         <div className="container mx-auto">
-          <h2 className="text-[#00262F] text-3xl font-bold mb-16 text-center">Waarom Boxstock?</h2>
+          <h2 className="uppercase text-3xl font-bold mb-12">
+            DE SNEAKERBARON<br />
+            <span className="text-4xl">SCHRIJFT BLOGS</span>
+          </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-            <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 text-center">
-              <div className="w-16 h-16 bg-[#F1F1F1] rounded-full flex items-center justify-center mx-auto mb-6">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/a509693db90c1c674ca7d91d448f1f7c1390ae40?placeholderIfAbsent=true"
-                  className="w-8 h-8"
-                  alt="Verification icon"
-                />
-              </div>
-              <h3 className="text-[#00262F] text-xl font-bold mb-4">100% Authenticiteit</h3>
-              <p className="text-[#00262F] leading-relaxed">Elk product wordt geverifieerd door het Boxstock Authenticatieteam</p>
-            </div>
-            
-            <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 text-center">
-              <div className="w-16 h-16 bg-[#F1F1F1] rounded-full flex items-center justify-center mx-auto mb-6">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/0c091b2fd07f8a0ba829b4787a9d57f263a51b1b?placeholderIfAbsent=true"
-                  className="w-8 h-8"
-                  alt="Payment icon"
-                />
-              </div>
-              <h3 className="text-[#00262F] text-xl font-bold mb-4">Veilig betalen</h3>
-              <p className="text-[#00262F] leading-relaxed">Betaal veilig en gemakkelijk met verschillende betaalmethoden</p>
-            </div>
-            
-            <div className="bg-white border border-gray-100 p-8 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 text-center">
-              <div className="w-16 h-16 bg-[#F1F1F1] rounded-full flex items-center justify-center mx-auto mb-6">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/TEMP/0b1cc9210f6efd5429a2869691c140d8d12605c4?placeholderIfAbsent=true"
-                  className="w-8 h-8"
-                  alt="Rating icon"
-                />
-              </div>
-              <h3 className="text-[#00262F] text-xl font-bold mb-4">Hoge klantbeoordeling</h3>
-              <p className="text-[#00262F] leading-relaxed">Onze klanten waarderen ons met een 9.2/10</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Blog Preview */}
-      <section className="py-16 px-6 bg-[#F8F8F8]">
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center mb-12">
-            <h2 className="text-[#00262F] text-3xl font-bold">Laatste blogs</h2>
-            <Link to="/blog" className="text-[#00262F] font-bold flex items-center gap-2 hover:text-[#E41A36] transition-colors">
-              Alle blogs
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link to="/blog/1" className="group">
-              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col">
-                <div className="h-48 overflow-hidden">
+              <div className="border border-gray-200 overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden">
                   <img 
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true"
                     alt="Blog post"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="text-sm text-gray-500 mb-2">3 mei 2025</div>
-                  <h3 className="text-xl font-bold text-[#00262F] mb-3 group-hover:text-[#E41A36] transition-colors">De geschiedenis van Air Jordan sneakers</h3>
-                  <p className="text-gray-600 mb-4 flex-1">Ontdek de rijke geschiedenis achter het iconische Air Jordan merk en hoe het de sneakercultuur voorgoed veranderde.</p>
-                  <div className="flex items-center text-[#E41A36] font-semibold">
-                    Lees meer
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </div>
+                <div className="p-6">
+                  <div className="text-xs text-gray-500 mb-2">3 mei 2025</div>
+                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                    De geschiedenis van Air Jordan sneakers
+                  </h3>
+                  <p className="text-gray-700 text-sm line-clamp-3">
+                    Ontdek de rijke geschiedenis achter het iconische Air Jordan merk en hoe het de sneakercultuur voorgoed veranderde.
+                  </p>
                 </div>
               </div>
             </Link>
             
             <Link to="/blog/2" className="group">
-              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col">
-                <div className="h-48 overflow-hidden">
+              <div className="border border-gray-200 overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden">
                   <img 
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true"
                     alt="Blog post"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="text-sm text-gray-500 mb-2">28 april 2025</div>
-                  <h3 className="text-xl font-bold text-[#00262F] mb-3 group-hover:text-[#E41A36] transition-colors">Top 10 duurzame sneakermerken van 2025</h3>
-                  <p className="text-gray-600 mb-4 flex-1">De sneakerindustrie wordt steeds duurzamer. Bekijk hier de merken die vooroplopen met eco-vriendelijke innovaties.</p>
-                  <div className="flex items-center text-[#E41A36] font-semibold">
-                    Lees meer
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </div>
+                <div className="p-6">
+                  <div className="text-xs text-gray-500 mb-2">28 april 2025</div>
+                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                    Top 10 duurzame sneakermerken van 2025
+                  </h3>
+                  <p className="text-gray-700 text-sm line-clamp-3">
+                    De sneakerindustrie wordt steeds duurzamer. Bekijk hier de merken die vooroplopen met eco-vriendelijke innovaties.
+                  </p>
                 </div>
               </div>
             </Link>
             
             <Link to="/blog/3" className="group">
-              <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full flex flex-col">
-                <div className="h-48 overflow-hidden">
+              <div className="border border-gray-200 overflow-hidden">
+                <div className="aspect-[16/9] overflow-hidden">
                   <img 
                     src="https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true"
                     alt="Blog post"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <div className="text-sm text-gray-500 mb-2">15 april 2025</div>
-                  <h3 className="text-xl font-bold text-[#00262F] mb-3 group-hover:text-[#E41A36] transition-colors">De opkomst van digitale mode en NFT sneakers</h3>
-                  <p className="text-gray-600 mb-4 flex-1">Hoe digitale mode en NFT's de sneakerwereld transformeren en wat dit betekent voor verzamelaars en investeerders.</p>
-                  <div className="flex items-center text-[#E41A36] font-semibold">
-                    Lees meer
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </div>
+                <div className="p-6">
+                  <div className="text-xs text-gray-500 mb-2">15 april 2025</div>
+                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                    De opkomst van digitale mode en NFT sneakers
+                  </h3>
+                  <p className="text-gray-700 text-sm line-clamp-3">
+                    Hoe digitale mode en NFT's de sneakerwereld transformeren en wat dit betekent voor verzamelaars en investeerders.
+                  </p>
                 </div>
               </div>
             </Link>
@@ -304,8 +346,72 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
+      {/* History Block */}
+      <section className="py-16 px-6 bg-black text-white">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h2 className="uppercase text-3xl font-bold mb-8">
+                HOE IS DE TERM<br />
+                'SNEAKERS' ONTSTAAN?
+              </h2>
+              <p className="mb-4">
+                Lang geleden in 1917, werden sportschoenen 'sneakers' genoemd omdat ze zo stil waren. De rubberen zool zorgde ervoor dat mensen konden "sluipen" (to sneak).
+              </p>
+              <p className="mb-4">
+                Wat begon als functionele sportschoenen voor basketbal en tennis, werd vanaf de jaren 70 een mode-item. Run DMC zette de trend met "My Adidas" in 1986 en sindsdien zijn sneakers niet meer weg te denken uit de streetwear cultuur.
+              </p>
+              <p className="mb-8">
+                Vandaag de dag is de sneakermarkt miljarden waard en verzamelen mensen zeldzame edities als kunststukken. Van sportschoen naar fashion statement naar investering - dat is de evolutie van de sneaker.
+              </p>
+              <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-black transition-colors">
+                MEER HISTORIE
+              </button>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-xs">
+                <div className="aspect-video bg-gray-900 rounded flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
+                    <div className="w-0 h-0 border-t-8 border-t-transparent border-l-16 border-l-white border-b-8 border-b-transparent ml-1"></div>
+                  </div>
+                </div>
+                <div className="mt-4 text-center">
+                  <h3 className="text-xl font-bold uppercase">EVEN TERUG IN DE TIJD</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Newsletter */}
       <Newsletter />
+      
+      {/* Social Media */}
+      <section className="py-10 bg-black text-white">
+        <div className="container mx-auto px-6 text-center">
+          <h2 className="uppercase font-bold mb-6">SOCIAL MEDIA</h2>
+          <div className="flex justify-center gap-6">
+            <a href="#" className="text-white hover:text-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="#" className="text-white hover:text-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+            <a href="#" className="text-white hover:text-gray-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
       
       {/* Footer */}
       <Footer />

@@ -1,8 +1,8 @@
 
-import React from 'react';
-import ProductInfo from './ProductInfo';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Star, Heart, ShoppingCart } from 'lucide-react';
 
 const PreOwnedProductDetail: React.FC = () => {
   // Sample pre-owned product
@@ -28,85 +28,115 @@ const PreOwnedProductDetail: React.FC = () => {
       'Minimale slijtage aan de zool',
       'Geen vlekken of scheuren',
       'Professioneel gereinigd en gedesinfecteerd'
-    ]
+    ],
+    seller: {
+      name: 'SneakerHeads',
+      rating: 4.8,
+      sales: 42,
+      joined: 'Augustus 2022',
+      responseTime: '< 2 uur'
+    }
   };
 
-  const [selectedImage, setSelectedImage] = React.useState(0);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [liked, setLiked] = useState(false);
 
   return (
     <div className="container mx-auto max-w-6xl px-4 mb-16">
-      <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-        <div className="flex flex-col lg:flex-row">
-          {/* Product Gallery */}
-          <div className="lg:w-[55%]">
-            <div className="p-6">
-              <Badge className="bg-[#1EC0A3] text-white mb-4">PRE-OWNED</Badge>
-              <div className="aspect-square bg-gray-100 rounded-xl overflow-hidden mb-4">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Product Gallery - Left side */}
+        <div className="lg:w-[55%] space-y-4">
+          <div className="relative">
+            <Badge className="absolute top-4 left-4 z-10 bg-[#1EC0A3] text-white">PRE-OWNED</Badge>
+            <div className="aspect-[4/3] bg-gray-50 rounded-xl overflow-hidden">
+              <img 
+                src={product.images[selectedImage]} 
+                alt={product.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <button 
+              onClick={() => setLiked(!liked)} 
+              className={`absolute top-4 right-4 p-2 rounded-full ${liked ? 'bg-[#E41A36] text-white' : 'bg-white text-gray-600'} shadow-md`}
+            >
+              <Heart className={`w-5 h-5 ${liked ? 'fill-white' : ''}`} />
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-4 gap-3">
+            {product.images.map((image, idx) => (
+              <div 
+                key={idx} 
+                className={`aspect-square bg-gray-50 rounded-lg overflow-hidden cursor-pointer ${selectedImage === idx ? 'ring-2 ring-[#1EC0A3]' : ''}`}
+                onClick={() => setSelectedImage(idx)}
+              >
                 <img 
-                  src={product.images[selectedImage]} 
-                  alt={product.name}
+                  src={image} 
+                  alt={`${product.name} view ${idx+1}`}
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="grid grid-cols-4 gap-2">
-                {product.images.map((image, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer border-2 ${selectedImage === idx ? 'border-[#1EC0A3]' : 'border-transparent'}`}
-                    onClick={() => setSelectedImage(idx)}
-                  >
-                    <img 
-                      src={image} 
-                      alt={`${product.name} view ${idx+1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ))}
+            ))}
+          </div>
+          
+          <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 shadow-sm">
+            <div className="flex flex-col items-start text-[#00262F]">
+              <div className="text-xl font-bold mb-4 text-[#00262F]">
+                Verkoper Informatie
               </div>
               
-              <div className="mt-8 bg-gradient-to-br from-[#AEDDE8] to-[#93D0DE] rounded-xl p-6 shadow-sm">
-                <div className="flex flex-col items-center text-[#00262F]">
-                  <div className="text-xl font-medium mb-4">
-                    Heb jij deze sneaker te koop?
-                  </div>
-                  <div className="text-2xl font-bold mb-6 text-center">
-                    Word reseller en verkoop jouw items via Boxstock!
-                  </div>
-                  <Button className="w-full bg-[#E41A36] hover:bg-[#c01730] text-white font-bold py-3 rounded-md text-lg">
-                    Verkoop dit item
-                  </Button>
-                  <div className="text-[#00262F] underline mt-4 cursor-pointer hover:text-[#064559] transition-colors">
-                    Hoe werkt resell?
+              <div className="flex items-center gap-4 w-full mb-4">
+                <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-lg font-bold">
+                  {product.seller.name[0]}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-[#00262F]">{product.seller.name}</h3>
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                    <span className="text-sm">{product.seller.rating} · {product.seller.sales} verkopen</span>
                   </div>
                 </div>
               </div>
+              
+              <div className="grid grid-cols-2 gap-4 w-full text-sm">
+                <div>
+                  <span className="text-gray-500">Lid sinds</span>
+                  <p className="font-medium">{product.seller.joined}</p>
+                </div>
+                <div>
+                  <span className="text-gray-500">Reactietijd</span>
+                  <p className="font-medium">{product.seller.responseTime}</p>
+                </div>
+              </div>
+              
+              <Button className="w-full mt-4 bg-[#00262F] hover:bg-[#064559] text-white">
+                Contact verkoper
+              </Button>
             </div>
           </div>
-          
-          {/* Product Info */}
-          <div className="lg:w-[45%] border-l border-gray-100">
-            <div className="p-6">
-              <div className="mb-6">
+        </div>
+        
+        {/* Product Info - Right side */}
+        <div className="lg:w-[45%]">
+          <div className="bg-gradient-to-br from-[#f8f8f8] to-[#eaeaea] rounded-xl p-6 shadow-sm h-full">
+            <div className="space-y-6">
+              <div>
                 <div className="text-gray-600 text-lg">{product.brand}</div>
                 <h1 className="text-3xl font-bold text-[#00262F]">{product.name}</h1>
                 <div className="flex items-center mt-2">
                   <div className="flex">
                     {[...Array(5)].map((_, i) => (
-                      <svg 
+                      <Star 
                         key={i} 
-                        className={`w-4 h-4 ${i < product.rating ? 'text-yellow-400' : 'text-gray-300'}`} 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                      </svg>
+                        className={`w-4 h-4 ${i < product.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                      />
                     ))}
                   </div>
                   <span className="ml-2 text-gray-600 text-sm">(16 reviews)</span>
                 </div>
               </div>
               
-              <div className="flex items-end gap-3 mb-6">
+              <div className="flex items-end gap-3">
                 <div className="text-3xl font-bold text-[#E41A36]">{product.price}</div>
                 <div className="text-xl text-gray-500 line-through">{product.originalPrice}</div>
                 <div className="bg-[#E41A36]/10 text-[#E41A36] text-sm font-medium px-2 py-1 rounded">
@@ -114,7 +144,7 @@ const PreOwnedProductDetail: React.FC = () => {
                 </div>
               </div>
               
-              <div className="border-t border-b border-gray-100 py-5 mb-6 space-y-4">
+              <div className="py-5 space-y-4 border-t border-b border-gray-200">
                 <div className="flex justify-between">
                   <div className="text-gray-500">Conditie</div>
                   <div className="font-medium text-[#00262F]">{product.condition}</div>
@@ -129,12 +159,12 @@ const PreOwnedProductDetail: React.FC = () => {
                 </div>
               </div>
               
-              <div className="mb-8">
+              <div>
                 <h3 className="font-medium text-[#00262F] mb-3">Beschrijving</h3>
                 <p className="text-gray-600">{product.description}</p>
               </div>
               
-              <div className="mb-8">
+              <div>
                 <h3 className="font-medium text-[#00262F] mb-3">Pre-owned kenmerken</h3>
                 <ul className="space-y-2 text-gray-600">
                   {product.features.map((feature, idx) => (
@@ -147,7 +177,8 @@ const PreOwnedProductDetail: React.FC = () => {
               </div>
               
               <div className="space-y-3">
-                <Button className="w-full bg-[#00262F] hover:bg-[#064559] text-white font-bold py-3 rounded-md text-lg">
+                <Button className="w-full bg-[#E41A36] hover:bg-[#c01730] text-white font-bold py-3 rounded-md text-lg flex items-center justify-center gap-2">
+                  <ShoppingCart className="w-5 h-5" />
                   Direct kopen
                 </Button>
                 <Button variant="outline" className="w-full border-[#00262F] text-[#00262F] font-bold py-3 rounded-md text-lg">
@@ -155,7 +186,7 @@ const PreOwnedProductDetail: React.FC = () => {
                 </Button>
               </div>
               
-              <div className="flex justify-between mt-6 text-sm text-gray-500">
+              <div className="flex justify-between text-sm text-gray-500">
                 <div className="flex items-center">
                   <svg className="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
