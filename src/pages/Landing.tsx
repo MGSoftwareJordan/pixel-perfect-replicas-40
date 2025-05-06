@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
-import { ArrowRight, Star, Tag, CalendarCheck } from 'lucide-react';
+import { ArrowRight, Star, Tag, CalendarCheck, Globe, Sparkles, BookOpen } from 'lucide-react';
 
 const Landing: React.FC = () => {
   // Featured products for the landing page
@@ -55,79 +55,6 @@ const Landing: React.FC = () => {
       rating: 4.2,
       tag: "SALE",
       category: "sneakers"
-    }
-  ];
-
-  // Accessories products
-  const accessoriesProducts = [
-    {
-      id: 6,
-      name: "Supreme Box Logo Beanie Red",
-      price: "€89",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true",
-      brand: "Supreme",
-      rating: 4.8,
-      category: "accessories"
-    },
-    {
-      id: 7,
-      name: "Nike Tech Cap Black",
-      price: "€29",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
-      brand: "Nike",
-      rating: 4.5,
-      category: "accessories"
-    }
-  ];
-
-  // Clothing products
-  const clothingProducts = [
-    {
-      id: 9,
-      name: "Stussy Basic Tee Black",
-      price: "€49",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1151fbe94e56faf832add68dff4fd394e96e331e?placeholderIfAbsent=true",
-      brand: "Stussy",
-      rating: 4.7,
-      category: "clothing"
-    },
-    {
-      id: 10,
-      name: "The North Face Nuptse Jacket Black",
-      price: "€320",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/5b1b65f705bc681b0bdfb2c25e65f8d939142459?placeholderIfAbsent=true",
-      brand: "The North Face",
-      rating: 4.9,
-      tag: "BESTSELLER",
-      category: "clothing"
-    }
-  ];
-
-  // Bags products
-  const bagsProducts = [
-    {
-      id: 12,
-      name: "Supreme Shoulder Bag SS21 Black",
-      price: "€79",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
-      brand: "Supreme",
-      rating: 4.5,
-      category: "bags"
-    },
-    {
-      id: 13,
-      name: "The North Face Base Camp Duffel S Black",
-      price: "€130",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
-      brand: "The North Face",
-      rating: 4.8,
-      category: "bags"
     }
   ];
 
@@ -201,6 +128,38 @@ const Landing: React.FC = () => {
     }
   ];
 
+  // Expanded lifestyle categories with images and descriptions
+  const lifestyleCategories = [
+    {
+      title: "Mode & Kleding",
+      description: "Van minimalistische designs tot streetwear essentials en premium denim",
+      image: "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+      path: "/clothing",
+      subcategories: ["Streetwear", "Minimalistisch", "Denim", "Athleisure", "Designer collabs"]
+    },
+    {
+      title: "Interieur & Decoratie",
+      description: "Creëer een stijlvolle leefruimte met designmeubels en street art",
+      image: "https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=1050&q=80",
+      path: "/interior",
+      subcategories: ["Minimalistisch interieur", "Street art", "Geurkaarsen", "Design meubels"]
+    },
+    {
+      title: "Beauty & Verzorging",
+      description: "Premium verzorgingsproducten, niche parfums en grooming essentials",
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+      path: "/beauty",
+      subcategories: ["Huidverzorging", "Parfums", "Grooming"]
+    },
+    {
+      title: "Tech & Gadgets",
+      description: "Design headphones, premium smartphone cases en smart accessories",
+      image: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+      path: "/tech",
+      subcategories: ["Headphones", "Smart accessoires", "Smartphone cases"]
+    }
+  ];
+
   // Categories with images and count
   const categories = [
     { 
@@ -226,6 +185,24 @@ const Landing: React.FC = () => {
       image: "https://images.unsplash.com/photo-1590874103328-eac8365b5776?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80", 
       path: "/bags",
       count: "1,800+ modellen"
+    }
+  ];
+
+  // Urban lifestyle categories
+  const urbanLifestyleItems = [
+    {
+      title: "Urban Sport",
+      description: "Stijlvolle sportuitrusting voor de stadsmens",
+      image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+      path: "/urban-sport",
+      items: ["Longboards & skateboards", "Elektrische steps", "Yoga & meditatie"]
+    },
+    {
+      title: "Pre-owned Collectie",
+      description: "Tweedehands sneakers en kleding van premium merken",
+      image: "https://images.unsplash.com/photo-1472396961693-142e6e269027?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80",
+      path: "/pre-owned",
+      items: ["Sneakers", "Designer kleding", "Accessoires", "Tassen"]
     }
   ];
 
@@ -303,10 +280,10 @@ const Landing: React.FC = () => {
               <span className="text-sm font-bold text-[#E41A36] tracking-wider">NIEUW BINNEN</span>
             </div>
             <h1 className="text-5xl md:text-6xl font-bold text-white uppercase mb-6 leading-tight">
-              PREMIUM<br />SNEAKERS &<br />STREETWEAR
+              PREMIUM<br />LIFESTYLE<br />COLLECTIE
             </h1>
             <p className="text-white text-lg mb-8 max-w-md">
-              Ontdek de nieuwste collecties en exclusieve releases bij Boxstock, jouw premium sneaker destination.
+              Ontdek de nieuwste collecties en exclusieve releases bij Boxstock, jouw premium lifestyle destination.
             </p>
             <Link to="/sneakers">
               <button className="bg-[#E41A36] text-white px-8 py-4 text-sm font-bold uppercase hover:bg-[#c01730] transition-colors">
@@ -393,7 +370,7 @@ const Landing: React.FC = () => {
               
               <div className="space-y-4 text-gray-700 max-w-lg mb-6">
                 <p>
-                  We hebben de grootste collectie sneakers in Europa met meer dan <strong>10.000 paar</strong> van 50+ merken op voorraad.
+                  We hebben de grootste collectie premium lifestyle producten in Europa met meer dan <strong>20.000 items</strong> van 100+ merken op voorraad.
                 </p>
                 <p>
                   Als 100% authorized retailer verkopen we alleen originele items rechtstreeks bij de merken. Dat zie je terug in onze reviews, omdat kwaliteit en service voor ons centraal staan.
@@ -451,16 +428,16 @@ const Landing: React.FC = () => {
             <div>
               <div className="bg-[#00262F] text-white p-10 rounded-lg shadow-lg">
                 <h3 className="uppercase text-3xl font-bold mb-6 leading-tight">
-                  AUTHENTIEKE<br />
-                  SNEAKERS
+                  PREMIUM<br />
+                  LIFESTYLE
                 </h3>
                 <div className="h-1 w-16 bg-[#E41A36] mb-6"></div>
                 <p className="mb-6 text-gray-300">
-                  Van limited editions tot dagelijkse favorieten – bij ons vind je altijd 100% authentieke sneakers, rechtstreeks van de meest geliefde merken.
+                  Van limited editions tot dagelijkse favorieten – bij ons vind je altijd 100% authentieke producten, rechtstreeks van de meest geliefde merken.
                 </p>
                 <Link to="/sneakers">
                   <button className="bg-white text-[#00262F] px-6 py-3 font-bold hover:bg-gray-100 transition-colors flex items-center gap-2">
-                    SHOP SNEAKERS <ArrowRight size={16} />
+                    ONTDEK NU <ArrowRight size={16} />
                   </button>
                 </Link>
               </div>
@@ -489,64 +466,91 @@ const Landing: React.FC = () => {
         </div>
       </section>
       
-      {/* Accessories & Clothing Section - Compact display */}
-      <section className="py-12 px-6 bg-white">
+      {/* NEW: Expanded Lifestyle Categories Section */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Accessories Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="uppercase text-2xl font-bold">
-                  ACCESSOIRES
-                </h2>
-                <Link to="/accessories" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-                  Bekijk alles <ArrowRight size={16} />
-                </Link>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
+              <Sparkles className="text-[#E41A36]" />
+              LIFESTYLE COLLECTIES
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {lifestyleCategories.map((category, index) => (
+              <div key={index} className="bg-white border border-gray-200 rounded-lg overflow-hidden group hover:shadow-lg transition-all duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                  <div className="relative h-64 md:h-full">
+                    <img 
+                      src={category.image} 
+                      alt={category.title} 
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:hidden"></div>
+                  </div>
+                  <div className="p-6 flex flex-col">
+                    <h3 className="text-2xl font-bold mb-2 text-[#00262F]">{category.title}</h3>
+                    <p className="text-gray-600 mb-4">{category.description}</p>
+                    
+                    <div className="mb-6 flex-grow">
+                      <h4 className="uppercase text-xs font-bold text-gray-500 mb-3">Categorieën</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {category.subcategories.map((sub, i) => (
+                          <div key={i} className="bg-gray-100 px-3 py-1 rounded text-xs">
+                            {sub}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <Link to={category.path} className="mt-auto">
+                      <button className="w-full bg-[#00262F] text-white px-4 py-3 font-bold hover:bg-[#00374F] transition-colors flex items-center justify-center gap-2">
+                        ONTDEK COLLECTIE <ArrowRight size={16} />
+                      </button>
+                    </Link>
+                  </div>
+                </div>
               </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {accessoriesProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-            
-            {/* Clothing Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="uppercase text-2xl font-bold">
-                  KLEDING
-                </h2>
-                <Link to="/clothing" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-                  Bekijk alles <ArrowRight size={16} />
-                </Link>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {clothingProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
-      
-      {/* Bags Section */}
-      <section className="py-12 px-6 bg-gray-50">
+
+      {/* NEW: Urban Lifestyle Section */}
+      <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="uppercase text-2xl font-bold">
-              TASSEN
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
+              <Globe className="text-[#E41A36]" />
+              URBAN LIFESTYLE
             </h2>
-            <Link to="/bags" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-              Bekijk alles <ArrowRight size={16} />
-            </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {bagsProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {urbanLifestyleItems.map((item, index) => (
+              <div key={index} className="relative rounded-lg overflow-hidden group h-[320px]">
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-8">
+                  <h3 className="text-white text-2xl font-bold mb-2">{item.title}</h3>
+                  <p className="text-white/90 mb-4">{item.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {item.items.map((subItem, i) => (
+                      <span key={i} className="bg-white/20 text-white text-xs px-3 py-1 rounded-full">
+                        {subItem}
+                      </span>
+                    ))}
+                  </div>
+                  <Link to={item.path}>
+                    <button className="bg-white text-[#00262F] px-5 py-2 rounded font-medium hover:bg-gray-100 transition-colors inline-flex items-center gap-1">
+                      Ontdek meer <ArrowRight size={14} />
+                    </button>
+                  </Link>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -568,7 +572,7 @@ const Landing: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {upcomingReleases.map((release) => (
               <div key={release.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
-                <div className="aspect-[4/3] overflow-hidden">
+                <div className="aspect-square overflow-hidden">
                   <img
                     src={release.image}
                     alt={release.name}
@@ -601,24 +605,24 @@ const Landing: React.FC = () => {
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="max-w-lg">
-              <h2 className="uppercase text-3xl font-bold mb-8">
-                HOE IS DE TERM<br />
-                'SNEAKERS' ONTSTAAN?
+              <h2 className="uppercase text-3xl font-bold mb-8 flex items-center gap-2">
+                <BookOpen className="text-[#E41A36]" />
+                BOXSTOCK MAGAZINE
               </h2>
               <div className="space-y-4 text-gray-300">
                 <p>
-                  Lang geleden in 1917, werden sportschoenen 'sneakers' genoemd omdat ze zo stil waren. De rubberen zool zorgde ervoor dat mensen konden "sluipen" (to sneak).
+                  Ontdek de verhalen achter jouw favoriete merken en producten. Leer meer over duurzame mode, de nieuwste trends en exclusieve interviews met ontwerpers.
                 </p>
                 <p>
-                  Wat begon als functionele sportschoenen voor basketbal en tennis, werd vanaf de jaren 70 een mode-item. Run DMC zette de trend met "My Adidas" in 1986 en sindsdien zijn sneakers niet meer weg te denken uit de streetwear cultuur.
+                  In onze wekelijkse blog-artikelen duiken we diep in de wereld van premium lifestyle, van sneaker-releases tot interieur-inspiratie en alles daartussenin.
                 </p>
                 <p className="mb-8">
-                  Vandaag de dag is de sneakermarkt miljarden waard en verzamelen mensen zeldzame edities als kunststukken.
+                  Blijf op de hoogte van alle ontwikkelingen in de wereld van fashion, design en urban lifestyle met Boxstock Magazine.
                 </p>
               </div>
-              <Link to="/sneaker-historie">
+              <Link to="/blog">
                 <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-[#00262F] transition-colors">
-                  MEER HISTORIE
+                  LEES ONZE BLOG
                 </button>
               </Link>
             </div>
@@ -626,7 +630,7 @@ const Landing: React.FC = () => {
               <div className="w-full max-w-md">
                 <img
                   src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-                  alt="Vintage sneakers"
+                  alt="Boxstock Magazine cover"
                   className="w-full h-auto rounded-lg"
                 />
               </div>
@@ -636,34 +640,57 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Newsletter - Improved with incentive */}
-      <section className="py-12 px-6 bg-gray-50">
-        <div className="container mx-auto max-w-3xl">
-          <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-            <h3 className="text-2xl font-bold mb-2">Blijf op de hoogte</h3>
-            <p className="text-gray-600 mb-6">
-              Schrijf je in voor onze nieuwsbrief en ontvang <span className="text-[#E41A36] font-semibold">€5 korting</span> op je eerste bestelling!
-            </p>
-            
-            <form className="max-w-md mx-auto">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-grow">
-                  <label htmlFor="email" className="sr-only">E-mailadres</label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="Jouw e-mailadres"
-                    className="w-full border border-gray-300 rounded py-3 px-4 focus:outline-none focus:ring-1 focus:ring-[#00262F]"
-                    required
-                  />
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto max-w-4xl">
+          <div className="bg-white p-8 rounded-lg shadow-sm">
+            <div className="flex flex-col md:flex-row gap-8 items-center">
+              <div className="md:w-1/2">
+                <div className="bg-[#E41A36]/10 text-[#E41A36] font-semibold rounded-full px-4 py-1.5 mb-4 inline-block text-sm">
+                  BLIJF GEÏNSPIREERD
                 </div>
-                <button
-                  type="submit"
-                  className="bg-[#00262F] text-white py-3 px-6 rounded font-medium hover:bg-[#00374F] transition-colors"
-                >
-                  Inschrijven
-                </button>
+                <h3 className="text-3xl font-bold mb-4">Schrijf je in voor onze nieuwsbrief</h3>
+                <p className="text-gray-600 mb-6">
+                  Ontvang als eerste toegang tot nieuwe collecties, exclusieve aanbiedingen en lifestyle-inspiratie. Plus, krijg direct <span className="text-[#E41A36] font-semibold">€10 korting</span> op je eerstvolgende bestelling.
+                </p>
+                
+                <form className="space-y-4">
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">E-mailadres</label>
+                    <input
+                      type="email"
+                      id="email"
+                      placeholder="jouw@email.com"
+                      className="w-full border border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-[#1EC0A3] focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div className="flex items-start">
+                    <input
+                      type="checkbox"
+                      id="privacy"
+                      className="mt-1"
+                      required
+                    />
+                    <label htmlFor="privacy" className="text-xs text-gray-500 ml-2">
+                      Ik ga akkoord met de <Link to="/privacy" className="underline">privacybeleid</Link> en ontvang graag inspiratie en aanbiedingen.
+                    </label>
+                  </div>
+                  <button
+                    type="submit"
+                    className="bg-[#00262F] text-white py-3 px-6 rounded-lg font-bold hover:bg-[#00374F] transition-colors w-full"
+                  >
+                    INSCHRIJVEN
+                  </button>
+                </form>
               </div>
-            </form>
+              <div className="md:w-1/2">
+                <img 
+                  src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                  alt="Boxstock nieuwsbrief" 
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
