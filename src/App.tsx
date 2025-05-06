@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Blog from "./pages/Blog";
 import BlogDetail from "./pages/BlogDetail";
 import PreOwnedProduct from "./pages/PreOwnedProduct";
+import PreOwnedListings from "./pages/PreOwnedListings";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/pre-owned" element={<PreOwnedProduct />} />
+          <Route path="/pre-owned/product/:productId" element={<PreOwnedListings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

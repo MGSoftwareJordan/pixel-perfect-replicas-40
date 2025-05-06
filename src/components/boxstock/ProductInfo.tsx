@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SizeSelector from './SizeSelector';
 import ExpandableSection from './ExpandableSection';
 import { Heart, Share } from 'lucide-react';
@@ -7,6 +8,7 @@ import { toast } from '@/hooks/use-toast';
 
 const ProductInfo: React.FC = () => {
   const [isFavorite, setIsFavorite] = useState(false);
+  const navigate = useNavigate();
   
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
@@ -32,6 +34,11 @@ const ProductInfo: React.FC = () => {
       });
       navigator.clipboard.writeText(window.location.href);
     }
+  };
+
+  const handlePreOwnedClick = () => {
+    // Navigate to pre-owned listings for this product (using a placeholder ID)
+    navigate('/pre-owned/product/jordan-xxxiii-university-red');
   };
 
   return (
@@ -117,7 +124,10 @@ const ProductInfo: React.FC = () => {
           Bestel nu!
         </button>
         <div className="flex w-full mt-4 max-md:max-w-full">
-          <div className="items-stretch shadow-sm flex min-w-60 w-full gap-3 flex-wrap flex-1 shrink basis-[0%] bg-[#1EC0A3] px-5 py-4 rounded-md hover:bg-[#19a88f] transition-colors cursor-pointer max-md:max-w-full">
+          <div 
+            onClick={handlePreOwnedClick}
+            className="items-stretch shadow-sm flex min-w-60 w-full gap-3 flex-wrap flex-1 shrink basis-[0%] bg-[#1EC0A3] px-5 py-4 rounded-md hover:bg-[#19a88f] transition-colors cursor-pointer max-md:max-w-full"
+          >
             <div className="flex gap-2.5 h-full w-6">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d47ddf5ccfa310bca65fc9f211d243aa1df914c?placeholderIfAbsent=true"
