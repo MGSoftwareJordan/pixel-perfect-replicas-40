@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
-import { ArrowRight, Star } from 'lucide-react';
-import ProductCard from '@/components/boxstock/ProductCard';
+import { ArrowRight, Star, Tag } from 'lucide-react';
 
 const Landing: React.FC = () => {
   // Featured products for the landing page
@@ -19,7 +18,8 @@ const Landing: React.FC = () => {
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
       brand: "Air Jordan",
       rating: 4.5,
-      tag: "BESTSELLER"
+      tag: "BESTSELLER",
+      category: "sneakers"
     },
     {
       id: 2,
@@ -30,7 +30,8 @@ const Landing: React.FC = () => {
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1151fbe94e56faf832add68dff4fd394e96e331e?placeholderIfAbsent=true",
       brand: "Nike",
       rating: 4.8,
-      tag: "NIEUW"
+      tag: "NIEUW",
+      category: "sneakers"
     },
     {
       id: 3,
@@ -40,7 +41,8 @@ const Landing: React.FC = () => {
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/20139938ade4dd7d58525cbf8fb332b18060cf34?placeholderIfAbsent=true",
       brand: "Nike",
       rating: 5.0,
-      tag: "TRENDING"
+      tag: "TRENDING",
+      category: "sneakers"
     },
     {
       id: 4,
@@ -51,7 +53,8 @@ const Landing: React.FC = () => {
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/5b1b65f705bc681b0bdfb2c25e65f8d939142459?placeholderIfAbsent=true",
       brand: "Adidas",
       rating: 4.2,
-      tag: "SALE"
+      tag: "SALE",
+      category: "sneakers"
     },
     {
       id: 5,
@@ -60,23 +63,227 @@ const Landing: React.FC = () => {
       sale: false,
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/b3525f8e789f93fdf9069e290822e3cc6271a324?placeholderIfAbsent=true",
       brand: "Vans",
-      rating: 4.6
+      rating: 4.6,
+      category: "sneakers"
     }
+  ];
+
+  // Accessories products
+  const accessoriesProducts = [
+    {
+      id: 6,
+      name: "Supreme Box Logo Beanie Red",
+      price: "€89",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true",
+      brand: "Supreme",
+      rating: 4.8,
+      category: "accessories"
+    },
+    {
+      id: 7,
+      name: "Nike Tech Cap Black",
+      price: "€29",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
+      brand: "Nike",
+      rating: 4.5,
+      category: "accessories"
+    },
+    {
+      id: 8,
+      name: "Off-White Industrial Belt Yellow",
+      price: "€170",
+      sale: true,
+      originalPrice: "€195",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
+      brand: "Off-White",
+      rating: 4.9,
+      tag: "SALE",
+      category: "accessories"
+    }
+  ];
+
+  // Clothing products
+  const clothingProducts = [
+    {
+      id: 9,
+      name: "Stussy Basic Tee Black",
+      price: "€49",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1151fbe94e56faf832add68dff4fd394e96e331e?placeholderIfAbsent=true",
+      brand: "Stussy",
+      rating: 4.7,
+      category: "clothing"
+    },
+    {
+      id: 10,
+      name: "The North Face Nuptse Jacket Black",
+      price: "€320",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/5b1b65f705bc681b0bdfb2c25e65f8d939142459?placeholderIfAbsent=true",
+      brand: "The North Face",
+      rating: 4.9,
+      tag: "BESTSELLER",
+      category: "clothing"
+    },
+    {
+      id: 11,
+      name: "Carhartt WIP Hoodie Grey",
+      price: "€85",
+      sale: true,
+      originalPrice: "€99",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/20139938ade4dd7d58525cbf8fb332b18060cf34?placeholderIfAbsent=true",
+      brand: "Carhartt WIP",
+      rating: 4.6,
+      tag: "SALE",
+      category: "clothing"
+    }
+  ];
+
+  // Bags products
+  const bagsProducts = [
+    {
+      id: 12,
+      name: "Supreme Shoulder Bag SS21 Black",
+      price: "€79",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
+      brand: "Supreme",
+      rating: 4.5,
+      category: "bags"
+    },
+    {
+      id: 13,
+      name: "The North Face Base Camp Duffel S Black",
+      price: "€130",
+      sale: false,
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
+      brand: "The North Face",
+      rating: 4.8,
+      category: "bags"
+    },
+    {
+      id: 14,
+      name: "Eastpak Padded Pak'r Black",
+      price: "€55",
+      sale: true,
+      originalPrice: "€65",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true",
+      brand: "Eastpak",
+      rating: 4.7,
+      tag: "SALE",
+      category: "bags"
+    }
+  ];
+
+  // Upcoming releases
+  const upcomingReleases = [
+    {
+      id: 15,
+      name: "Nike Dunk Low Retro 'Championship Blue'",
+      releaseDate: "15 mei 2025",
+      price: "€110",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/1151fbe94e56faf832add68dff4fd394e96e331e?placeholderIfAbsent=true",
+      brand: "Nike"
+    },
+    {
+      id: 16,
+      name: "Air Jordan 4 Retro 'Vivid Crimson'",
+      releaseDate: "22 mei 2025",
+      price: "€200",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/20139938ade4dd7d58525cbf8fb332b18060cf34?placeholderIfAbsent=true",
+      brand: "Jordan"
+    },
+    {
+      id: 17,
+      name: "Adidas Yeezy Boost 350 V2 'Slate Grey'",
+      releaseDate: "29 mei 2025",
+      price: "€220",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/5b1b65f705bc681b0bdfb2c25e65f8d939142459?placeholderIfAbsent=true",
+      brand: "Adidas"
+    },
+    {
+      id: 18,
+      name: "New Balance 990v6 'Lunar Grey'",
+      releaseDate: "5 juni 2025",
+      price: "€240",
+      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
+      brand: "New Balance"
+    }
+  ];
+
+  // Top brands that are clickable
+  const topBrands = [
+    { name: "Nike", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/nike-logo.png?placeholderIfAbsent=true" },
+    { name: "Adidas", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/adidas-logo.png?placeholderIfAbsent=true" },
+    { name: "Jordan", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/jordan-logo.png?placeholderIfAbsent=true" },
+    { name: "New Balance", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/new-balance-logo.png?placeholderIfAbsent=true" },
+    { name: "Puma", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/puma-logo.png?placeholderIfAbsent=true" },
+    { name: "Converse", logo: "https://cdn.builder.io/api/v1/image/assets/TEMP/converse-logo.png?placeholderIfAbsent=true" }
   ];
 
   // Categories with images
   const categories = [
-    { name: "DAMES", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/3ef3bd9f9ad579c25ada5f64b24a86af2750850e?placeholderIfAbsent=true", path: "/product" },
-    { name: "HEREN", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/a9e31490770c0f0aca97fed6fe494ad78c6b3959?placeholderIfAbsent=true", path: "/product" },
-    { name: "KINDEREN", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/69e0e5f62d38686d3ee665e8954a1ae7830c3e96?placeholderIfAbsent=true", path: "/product" },
-    { name: "BABY", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8ff4920a29a60a5882ad1e3a361e3e005dffcf77?placeholderIfAbsent=true", path: "/product" }
+    { name: "SNEAKERS", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/3ef3bd9f9ad579c25ada5f64b24a86af2750850e?placeholderIfAbsent=true", path: "/sneakers" },
+    { name: "KLEDING", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/a9e31490770c0f0aca97fed6fe494ad78c6b3959?placeholderIfAbsent=true", path: "/clothing" },
+    { name: "ACCESSOIRES", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/69e0e5f62d38686d3ee665e8954a1ae7830c3e96?placeholderIfAbsent=true", path: "/accessories" },
+    { name: "TASSEN", image: "https://cdn.builder.io/api/v1/image/assets/TEMP/8ff4920a29a60a5882ad1e3a361e3e005dffcf77?placeholderIfAbsent=true", path: "/bags" }
   ];
+
+  // Product card component
+  const ProductCard = ({ product }: { product: any }) => (
+    <Link to={`/product/${product.id}`} className="min-w-[250px]">
+      <div className="relative bg-gray-100 rounded-lg overflow-hidden group">
+        <div className="aspect-square">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          {product.tag && (
+            <div className="absolute top-2 left-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
+              {product.tag}
+            </div>
+          )}
+          {product.sale && (
+            <div className="absolute top-2 right-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
+              SALE
+            </div>
+          )}
+        </div>
+        <div className="p-4 bg-white">
+          <div className="text-sm text-[#00262F]">
+            <Link to={`/brands/${product.brand.toLowerCase().replace(/\s+/g, '-')}`} className="hover:underline">
+              {product.brand}
+            </Link>
+          </div>
+          <h3 className="text-sm font-bold mt-1 mb-2 truncate">{product.name}</h3>
+          
+          <div className="flex gap-1 mb-2">
+            {[...Array(5)].map((_, i) => (
+              <svg key={i} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill={i < Math.floor(product.rating) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-[#1EC0A3]">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
+            ))}
+          </div>
+          
+          <div className="flex items-center">
+            <span className="font-semibold">{product.price}</span>
+            {product.sale && product.originalPrice && (
+              <span className="text-xs text-gray-500 line-through ml-2">{product.originalPrice}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
 
   return (
     <div className="bg-white">
       <Header />
       
-      {/* Hero Section - Updated with new background and styling */}
+      {/* Hero Section */}
       <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
@@ -114,8 +321,64 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Welcome Section - Updated with better styling */}
+      {/* Categories - Enhanced section */}
       <section className="py-16 px-6">
+        <div className="container mx-auto">
+          <h2 className="uppercase text-3xl font-bold mb-12 text-center">
+            ONTDEK ONZE CATEGORIEËN
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {categories.map((category, index) => (
+              <Link to={category.path} key={index} className="group relative">
+                <div className="aspect-[1/1] overflow-hidden bg-gray-100 rounded-lg">
+                  <img 
+                    src={category.image}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    alt={category.name}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
+                    <h3 className="text-white text-2xl font-bold">{category.name}</h3>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Brands */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto">
+          <h2 className="uppercase text-3xl font-bold mb-12 flex items-center justify-center gap-3">
+            <Star className="text-[#E41A36]" />
+            ONZE TOP MERKEN
+          </h2>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {topBrands.map((brand, index) => (
+              <Link 
+                to={`/brands?filter=${brand.name}`} 
+                key={index} 
+                className="bg-white border border-gray-200 hover:border-gray-300 rounded-lg p-6 flex items-center justify-center h-32 transition-all hover:shadow-sm"
+              >
+                <div className="text-center">
+                  <div className="mb-2 h-12 flex items-center justify-center">
+                    {brand.logo ? (
+                      <img src={brand.logo} alt={brand.name} className="h-8 max-w-full object-contain" />
+                    ) : (
+                      <h3 className="font-bold text-[#00262F]">{brand.name}</h3>
+                    )}
+                  </div>
+                  <p className="text-sm text-gray-600">Shop {brand.name}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Welcome Section - Enhanced design */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
@@ -143,203 +406,136 @@ const Landing: React.FC = () => {
                 <p className="mb-6 text-gray-300">
                   Alle sneakers op onze site zijn 100% authentiek en rechtstreeks bij de merken ingekocht.
                 </p>
-                <button className="bg-white text-[#00262F] px-6 py-2 font-bold hover:bg-gray-100 transition-colors">
-                  BUY NEW KICKS
-                </button>
+                <Link to="/sneakers">
+                  <button className="bg-white text-[#00262F] px-6 py-2 font-bold hover:bg-gray-100 transition-colors flex items-center gap-2">
+                    SHOP SNEAKERS <ArrowRight size={16} />
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Hot Products Section - Updated with product cards */}
+      {/* Sneakers Section */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
-          <h2 className="uppercase text-3xl font-bold mb-12">
-            HITTING HEAT<br />
-            <span className="text-4xl">VAN BOXSTOCK</span>
-          </h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold">
+              SNEAKERS
+            </h2>
+            <Link to="/sneakers" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+              Bekijk alles <ArrowRight size={16} />
+            </Link>
+          </div>
           
-          <div className="flex overflow-x-auto gap-4 pb-4">
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
             {featuredProducts.map((product) => (
-              <Link to="/product" key={product.id} className="min-w-[250px]">
-                <div className="relative bg-gray-100 rounded-lg overflow-hidden">
-                  <div className="aspect-square">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                    {product.tag && (
-                      <div className="absolute top-2 left-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
-                        {product.tag}
-                      </div>
-                    )}
-                    {product.sale && (
-                      <div className="absolute top-2 right-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
-                        SALE
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-4 bg-white">
-                    <div className="text-sm text-[#00262F]">{product.brand}</div>
-                    <h3 className="text-sm font-bold mt-1 mb-2 truncate">{product.name}</h3>
-                    
-                    <div className="flex gap-1 mb-2">
-                      {[...Array(5)].map((_, i) => (
-                        <svg key={i} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill={i < Math.floor(product.rating) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-[#1EC0A3]">
-                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                        </svg>
-                      ))}
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <span className="font-semibold">{product.price}</span>
-                      {product.sale && product.originalPrice && (
-                        <span className="text-xs text-gray-500 line-through ml-2">{product.originalPrice}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
       </section>
-
-      {/* Categories */}
-      <section className="py-16 px-6">
+      
+      {/* Accessories Section */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.map((category, index) => (
-              <Link to={category.path} key={index} className="group relative">
-                <div className="aspect-[1/1] overflow-hidden bg-gray-100">
-                  <img 
-                    src={category.image}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    alt={category.name}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/40 transition-colors">
-                    <h3 className="text-white text-2xl font-bold">{category.name}</h3>
-                  </div>
-                </div>
-              </Link>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold">
+              ACCESSOIRES
+            </h2>
+            <Link to="/accessories" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+              Bekijk alles <ArrowRight size={16} />
+            </Link>
+          </div>
+          
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            {accessoriesProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>
       </section>
-
-      {/* Benefits - Updated with Boxstock branding */}
+      
+      {/* Clothing Section */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
-          <h2 className="uppercase text-3xl font-bold mb-12">
-            ZOEKEN, KIEZEN, SCOREN<br />
-            <span className="text-4xl">MET BOXSTOCK</span>
-          </h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold">
+              KLEDING
+            </h2>
+            <Link to="/clothing" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+              Bekijk alles <ArrowRight size={16} />
+            </Link>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="space-y-6">
-              <p className="text-gray-700">
-                Je favoriete sneakers shop je makkelijk en snel bij Boxstock. Met meer dan 10.000 paar sneakers op voorraad heb je altijd genoeg keus. We hebben alle topsellers, limited editions en de nieuwste releases.
-              </p>
-              <p className="text-gray-700">
-                We zijn een 100% authorized retailer. Dat betekent dat we samenwerken met alle topmerken en dat alle sneakers op onze site 100% origineel en authentiek zijn.
-              </p>
-              <p className="text-gray-700">
-                Vandaag voor 23:59 besteld? Dan heb je je sneakers morgen al in huis! We versturen met DHL en je kan de bestelling volgen via track & trace.
-              </p>
-            </div>
-            <div className="space-y-6">
-              <p className="text-gray-700">
-                Niet blij met je aankoop? Je kan binnen 30 dagen je bestelling retourneren. Erg makkelijk met ons retourportaal en de verzendkosten zijn voor ons.
-              </p>
-              <p className="text-gray-700">
-                We worden beoordeeld met een 9.2 door duizenden klanten. Service, kwaliteit, snelheid van leveren en goede prijzen zijn de redenen dat klanten ons aanraden.
-              </p>
-              <p className="text-gray-700">
-                Vragen of wil je gewoon even kletsen? We zijn bereikbaar via WhatsApp, mail en telefoon. Ons team staat altijd voor je klaar.
-              </p>
-            </div>
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            {clothingProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>
-
-      {/* Blog Section - Updated with Boxstock branding */}
-      <section className="py-16 px-6">
+      
+      {/* Bags Section */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
-          <h2 className="uppercase text-3xl font-bold mb-12">
-            BOXSTOCK<br />
-            <span className="text-4xl">SCHRIJFT BLOGS</span>
-          </h2>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold">
+              TASSEN
+            </h2>
+            <Link to="/bags" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+              Bekijk alles <ArrowRight size={16} />
+            </Link>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Link to="/blog/1" className="group">
-              <div className="border border-gray-200 overflow-hidden">
-                <div className="aspect-[16/9] overflow-hidden">
-                  <img 
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true"
-                    alt="Blog post"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="text-xs text-gray-500 mb-2">3 mei 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
-                    De geschiedenis van Air Jordan sneakers
-                  </h3>
-                  <p className="text-gray-700 text-sm line-clamp-3">
-                    Ontdek de rijke geschiedenis achter het iconische Air Jordan merk en hoe het de sneakercultuur voorgoed veranderde.
-                  </p>
-                </div>
-              </div>
-            </Link>
-            
-            <Link to="/blog/2" className="group">
-              <div className="border border-gray-200 overflow-hidden">
-                <div className="aspect-[16/9] overflow-hidden">
-                  <img 
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true"
-                    alt="Blog post"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="text-xs text-gray-500 mb-2">28 april 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
-                    Top 10 duurzame sneakermerken van 2025
-                  </h3>
-                  <p className="text-gray-700 text-sm line-clamp-3">
-                    De sneakerindustrie wordt steeds duurzamer. Bekijk hier de merken die vooroplopen met eco-vriendelijke innovaties.
-                  </p>
-                </div>
-              </div>
-            </Link>
-            
-            <Link to="/blog/3" className="group">
-              <div className="border border-gray-200 overflow-hidden">
-                <div className="aspect-[16/9] overflow-hidden">
-                  <img 
-                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/ab17d086a93643e33227de5cccee1c221bae4655?placeholderIfAbsent=true"
-                    alt="Blog post"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <div className="text-xs text-gray-500 mb-2">15 april 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
-                    De opkomst van digitale mode en NFT sneakers
-                  </h3>
-                  <p className="text-gray-700 text-sm line-clamp-3">
-                    Hoe digitale mode en NFT's de sneakerwereld transformeren en wat dit betekent voor verzamelaars en investeerders.
-                  </p>
-                </div>
-              </div>
-            </Link>
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+            {bagsProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
       </section>
 
-      {/* History Block - Updated with Boxstock branding */}
+      {/* Upcoming Releases Section */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="container mx-auto">
+          <h2 className="uppercase text-3xl font-bold mb-8">
+            UPCOMING RELEASES
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {upcomingReleases.map((release) => (
+              <div key={release.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={release.image}
+                    alt={release.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-6">
+                  <div className="text-sm text-[#E41A36] font-semibold mb-2">
+                    Release: {release.releaseDate}
+                  </div>
+                  <Link to={`/brands/${release.brand.toLowerCase().replace(/\s+/g, '-')}`} className="text-[#00262F] hover:underline">
+                    {release.brand}
+                  </Link>
+                  <h3 className="font-bold text-lg mt-1 mb-2">{release.name}</h3>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">{release.price}</span>
+                    <button className="bg-[#00262F] text-white px-4 py-2 text-sm rounded-md hover:bg-[#00374F] transition-colors">
+                      Notificeer mij
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* History Block */}
       <section className="py-16 px-6 bg-[#00262F] text-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -379,32 +575,6 @@ const Landing: React.FC = () => {
 
       {/* Newsletter */}
       <Newsletter />
-      
-      {/* Social Media */}
-      <section className="py-10 bg-black text-white">
-        <div className="container mx-auto px-6 text-center">
-          <h2 className="uppercase font-bold mb-6">SOCIAL MEDIA</h2>
-          <div className="flex justify-center gap-6">
-            <a href="#" className="text-white hover:text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </a>
-            <a href="#" className="text-white hover:text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
-            </a>
-            <a href="#" className="text-white hover:text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6">
-                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
-              </svg>
-            </a>
-          </div>
-        </div>
-      </section>
       
       {/* Footer */}
       <Footer />
