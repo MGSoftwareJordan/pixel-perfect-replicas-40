@@ -12,6 +12,12 @@ import BlogDetail from "./pages/BlogDetail";
 import PreOwnedProduct from "./pages/PreOwnedProduct";
 import PreOwnedListings from "./pages/PreOwnedListings";
 import ProfilePage from "./pages/ProfilePage";
+import Sneakers from "./pages/Sneakers";
+import Accessories from "./pages/Accessories";
+import Clothing from "./pages/Clothing";
+import Bags from "./pages/Bags";
+import Brands from "./pages/Brands";
+import PreOwned from "./pages/PreOwned";
 
 const queryClient = new QueryClient();
 
@@ -26,10 +32,15 @@ const App = () => (
           <Route path="/product" element={<Index />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
-          <Route path="/pre-owned" element={<PreOwnedProduct />} />
+          <Route path="/pre-owned" element={<PreOwned />} />
           <Route path="/pre-owned/product/:productId" element={<PreOwnedListings />} />
           <Route path="/pre-owned/:id" element={<PreOwnedProduct />} />
           <Route path="/profile/:sellerId" element={<ProfilePage />} />
+          <Route path="/sneakers" element={<Sneakers />} />
+          <Route path="/accessories" element={<Accessories />} />
+          <Route path="/clothing" element={<Clothing />} />
+          <Route path="/bags" element={<Bags />} />
+          <Route path="/brands" element={<Brands />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
