@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, Heart, ShoppingCart, MessageCircle, Shield, Info } from 'lucide-react';
+import { Star, Heart, ShoppingCart, MessageCircle, Shield, Info, User, Images } from 'lucide-react';
 import { 
   Carousel,
   CarouselContent,
@@ -10,6 +10,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Card } from '@/components/ui/card';
 
 const PreOwnedProductDetail: React.FC = () => {
   // Sample pre-owned product
@@ -38,110 +39,75 @@ const PreOwnedProductDetail: React.FC = () => {
     ],
     seller: {
       name: 'SneakerHeads',
+      avatar: 'M',
       rating: 4.8,
       sales: 42,
       joined: 'Augustus 2022',
-      responseTime: '< 2 uur'
+      responseTime: '< 2 uur',
+      location: 'Amsterdam',
+      verified: true,
+      bio: 'Sneakerverzamelaar sinds 2010. Verkoop alleen items uit mijn persoonlijke collectie, alles authentiek en in goede staat.',
+      listings: 12
     }
   };
 
   const [liked, setLiked] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   return (
     <div className="container mx-auto max-w-6xl px-4 mb-16">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Product Gallery - Left side */}
-        <div className="lg:w-[55%] space-y-4">
-          <div className="relative bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
-            <Badge className="absolute top-4 left-4 z-10 bg-[#1EC0A3] text-white">PRE-OWNED</Badge>
-            
-            <Carousel className="w-full" opts={{ loop: true }}>
-              <CarouselContent>
-                {product.images.map((img, index) => (
-                  <CarouselItem key={index}>
-                    <div className="aspect-[4/3] flex items-center justify-center bg-gray-50 p-1">
-                      <img 
-                        src={img} 
-                        alt={`${product.name} - image ${index + 1}`}
-                        className="w-full h-full object-cover rounded-lg"
-                      />
-                    </div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-2" />
-              <CarouselNext className="right-2" />
-            </Carousel>
-            
-            <button 
-              onClick={() => setLiked(!liked)} 
-              className={`absolute top-4 right-4 p-2 rounded-full ${liked ? 'bg-[#E41A36] text-white' : 'bg-white text-gray-600'} shadow-md`}
-            >
-              <Heart className={`w-5 h-5 ${liked ? 'fill-white' : ''}`} />
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-4 gap-3">
-            {product.images.map((image, idx) => (
-              <div 
-                key={idx} 
-                className="aspect-square bg-white rounded-lg overflow-hidden cursor-pointer border border-gray-100 p-1"
+      <Card className="bg-white border border-gray-100 shadow-sm rounded-xl overflow-hidden mb-8">
+        <div className="flex flex-col lg:flex-row">
+          {/* Product Gallery - Left side */}
+          <div className="lg:w-3/5 p-6">
+            <div className="relative">
+              <Badge className="absolute top-4 left-4 z-10 bg-[#1EC0A3] text-white">PRE-OWNED</Badge>
+              
+              <Carousel className="w-full" opts={{ loop: true }}>
+                <CarouselContent>
+                  {product.images.map((img, index) => (
+                    <CarouselItem key={index}>
+                      <div className="aspect-square flex items-center justify-center bg-gray-50 rounded-lg overflow-hidden">
+                        <img 
+                          src={img} 
+                          alt={`${product.name} - image ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2" />
+                <CarouselNext className="right-2" />
+              </Carousel>
+              
+              <button 
+                onClick={() => setLiked(!liked)} 
+                className={`absolute top-4 right-4 p-2 rounded-full ${liked ? 'bg-[#E41A36] text-white' : 'bg-white text-gray-600'} shadow-md`}
               >
-                <img 
-                  src={image} 
-                  alt={`${product.name} view ${idx+1}`}
-                  className="w-full h-full object-cover rounded"
-                />
-              </div>
-            ))}
-          </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-            <div className="flex flex-col items-start text-[#00262F]">
-              <div className="flex items-center gap-2 mb-4 w-full">
-                <div className="text-xl font-bold text-[#00262F]">
-                  Verkoper
-                </div>
-                <Badge variant="outline" className="bg-[#1EC0A3]/10 text-[#1EC0A3] border-[#1EC0A3]/20">
-                  Geverifieerd
-                </Badge>
-              </div>
-              
-              <div className="flex items-center gap-4 w-full mb-4">
-                <div className="w-12 h-12 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-lg font-bold text-[#1EC0A3]">
-                  {product.seller.name[0]}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-[#00262F]">{product.seller.name}</h3>
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm">{product.seller.rating} · {product.seller.sales} verkopen</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-2 gap-4 w-full text-sm">
-                <div>
-                  <span className="text-gray-500">Lid sinds</span>
-                  <p className="font-medium">{product.seller.joined}</p>
-                </div>
-                <div>
-                  <span className="text-gray-500">Reactietijd</span>
-                  <p className="font-medium">{product.seller.responseTime}</p>
-                </div>
-              </div>
-              
-              <Button className="w-full mt-4 bg-white text-[#00262F] border border-[#00262F] hover:bg-gray-50 flex gap-2 items-center justify-center">
-                <MessageCircle className="w-4 h-4" />
-                Contact verkoper
-              </Button>
+                <Heart className={`w-5 h-5 ${liked ? 'fill-white' : ''}`} />
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-4 gap-3 mt-4">
+              {product.images.map((image, idx) => (
+                <button 
+                  key={idx} 
+                  onClick={() => setActiveImageIndex(idx)}
+                  className={`aspect-square bg-white rounded-lg overflow-hidden cursor-pointer border ${activeImageIndex === idx ? 'border-[#1EC0A3] p-0.5' : 'border-gray-100 p-1'}`}
+                >
+                  <img 
+                    src={image} 
+                    alt={`${product.name} view ${idx+1}`}
+                    className="w-full h-full object-cover rounded"
+                  />
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-        
-        {/* Product Info - Right side */}
-        <div className="lg:w-[45%]">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 h-full">
+          
+          {/* Product Info - Right side */}
+          <div className="lg:w-2/5 p-6 border-l border-gray-100">
             <div className="space-y-6">
               <div>
                 <div className="text-gray-600 text-lg">{product.brand}</div>
@@ -211,18 +177,93 @@ const PreOwnedProductDetail: React.FC = () => {
                   In winkelwagen
                 </Button>
               </div>
-              
-              <div className="flex flex-col gap-3 text-sm text-gray-500 pt-4 border-t border-gray-200">
-                <div className="flex items-center">
-                  <Shield className="w-5 h-5 mr-2 text-[#1EC0A3]" />
-                  <span>Echtheidscontrole door Boxstock experts</span>
-                </div>
-                <div className="flex items-center">
-                  <svg className="w-5 h-5 mr-2 text-[#1EC0A3]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <span>Voor 23:59 besteld, morgen in huis</span>
-                </div>
+            </div>
+          </div>
+        </div>
+      </Card>
+      
+      {/* Seller information */}
+      <Card className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-2xl font-bold text-[#1EC0A3]">
+              {product.seller.avatar}
+            </div>
+            <div>
+              <div className="flex items-center gap-1">
+                <h3 className="font-bold text-xl text-[#00262F]">{product.seller.name}</h3>
+                {product.seller.verified && (
+                  <Badge variant="outline" className="bg-[#1EC0A3]/10 text-[#1EC0A3] border-[#1EC0A3]/20 ml-1">
+                    Geverifieerd
+                  </Badge>
+                )}
+              </div>
+              <div className="flex items-center gap-1 mt-1">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span className="text-sm">{product.seller.rating} · {product.seller.sales} verkopen</span>
+              </div>
+              <div className="flex gap-4 mt-1 text-sm text-gray-500">
+                <div>{product.seller.location}</div>
+                <div>·</div>
+                <div>Lid sinds {product.seller.joined}</div>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col md:flex-row gap-3">
+            <Button className="bg-[#1EC0A3] hover:bg-[#18a88f] text-white flex gap-2 items-center justify-center">
+              <MessageCircle className="w-4 h-4" />
+              Contact verkoper
+            </Button>
+            <Button variant="outline" className="border-gray-200 text-gray-700 hover:bg-gray-50 flex gap-2 items-center justify-center">
+              <Images className="w-4 h-4" />
+              Bekijk alle {product.seller.listings} listings
+            </Button>
+          </div>
+        </div>
+        
+        <div className="mt-4 border-t border-gray-100 pt-4">
+          <h4 className="font-medium text-[#00262F] mb-2">Over de verkoper</h4>
+          <p className="text-gray-600">{product.seller.bio}</p>
+        </div>
+      </Card>
+      
+      <div className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
+        <div className="flex flex-col md:flex-row items-start gap-6">
+          <div className="md:w-1/2 space-y-3">
+            <div className="flex items-start gap-2">
+              <Shield className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-medium text-[#00262F]">Echtheidsgarantie</h3>
+                <p className="text-sm text-gray-600">Elk item wordt grondig gecontroleerd door onze experts voordat het wordt verzonden.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <svg className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 className="font-medium text-[#00262F]">Snelle verzending</h3>
+                <p className="text-sm text-gray-600">Voor 23:59 besteld, morgen in huis bij de meeste bestellingen.</p>
+              </div>
+            </div>
+          </div>
+          <div className="md:w-1/2 space-y-3">
+            <div className="flex items-start gap-2">
+              <svg className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <h3 className="font-medium text-[#00262F]">30 dagen retourbeleid</h3>
+                <p className="text-sm text-gray-600">Niet tevreden? Je kunt je aankoop binnen 30 dagen retourneren.</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <svg className="h-5 w-5 text-[#1EC0A3] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              <div>
+                <h3 className="font-medium text-[#00262F]">Community vertrouwen</h3>
+                <p className="text-sm text-gray-600">Een betrouwbare community met geverifieerde verkopers.</p>
               </div>
             </div>
           </div>

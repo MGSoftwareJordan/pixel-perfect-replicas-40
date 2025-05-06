@@ -3,9 +3,11 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, ArrowLeft, Star, Info } from 'lucide-react';
+import { Heart, ArrowLeft, Star, Info, User } from 'lucide-react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
+import { Card, CardContent } from '@/components/ui/card';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const PreOwnedListings: React.FC = () => {
   const { productId } = useParams();
@@ -33,9 +35,13 @@ const PreOwnedListings: React.FC = () => {
       ],
       seller: {
         name: "SneakerHeads",
+        avatar: "M",
         rating: 4.8,
-        verified: true
-      }
+        verified: true,
+        location: "Amsterdam",
+        joinedDate: "Apr 2021"
+      },
+      description: "Perfect match for any outfit, barely worn. Original box included."
     },
     {
       id: 2,
@@ -51,9 +57,13 @@ const PreOwnedListings: React.FC = () => {
       ],
       seller: {
         name: "SneakerLover",
+        avatar: "J",
         rating: 4.6,
-        verified: true
-      }
+        verified: true,
+        location: "Rotterdam",
+        joinedDate: "Mar 2022"
+      },
+      description: "Great condition, minor signs of wear. Super comfortable!"
     },
     {
       id: 3,
@@ -69,9 +79,13 @@ const PreOwnedListings: React.FC = () => {
       ],
       seller: {
         name: "KickKings",
+        avatar: "K",
         rating: 4.9,
-        verified: true
-      }
+        verified: true,
+        location: "Utrecht",
+        joinedDate: "Jan 2020"
+      },
+      description: "Almost new! Only worn once indoors. Comes with extra laces."
     },
     {
       id: 4,
@@ -87,9 +101,13 @@ const PreOwnedListings: React.FC = () => {
       ],
       seller: {
         name: "ShoeMaster",
+        avatar: "S",
         rating: 4.2,
-        verified: false
-      }
+        verified: false,
+        location: "Den Haag",
+        joinedDate: "Aug 2022"
+      },
+      description: "Good condition, some signs of wear but lots of life left!"
     }
   ];
 
@@ -131,77 +149,92 @@ const PreOwnedListings: React.FC = () => {
           {listings.length} pre-owned {product.name} beschikbaar
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-16">
           {listings.map(listing => (
-            <div 
+            <Card 
               key={listing.id}
-              className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all"
+              className="overflow-hidden hover:shadow-md transition-all border-gray-100 group"
             >
-              <Link to={`/pre-owned/${listing.id}`} className="flex">
-                <div className="relative w-2/5">
-                  <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white">
-                    PRE-OWNED
-                  </Badge>
-                  <div className="h-full bg-gray-50 flex items-center justify-center overflow-hidden">
-                    <img 
-                      src={listing.images[0]} 
-                      alt={product.name}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                </div>
-                
-                <div className="w-3/5 p-4">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <div className="text-sm text-gray-600">{product.brand}</div>
-                      <h3 className="font-medium text-[#00262F]">{product.name}</h3>
-                    </div>
-                    <button className="text-gray-400 hover:text-red-500 transition-colors p-1">
+              <Link to={`/pre-owned/${listing.id}`} className="block">
+                <div className="grid grid-cols-1 md:grid-cols-2 h-full">
+                  {/* Left side - Photos */}
+                  <div className="relative">
+                    <Badge className="absolute top-3 left-3 z-10 bg-[#1EC0A3] text-white">
+                      PRE-OWNED
+                    </Badge>
+                    <AspectRatio ratio={1/1} className="bg-gray-50">
+                      <img 
+                        src={listing.images[0]} 
+                        alt={`${product.name} door ${listing.seller.name}`}
+                        className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
+                      />
+                    </AspectRatio>
+                    <button className="absolute top-3 right-3 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors">
                       <Heart className="h-5 w-5" />
                     </button>
                   </div>
                   
-                  <div className="mt-2 flex items-end gap-2">
-                    <div className="text-xl font-bold text-[#E41A36]">{listing.price}</div>
-                    <div className="text-sm text-gray-500 line-through">{listing.originalPrice}</div>
-                    <div className="bg-[#E41A36]/10 text-[#E41A36] text-xs font-medium px-2 py-0.5 rounded">
-                      {listing.discount}
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-2 mt-3 text-sm">
-                    <div>
-                      <span className="text-gray-500">Conditie:</span> {listing.condition}
-                    </div>
-                    <div>
-                      <span className="text-gray-500">Maat:</span> {listing.size}
-                    </div>
-                  </div>
-                  
-                  <div className="mt-2 flex justify-between items-center">
-                    <div className="flex items-center gap-1">
-                      <div className="text-xs bg-gray-50 px-2 py-1 rounded flex items-center">
-                        <span className="font-medium">{listing.seller.name}</span>
-                        {listing.seller.verified && (
-                          <span className="ml-1 text-[#1EC0A3] text-xs">✓</span>
-                        )}
-                      </div>
-                      <div className="flex items-center">
-                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs ml-0.5">{listing.seller.rating}</span>
+                  {/* Right side - Info */}
+                  <CardContent className="p-4 md:p-5 flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <div className="text-sm text-gray-600">{product.brand}</div>
+                        <h3 className="font-medium text-[#00262F] line-clamp-1">{product.name}</h3>
                       </div>
                     </div>
-                    <Button 
-                      size="sm" 
-                      className="bg-[#00262F] hover:bg-[#001520] text-white text-xs"
-                    >
-                      Bekijk
-                    </Button>
-                  </div>
+                    
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="text-xl font-bold text-[#E41A36]">{listing.price}</div>
+                      <div className="text-sm text-gray-500 line-through">{listing.originalPrice}</div>
+                      <div className="bg-[#E41A36]/10 text-[#E41A36] text-xs font-medium px-2 py-0.5 rounded">
+                        {listing.discount}
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-2 text-sm mb-2">
+                      <div>
+                        <span className="text-gray-500">Conditie:</span> {listing.condition}
+                      </div>
+                      <div>
+                        <span className="text-gray-500">Maat:</span> {listing.size}
+                      </div>
+                    </div>
+                    
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{listing.description}</p>
+                    
+                    <div className="mt-auto">
+                      <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-sm font-medium text-[#1EC0A3]">
+                            {listing.seller.avatar}
+                          </div>
+                          <div>
+                            <div className="flex items-center text-xs">
+                              <span className="font-medium mr-1">{listing.seller.name}</span>
+                              {listing.seller.verified && (
+                                <span className="text-[#1EC0A3]">✓</span>
+                              )}
+                            </div>
+                            <div className="flex items-center text-xs text-gray-500">
+                              <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-0.5" />
+                              <span>{listing.seller.rating}</span>
+                              <span className="mx-1">·</span>
+                              <span>{listing.seller.location}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <Button 
+                          size="sm" 
+                          className="bg-[#00262F] hover:bg-[#001520] text-white text-xs"
+                        >
+                          Bekijk
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
                 </div>
               </Link>
-            </div>
+            </Card>
           ))}
         </div>
         
