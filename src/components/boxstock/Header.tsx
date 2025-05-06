@@ -83,7 +83,7 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="w-full bg-white relative z-50">
+    <header className="w-full bg-white relative z-[90]">
       {/* Top navigation */}
       <div className="border-b border-gray-100">
         <div className="container mx-auto max-w-6xl px-4 py-2">
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
       <div className="border-b border-gray-200">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="hidden md:flex items-center space-x-4 overflow-x-auto py-3 scrollbar-hide">
-            <NavigationMenu className="z-50">
+            <NavigationMenu className="z-[100]">
               <NavigationMenuList>
                 {mainCategories.map((category) => (
                   <NavigationMenuItem key={category.name}>
