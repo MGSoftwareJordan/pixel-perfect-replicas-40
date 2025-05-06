@@ -1,7 +1,18 @@
+
 import React from 'react';
 import ProductCard from './ProductCard';
+import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
-const PreOwnedProducts: React.FC = () => {
+interface PreOwnedProductsProps {
+  limit?: number;
+  showHeading?: boolean;
+}
+
+const PreOwnedProducts: React.FC<PreOwnedProductsProps> = ({ 
+  limit, 
+  showHeading = true 
+}) => {
   const products = [
     {
       id: 1,
@@ -53,25 +64,29 @@ const PreOwnedProducts: React.FC = () => {
     }
   ];
 
+  // If limit is provided, slice the products array
+  const displayProducts = limit ? products.slice(0, limit) : products;
+
   return (
-    <section className="flex w-full flex-col items-stretch mt-[60px] pl-20 pt-[9px] pb-[21px] max-md:max-w-full max-md:mt-10 max-md:pl-5">
-      <div className="self-center flex w-full max-w-[1194px] items-stretch gap-5 text-[#00262F] font-bold flex-wrap justify-between max-md:max-w-full">
-        <h2 className="text-[#00262F] text-[32px] leading-none">
-          Pre-owned artikelen
-        </h2>
-        <div className="flex items-stretch gap-[11px] text-base mt-1.5">
-          <div className="text-[#00262F] grow cursor-pointer">
-            Bekijk meer
-          </div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d39c0f1eb7f1243a62c529fa14d41d85453ba72?placeholderIfAbsent=true"
-            className="aspect-[1] object-contain w-6 shrink-0"
-            alt="Arrow right"
-          />
+    <section className="container mx-auto">
+      {showHeading && (
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-[#00262F] text-2xl md:text-3xl font-bold">
+            Pre-owned artikelen
+          </h2>
+          <Button 
+            variant="ghost" 
+            className="text-[#00262F] hover:text-[#E41A36] flex items-center"
+            asChild
+          >
+            <a href="/pre-owned">
+              Bekijk meer <ArrowRight size={16} className="ml-1" />
+            </a>
+          </Button>
         </div>
-      </div>
-      <div className="flex items-center gap-2.5 mt-[39px] overflow-x-auto max-md:max-w-full">
-        {products.map(product => (
+      )}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        {displayProducts.map(product => (
           <ProductCard
             key={product.id}
             brand={product.brand}
