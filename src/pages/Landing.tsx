@@ -89,7 +89,7 @@ const Landing: React.FC = () => {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
           <img 
-            src={`${import.meta.env.BASE_URL}lovable-uploads/aeabc203-3777-4648-8357-a3052d2c16aa.png`}
+            src={`https://boxstock.com/images/banners/nike-jordan.webp`}
             alt="Hero background" 
             className="w-full h-full object-cover object-center scale-110 animate-slow-zoom"
           />
