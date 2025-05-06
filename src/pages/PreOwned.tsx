@@ -70,40 +70,95 @@ const PreOwned: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <div className="container mx-auto max-w-6xl px-4 py-8">
-        <h1 className="text-3xl font-bold text-[#00262F] mb-8">Pre-owned</h1>
-        
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-          <h2 className="text-xl font-bold text-[#00262F] mb-4 flex items-center">
-            <Tag size={20} className="mr-2 text-[#1EC0A3]" />
-            Over onze pre-owned collectie
-          </h2>
-          <p className="text-gray-600">
-            Bij Boxstock krijgen premium sneakers en streetwear een tweede leven. 
-            Onze pre-owned collectie bestaat uit zorgvuldig geselecteerde items die 
-            voldoen aan onze kwaliteitseisen. Elk item wordt grondig gecontroleerd 
-            en professioneel gereinigd voordat het in onze collectie wordt opgenomen.
-          </p>
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 mb-8 text-sm">
+          <Link to="/" className="text-gray-500 hover:text-[#00262F]">Home</Link>
+          <span className="text-gray-400">›</span>
+          <span className="text-[#00262F]">Pre-owned</span>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {preOwnedItems.map((item) => (
-            <Link 
-              to={`/pre-owned/product/${item.title.toLowerCase().replace(/ /g, '-')}`} 
-              key={item.id}
-              className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all"
-            >
-              <div className="aspect-square bg-gray-100 relative">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute bottom-0 right-0 bg-white px-2 py-1 m-2 rounded text-sm font-medium">
-                  {item.size}
-                </div>
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Left sidebar */}
+          <div className="w-full md:w-1/4 bg-white rounded-lg p-6 h-fit">
+            <h1 className="text-3xl font-bold text-[#00262F] mb-4">Pre-owned</h1>
+            <p className="text-gray-600 mb-6">
+              Ontdek een grote selectie van tweedehands sneakers en streetwear.
+            </p>
+            
+            <div className="bg-[#1EC0A3]/10 p-4 rounded-lg mb-6">
+              <div className="flex items-center gap-2 mb-2 text-[#1EC0A3]">
+                <Tag size={18} />
+                <span className="font-bold">PRE-OWNED</span>
               </div>
-            </Link>
-          ))}
+              <p className="text-sm text-gray-700">
+                Alle items worden gecontroleerd op authenticiteit en kwaliteit voordat ze worden aangeboden.
+              </p>
+            </div>
+            
+            <nav className="space-y-2">
+              <Link to="/sneakers" className="block text-gray-600 hover:text-[#00262F] py-1">
+                Sneakers
+              </Link>
+              <Link to="/accessories" className="block text-gray-600 hover:text-[#00262F] py-1">
+                Accessoires
+              </Link>
+              <Link to="/clothing" className="block text-gray-600 hover:text-[#00262F] py-1">
+                Kleding
+              </Link>
+              <Link to="/bags" className="block text-gray-600 hover:text-[#00262F] py-1">
+                Tassen
+              </Link>
+              <Link to="/brands" className="block text-gray-600 hover:text-[#00262F] py-1">
+                Merken
+              </Link>
+            </nav>
+          </div>
+          
+          {/* Main content */}
+          <div className="w-full md:w-3/4">
+            <div className="mb-8">
+              <div className="bg-white p-6 rounded-lg shadow-sm">
+                <h2 className="text-xl font-bold text-[#00262F] mb-4 flex items-center">
+                  <Tag size={20} className="mr-2 text-[#1EC0A3]" />
+                  Over onze pre-owned collectie
+                </h2>
+                <p className="text-gray-600">
+                  Bij Boxstock krijgen premium sneakers en streetwear een tweede leven. 
+                  Onze pre-owned collectie bestaat uit zorgvuldig geselecteerde items die 
+                  voldoen aan onze kwaliteitseisen. Elk item wordt grondig gecontroleerd 
+                  en professioneel gereinigd voordat het in onze collectie wordt opgenomen.
+                </p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {preOwnedItems.map((item) => (
+                <Link 
+                  to={`/pre-owned/${item.id}`} 
+                  key={item.id}
+                  className="relative bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all"
+                >
+                  <div className="aspect-square bg-gray-100 relative">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 bg-[#1EC0A3] text-white text-xs font-bold px-2 py-1 text-center">
+                      PRE-OWNED
+                    </div>
+                    <div className="absolute top-2 right-2 bg-white px-2 py-1 rounded text-sm font-medium">
+                      {item.size}
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-bold text-sm">{item.title}</h3>
+                    <div className="font-semibold text-sm mt-1">{item.price}</div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

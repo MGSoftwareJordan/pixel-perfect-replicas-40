@@ -5,18 +5,10 @@ import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
 import { ArrowRight, Star } from 'lucide-react';
+import ProductCard from '@/components/boxstock/ProductCard';
 
 const Landing: React.FC = () => {
-  // Brand logos for the brand bar
-  const brands = [
-    { name: 'Nike', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/6aacf4fc34eb3f87e49e2c4c6287d8c917b09a11?placeholderIfAbsent=true' },
-    { name: 'Adidas', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/20aaa695d05117101e3a4a54402efc557d037b95?placeholderIfAbsent=true' },
-    { name: 'Reebok', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/f3e534223adb9fcb6c53c3669f5a2a57b8bcc7b4?placeholderIfAbsent=true' },
-    { name: 'Converse', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/0463316156002c7c56a5f05c6839aab7f3a5e204?placeholderIfAbsent=true' },
-    { name: 'Puma', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/058f9f5ebe09d28cd5868383d08be31fe8629847?placeholderIfAbsent=true' },
-    { name: 'Vans', logo: 'https://cdn.builder.io/api/v1/image/assets/TEMP/7dfcb06640a07bff110f3a711dbd3d84d15e62fe?placeholderIfAbsent=true' },
-  ];
-
+  // Featured products for the landing page
   const featuredProducts = [
     {
       id: 1,
@@ -122,24 +114,7 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Brands Bar */}
-      <section className="bg-black py-6">
-        <div className="container mx-auto px-6">
-          <div className="flex justify-between items-center flex-wrap gap-6">
-            {brands.map((brand, index) => (
-              <div key={index} className="flex items-center">
-                <img 
-                  src={brand.logo} 
-                  alt={brand.name}
-                  className="h-8 md:h-10 w-auto opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Welcome Section - Updated with Boxstock branding */}
+      {/* Welcome Section - Updated with better styling */}
       <section className="py-16 px-6">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
@@ -159,19 +134,25 @@ const Landing: React.FC = () => {
               </button>
             </div>
             <div>
-              <div className="bg-[#00262F] text-white p-8 rotate-3 transform">
-                <h3 className="uppercase text-2xl font-bold rotate-[-3deg] transform">
+              <div className="bg-[#00262F] text-white p-10 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                <h3 className="uppercase text-3xl font-bold mb-4 leading-tight">
                   AUTHENTIEKE<br />
-                  SNEAKERS<br />
-                  BUY NEW KICKS
+                  SNEAKERS
                 </h3>
+                <div className="h-1 w-16 bg-[#E41A36] mb-4"></div>
+                <p className="mb-6 text-gray-300">
+                  Alle sneakers op onze site zijn 100% authentiek en rechtstreeks bij de merken ingekocht.
+                </p>
+                <button className="bg-white text-[#00262F] px-6 py-2 font-bold hover:bg-gray-100 transition-colors">
+                  BUY NEW KICKS
+                </button>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Hot Products Section - Updated heading */}
+      {/* Hot Products Section - Updated with product cards */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
           <h2 className="uppercase text-3xl font-bold mb-12">
@@ -179,40 +160,41 @@ const Landing: React.FC = () => {
             <span className="text-4xl">VAN BOXSTOCK</span>
           </h2>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="flex overflow-x-auto gap-4 pb-4">
             {featuredProducts.map((product) => (
-              <Link to="/product" key={product.id} className="group">
-                <div className="bg-white border border-gray-200 relative">
-                  {product.tag && (
-                    <div className="absolute top-0 left-0 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
-                      {product.tag}
-                    </div>
-                  )}
-                  {product.sale && (
-                    <div className="absolute top-0 right-0 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
-                      SALE
-                    </div>
-                  )}
-                  <div className="p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-gray-700">{product.brand}</span>
-                      <div className="flex items-center">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs ml-1">{product.rating}</span>
+              <Link to="/product" key={product.id} className="min-w-[250px]">
+                <div className="relative bg-gray-100 rounded-lg overflow-hidden">
+                  <div className="aspect-square">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
+                    {product.tag && (
+                      <div className="absolute top-2 left-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
+                        {product.tag}
                       </div>
+                    )}
+                    {product.sale && (
+                      <div className="absolute top-2 right-2 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
+                        SALE
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 bg-white">
+                    <div className="text-sm text-[#00262F]">{product.brand}</div>
+                    <h3 className="text-sm font-bold mt-1 mb-2 truncate">{product.name}</h3>
+                    
+                    <div className="flex gap-1 mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill={i < Math.floor(product.rating) ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4 text-[#1EC0A3]">
+                          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                      ))}
                     </div>
-                    <div className="flex justify-center h-32 mb-4">
-                      <img
-                        src={product.image}
-                        className="h-full w-auto object-contain group-hover:scale-105 transition-transform duration-500"
-                        alt={product.name}
-                      />
-                    </div>
-                    <h3 className="text-sm font-bold truncate group-hover:text-[#E41A36] transition-colors">
-                      {product.name}
-                    </h3>
-                    <div className="flex items-center mt-2">
-                      <span className="font-bold">{product.price}</span>
+                    
+                    <div className="flex items-center">
+                      <span className="font-semibold">{product.price}</span>
                       {product.sale && product.originalPrice && (
                         <span className="text-xs text-gray-500 line-through ml-2">{product.originalPrice}</span>
                       )}
