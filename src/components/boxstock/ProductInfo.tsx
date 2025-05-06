@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SizeSelector from './SizeSelector';
@@ -37,7 +36,7 @@ const ProductInfo: React.FC = () => {
   };
 
   const handlePreOwnedClick = () => {
-    // Navigate to pre-owned listings for this product (using a placeholder ID)
+    // Navigate to pre-owned listings for this product using a clear URL path
     navigate('/pre-owned/product/jordan-xxxiii-university-red');
   };
 

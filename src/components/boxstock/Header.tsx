@@ -1,10 +1,17 @@
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Search, User, ShoppingBag, Heart, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Header: React.FC = () => {
+  const location = useLocation();
+  
+  // Function to determine if a link is active
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <header className="w-full bg-white">
       {/* Top navigation */}
@@ -60,17 +67,11 @@ const Header: React.FC = () => {
               <Link to="/cart" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
                 <ShoppingBag size={20} />
               </Link>
-              <Link to="/profile">
-                <Button 
-                  variant="ghost" 
-                  size="icon"
-                  className="text-[#00262F] hover:text-[#1EC0A3] hover:bg-transparent"
-                >
-                  <User size={20} />
-                </Button>
+              <Link to="/profile/1" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
+                <User size={20} />
               </Link>
-              <Button className="bg-[#E41A36] hover:bg-[#c01730] text-white ml-2">
-                Login
+              <Button className="bg-[#E41A36] hover:bg-[#c01730] text-white ml-2" asChild>
+                <Link to="/login">Login</Link>
               </Button>
               <Button 
                 variant="ghost" 
@@ -88,22 +89,40 @@ const Header: React.FC = () => {
       <div className="border-b border-gray-200">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="flex items-center space-x-8 overflow-x-auto py-3 scrollbar-hide">
-            <Link to="/sneakers" className="text-[#00262F] font-bold whitespace-nowrap hover:text-[#1EC0A3] transition-colors">
+            <Link 
+              to="/sneakers" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/sneakers') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Sneakers
             </Link>
-            <Link to="/accessories" className="text-[#00262F] font-bold whitespace-nowrap hover:text-[#1EC0A3] transition-colors">
+            <Link 
+              to="/accessories" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/accessories') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Accessoires
             </Link>
-            <Link to="/clothing" className="text-[#00262F] font-bold whitespace-nowrap hover:text-[#1EC0A3] transition-colors">
+            <Link 
+              to="/clothing" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/clothing') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Kleding
             </Link>
-            <Link to="/bags" className="text-[#00262F] font-bold whitespace-nowrap hover:text-[#1EC0A3] transition-colors">
+            <Link 
+              to="/bags" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/bags') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Tassen
             </Link>
-            <Link to="/brands" className="text-[#00262F] font-bold whitespace-nowrap hover:text-[#1EC0A3] transition-colors">
+            <Link 
+              to="/brands" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/brands') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Merken
             </Link>
-            <Link to="/pre-owned" className="text-[#1EC0A3] font-bold whitespace-nowrap">
+            <Link 
+              to="/pre-owned" 
+              className={`font-bold whitespace-nowrap transition-colors ${isActive('/pre-owned') || location.pathname.includes('/pre-owned') ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}
+            >
               Pre-owned
             </Link>
           </div>

@@ -3,10 +3,10 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Heart, ArrowLeft, Star, Info, User, ShoppingBag } from 'lucide-react';
+import { Heart, ArrowLeft, Star, User } from 'lucide-react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const PreOwnedListings: React.FC = () => {
@@ -34,29 +34,23 @@ const PreOwnedListings: React.FC = () => {
       listings: [
         {
           id: 1,
-          price: "€129",
-          size: "EU 42",
-          condition: "9/10",
-          originalPrice: "€178",
-          discount: "-28%",
+          price: "€3,33",
+          size: "S",
+          condition: "Heel goed",
+          originalPrice: "€2,50",
           images: [
             "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?q=80&w=2121&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1587&auto=format&fit=crop",
           ],
-          description: "Perfect match for any outfit, barely worn. Original box included."
         },
         {
           id: 2,
-          price: "€135",
-          size: "EU 43",
-          condition: "8/10",
-          originalPrice: "€178",
-          discount: "-24%",
+          price: "€5,95",
+          size: "M",
+          condition: "Heel goed",
+          originalPrice: "€5,00",
           images: [
             "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=2012&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1621665421558-831f91fd0500?q=80&w=1974&auto=format&fit=crop",
           ],
-          description: "Great condition, minor signs of wear. Super comfortable!"
         }
       ]
     },
@@ -72,16 +66,13 @@ const PreOwnedListings: React.FC = () => {
       listings: [
         {
           id: 3,
-          price: "€149",
-          size: "EU 44",
-          condition: "9.5/10",
-          originalPrice: "€178",
-          discount: "-16%",
+          price: "€1,75",
+          size: "Universeel",
+          condition: "Nieuw met prijskaartje",
+          originalPrice: "€1,00",
           images: [
             "https://images.unsplash.com/photo-1575537302964-96cd47c06b1b?q=80&w=2070&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?q=80&w=2031&auto=format&fit=crop",
           ],
-          description: "Almost new! Only worn once indoors. Comes with extra laces."
         }
       ]
     },
@@ -97,16 +88,13 @@ const PreOwnedListings: React.FC = () => {
       listings: [
         {
           id: 4,
-          price: "€120",
-          size: "EU 42.5",
-          condition: "7/10",
-          originalPrice: "€178",
-          discount: "-33%",
+          price: "€1,75",
+          size: "L",
+          condition: "Heel goed",
+          originalPrice: "€1,00",
           images: [
             "https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1543508282-6319a3e2621f?q=80&w=1915&auto=format&fit=crop",
           ],
-          description: "Good condition, some signs of wear but lots of life left!"
         }
       ]
     }
@@ -199,39 +187,42 @@ const PreOwnedListings: React.FC = () => {
                 <p className="text-sm text-gray-600 mt-3 line-clamp-2">{seller.bio}</p>
               </div>
               
-              {/* Seller listings - Simplified as requested */}
+              {/* Seller listings - Simplified as requested (only image and size) */}
               <div className="p-4">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {seller.listings.map((listing) => (
-                    <Card 
+                    <Link 
                       key={listing.id}
-                      className="overflow-hidden hover:shadow-md transition-all border-gray-100 group"
+                      to={`/pre-owned/${listing.id}`}
+                      className="block group"
                     >
-                      <Link to={`/pre-owned/${listing.id}`} className="block">
+                      <Card className="border border-gray-100 overflow-hidden hover:shadow-md transition-all">
                         <div className="relative">
-                          <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white text-xs">
-                            PRE-OWNED
-                          </Badge>
-                          <AspectRatio ratio={1/1} className="bg-gray-50">
+                          <AspectRatio ratio={3/4} className="bg-gray-50">
                             <img 
                               src={listing.images[0]} 
-                              alt={`${product.name} door ${seller.name}`}
+                              alt={`${product.name} - ${listing.size}`}
                               className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
                             />
                           </AspectRatio>
-                          <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors">
+                          <button 
+                            className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              // Add favorite logic here
+                            }}
+                          >
                             <Heart className="h-4 w-4" />
                           </button>
                         </div>
-                        
-                        <CardContent className="p-3">
-                          <div className="flex items-center justify-between">
+                        <div className="p-2">
+                          <div className="flex flex-col">
+                            <div className="font-medium text-[#00262F]">{listing.size} · {listing.condition}</div>
                             <div className="font-bold text-[#E41A36]">{listing.price}</div>
-                            <div className="text-sm font-medium">{listing.size}</div>
                           </div>
-                        </CardContent>
-                      </Link>
-                    </Card>
+                        </div>
+                      </Card>
+                    </Link>
                   ))}
                 </div>
               </div>
