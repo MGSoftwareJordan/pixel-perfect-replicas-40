@@ -161,18 +161,22 @@ const Accessories: React.FC = () => {
                     </div>
                     
                     <div className="mt-3 max-h-48 overflow-y-auto space-y-2 pr-2">
-                      {["Alle merken", ...brands].map((brand, index) => (
-                        <div key={index} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`brand-${index}`}
-                            className="rounded border-gray-300 text-[#00262F] focus:ring-[#00262F]"
-                          />
-                          <label htmlFor={`brand-${index}`} className="ml-2 text-sm text-[#00262F]">
-                            {brand}
+                      <RadioGroup defaultValue="all-brands">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="all-brands" id="brand-all" />
+                          <label htmlFor="brand-all" className="text-sm font-medium text-[#00262F]">
+                            Alle merken
                           </label>
                         </div>
-                      ))}
+                        {brands.map((brand, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <RadioGroupItem value={brand.toLowerCase().replace(/\s+/g, '-')} id={`brand-${index + 1}`} />
+                            <label htmlFor={`brand-${index + 1}`} className="text-sm text-[#00262F]">
+                              {brand}
+                            </label>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </div>
                   </div>
                 )}
@@ -202,8 +206,8 @@ const Accessories: React.FC = () => {
                       </div>
                       {targetGroups.map((group, index) => (
                         <div key={index} className="flex items-center space-x-2">
-                          <RadioGroupItem value={group.toLowerCase()} id={`target-${index}`} />
-                          <label htmlFor={`target-${index}`} className="text-sm font-medium">
+                          <RadioGroupItem value={group.toLowerCase()} id={`target-${index + 1}`} />
+                          <label htmlFor={`target-${index + 1}`} className="text-sm font-medium">
                             {group}
                           </label>
                         </div>
@@ -273,11 +277,11 @@ const Accessories: React.FC = () => {
               </div>
               
               <div className="relative">
-                <div className="flex overflow-x-auto gap-3 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+                <div className="flex overflow-x-auto gap-3 pb-4 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hide-scrollbar">
                   {brands.map((brand, index) => (
                     <Link 
                       key={index} 
-                      to={`/brands?filter=${brand}`}
+                      to={`/brands/${brand.toLowerCase().replace(/\s+/g, '-')}`}
                       className="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm min-w-max hover:bg-gray-50 hover:border-gray-300 transition-colors"
                     >
                       {brand}
@@ -317,7 +321,7 @@ const Accessories: React.FC = () => {
                         </svg>
                       </button>
                       
-                      <div className="bg-gray-100 rounded-lg overflow-hidden">
+                      <div className="bg-white border border-gray-100 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all">
                         <div className="aspect-square overflow-hidden">
                           <img
                             src={product.image}
@@ -326,7 +330,7 @@ const Accessories: React.FC = () => {
                           />
                         </div>
                         
-                        <div className="p-4 bg-white">
+                        <div className="p-4">
                           <div className="text-sm text-[#00262F]">{product.brand}</div>
                           <h3 className="text-sm font-bold mt-1 mb-2 line-clamp-2 h-10">{product.name}</h3>
                           

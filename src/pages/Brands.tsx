@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 import { ChevronDown, ChevronUp, Filter, Star } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Brands: React.FC = () => {
   // State for filters
@@ -118,18 +120,22 @@ const Brands: React.FC = () => {
                     </div>
                     
                     <div className="mt-3 max-h-48 overflow-y-auto space-y-2 pr-2">
-                      {["Alle modellen", ...models].map((model, index) => (
-                        <div key={index} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            id={`model-${index}`}
-                            className="rounded border-gray-300 text-[#00262F] focus:ring-[#00262F]"
-                          />
-                          <label htmlFor={`model-${index}`} className="ml-2 text-sm text-[#00262F]">
-                            {model}
+                      <RadioGroup defaultValue="all-models">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem value="all-models" id="model-all" />
+                          <label htmlFor="model-all" className="text-sm font-medium text-[#00262F]">
+                            Alle modellen
                           </label>
                         </div>
-                      ))}
+                        {models.map((model, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <RadioGroupItem value={model.toLowerCase().replace(/\s+/g, '-')} id={`model-${index + 1}`} />
+                            <label htmlFor={`model-${index + 1}`} className="text-sm text-[#00262F]">
+                              {model}
+                            </label>
+                          </div>
+                        ))}
+                      </RadioGroup>
                     </div>
                   </div>
                 )}
@@ -150,18 +156,22 @@ const Brands: React.FC = () => {
                 
                 {showFilters.categories && (
                   <div className="mt-3 space-y-2">
-                    {categories.map((category, index) => (
-                      <div key={index} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`category-${index}`}
-                          className="rounded border-gray-300 text-[#00262F] focus:ring-[#00262F]"
-                        />
-                        <label htmlFor={`category-${index}`} className="ml-2 text-sm text-[#00262F]">
-                          {category}
+                    <RadioGroup defaultValue="all-categories">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="all-categories" id="category-all" />
+                        <label htmlFor="category-all" className="text-sm font-medium text-[#00262F]">
+                          Alle categorieën
                         </label>
                       </div>
-                    ))}
+                      {categories.map((category, index) => (
+                        <div key={index} className="flex items-center space-x-2">
+                          <RadioGroupItem value={category.toLowerCase()} id={`category-${index + 1}`} />
+                          <label htmlFor={`category-${index + 1}`} className="text-sm text-[#00262F]">
+                            {category}
+                          </label>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   </div>
                 )}
               </div>
