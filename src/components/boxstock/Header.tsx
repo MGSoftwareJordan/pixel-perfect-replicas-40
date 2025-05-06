@@ -83,7 +83,7 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="w-full bg-white">
+    <header className="w-full bg-white relative z-50">
       {/* Top navigation */}
       <div className="border-b border-gray-100">
         <div className="container mx-auto max-w-6xl px-4 py-2">
@@ -161,7 +161,7 @@ const Header: React.FC = () => {
       <div className="border-b border-gray-200">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="hidden md:flex items-center space-x-4 overflow-x-auto py-3 scrollbar-hide">
-            <NavigationMenu>
+            <NavigationMenu className="z-50">
               <NavigationMenuList>
                 {mainCategories.map((category) => (
                   <NavigationMenuItem key={category.name}>
@@ -170,8 +170,8 @@ const Header: React.FC = () => {
                         <NavigationMenuTrigger className={`font-bold whitespace-nowrap transition-colors ${isActive(category.path) ? 'text-[#1EC0A3]' : 'text-[#00262F] hover:text-[#1EC0A3]'}`}>
                           {category.name}
                         </NavigationMenuTrigger>
-                        <NavigationMenuContent>
-                          <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] lg:w-[600px] grid-cols-2">
+                        <NavigationMenuContent className="bg-white">
+                          <ul className="grid gap-3 p-4 w-[400px] md:w-[500px] lg:w-[600px] grid-cols-2 bg-white shadow-lg rounded-md">
                             <li className="col-span-2">
                               <NavigationMenuLink asChild>
                                 <Link
