@@ -84,26 +84,37 @@ const Landing: React.FC = () => {
     <div className="bg-white">
       <Header />
       
-      {/* Hero Section */}
-      <section className="relative h-[580px] flex items-center">
+      {/* Hero Section - Updated with new background and styling */}
+      <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
           <img 
             src={`${import.meta.env.BASE_URL}lovable-uploads/aeabc203-3777-4648-8357-a3052d2c16aa.png`}
             alt="Hero background" 
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-center scale-110 animate-slow-zoom"
           />
         </div>
         
         <div className="container mx-auto px-6 z-10 relative">
           <div className="max-w-xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-white uppercase mb-4">
-              ONE SNEAKERSITE<br />TO RULE THEM ALL
+            <div className="inline-block bg-white px-4 py-1 mb-4">
+              <span className="text-sm font-bold text-[#E41A36] tracking-wider">NEW ARRIVALS</span>
+            </div>
+            <h1 className="text-5xl md:text-6xl font-bold text-white uppercase mb-6 leading-tight">
+              PREMIUM<br />SNEAKERS &<br />STREETWEAR
             </h1>
+            <p className="text-white text-lg mb-8 max-w-md">
+              Ontdek de nieuwste collecties en exclusieve releases bij Boxstock, jouw premium sneaker destination.
+            </p>
             <div className="flex flex-wrap gap-4 mt-8">
               <Link to="/product">
-                <button className="bg-white text-black px-6 py-3 text-sm font-bold uppercase hover:bg-gray-200 transition-colors">
+                <button className="bg-[#E41A36] text-white px-8 py-4 text-sm font-bold uppercase hover:bg-[#c01730] transition-colors">
                   SHOP NU
+                </button>
+              </Link>
+              <Link to="/pre-owned">
+                <button className="bg-white text-black px-8 py-4 text-sm font-bold uppercase hover:bg-gray-100 transition-colors">
+                  PRE-OWNED
                 </button>
               </Link>
             </div>
@@ -128,14 +139,14 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Welcome Section */}
+      {/* Welcome Section - Updated with Boxstock branding */}
       <section className="py-16 px-6">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
               <h2 className="uppercase text-3xl font-bold mb-6">
                 WELKOM BIJ<br />
-                <span className="text-4xl">DE SNEAKERBARON</span>
+                <span className="text-4xl">BOXSTOCK</span>
               </h2>
               <p className="text-gray-700 mb-4">
                 We hebben de grootste collectie sneakers in Europa. Met meer dan 10.000 paar van 50+ merken op voorraad heb je altijd genoeg keus.
@@ -143,12 +154,12 @@ const Landing: React.FC = () => {
               <p className="text-gray-700 mb-6">
                 We zijn 100% authorized retailer en verkopen alleen originele items rechtstreeks bij de merken. Dat zie je terug in onze reviews, omdat service en kwaliteit voor ons op de eerste plaats staan.
               </p>
-              <button className="bg-black text-white px-6 py-3 font-bold uppercase hover:bg-gray-800 transition-colors">
+              <button className="bg-[#E41A36] text-white px-6 py-3 font-bold uppercase hover:bg-[#c01730] transition-colors">
                 LEES MEER
               </button>
             </div>
             <div>
-              <div className="bg-black text-white p-8 rotate-3 transform">
+              <div className="bg-[#00262F] text-white p-8 rotate-3 transform">
                 <h3 className="uppercase text-2xl font-bold rotate-[-3deg] transform">
                   AUTHENTIEKE<br />
                   SNEAKERS<br />
@@ -160,12 +171,12 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Hot Products Section */}
+      {/* Hot Products Section - Updated heading */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
           <h2 className="uppercase text-3xl font-bold mb-12">
             HITTING HEAT<br />
-            <span className="text-4xl">VAN SNEAKERBARON</span>
+            <span className="text-4xl">VAN BOXSTOCK</span>
           </h2>
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -173,12 +184,12 @@ const Landing: React.FC = () => {
               <Link to="/product" key={product.id} className="group">
                 <div className="bg-white border border-gray-200 relative">
                   {product.tag && (
-                    <div className="absolute top-0 left-0 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
+                    <div className="absolute top-0 left-0 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
                       {product.tag}
                     </div>
                   )}
                   {product.sale && (
-                    <div className="absolute top-0 right-0 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10">
+                    <div className="absolute top-0 right-0 bg-[#E41A36] text-white text-xs font-bold px-2 py-1 z-10">
                       SALE
                     </div>
                   )}
@@ -197,7 +208,7 @@ const Landing: React.FC = () => {
                         alt={product.name}
                       />
                     </div>
-                    <h3 className="text-sm font-bold truncate group-hover:text-red-600 transition-colors">
+                    <h3 className="text-sm font-bold truncate group-hover:text-[#E41A36] transition-colors">
                       {product.name}
                     </h3>
                     <div className="flex items-center mt-2">
@@ -236,18 +247,18 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Benefits */}
+      {/* Benefits - Updated with Boxstock branding */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
           <h2 className="uppercase text-3xl font-bold mb-12">
             ZOEKEN, KIEZEN, SCOREN<br />
-            <span className="text-4xl">MET DE SNEAKERBARON</span>
+            <span className="text-4xl">MET BOXSTOCK</span>
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-6">
               <p className="text-gray-700">
-                Je favoriete sneakers shop je makkelijk en snel bij de Sneakerbaron. Met meer dan 10.000 paar sneakers op voorraad heb je altijd genoeg keus. We hebben alle topsellers, limited editions en de nieuwste releases.
+                Je favoriete sneakers shop je makkelijk en snel bij Boxstock. Met meer dan 10.000 paar sneakers op voorraad heb je altijd genoeg keus. We hebben alle topsellers, limited editions en de nieuwste releases.
               </p>
               <p className="text-gray-700">
                 We zijn een 100% authorized retailer. Dat betekent dat we samenwerken met alle topmerken en dat alle sneakers op onze site 100% origineel en authentiek zijn.
@@ -271,11 +282,11 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Blog Section */}
+      {/* Blog Section - Updated with Boxstock branding */}
       <section className="py-16 px-6">
         <div className="container mx-auto">
           <h2 className="uppercase text-3xl font-bold mb-12">
-            DE SNEAKERBARON<br />
+            BOXSTOCK<br />
             <span className="text-4xl">SCHRIJFT BLOGS</span>
           </h2>
           
@@ -291,7 +302,7 @@ const Landing: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-xs text-gray-500 mb-2">3 mei 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
                     De geschiedenis van Air Jordan sneakers
                   </h3>
                   <p className="text-gray-700 text-sm line-clamp-3">
@@ -312,7 +323,7 @@ const Landing: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-xs text-gray-500 mb-2">28 april 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
                     Top 10 duurzame sneakermerken van 2025
                   </h3>
                   <p className="text-gray-700 text-sm line-clamp-3">
@@ -333,7 +344,7 @@ const Landing: React.FC = () => {
                 </div>
                 <div className="p-6">
                   <div className="text-xs text-gray-500 mb-2">15 april 2025</div>
-                  <h3 className="text-lg font-bold group-hover:text-red-600 transition-colors mb-3">
+                  <h3 className="text-lg font-bold group-hover:text-[#E41A36] transition-colors mb-3">
                     De opkomst van digitale mode en NFT sneakers
                   </h3>
                   <p className="text-gray-700 text-sm line-clamp-3">
@@ -346,8 +357,8 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* History Block */}
-      <section className="py-16 px-6 bg-black text-white">
+      {/* History Block - Updated with Boxstock branding */}
+      <section className="py-16 px-6 bg-[#00262F] text-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
@@ -364,13 +375,13 @@ const Landing: React.FC = () => {
               <p className="mb-8">
                 Vandaag de dag is de sneakermarkt miljarden waard en verzamelen mensen zeldzame edities als kunststukken. Van sportschoen naar fashion statement naar investering - dat is de evolutie van de sneaker.
               </p>
-              <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-black transition-colors">
+              <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-[#00262F] transition-colors">
                 MEER HISTORIE
               </button>
             </div>
             <div className="flex items-center justify-center">
               <div className="relative w-full max-w-xs">
-                <div className="aspect-video bg-gray-900 rounded flex items-center justify-center">
+                <div className="aspect-video bg-[#00262F] rounded flex items-center justify-center border border-white/20">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
                     <div className="w-0 h-0 border-t-8 border-t-transparent border-l-16 border-l-white border-b-8 border-b-transparent ml-1"></div>
                   </div>
