@@ -11,6 +11,17 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Card } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const PreOwnedProductDetail: React.FC = () => {
   // Sample pre-owned product
@@ -53,6 +64,22 @@ const PreOwnedProductDetail: React.FC = () => {
 
   const [liked, setLiked] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [offerAmount, setOfferAmount] = useState('');
+  const [offerDialogOpen, setOfferDialogOpen] = useState(false);
+  
+  const numericPrice = parseInt(product.price.replace('€', '').trim(), 10);
+  const minOfferAmount = Math.floor(numericPrice * 0.7); // 70% of listing price
+  
+  const handleOfferSubmit = () => {
+    const amount = parseInt(offerAmount, 10);
+    if (isNaN(amount) || amount < minOfferAmount) {
+      toast.error(`Bod moet minimaal €${minOfferAmount} zijn`);
+      return;
+    }
+    
+    toast.success(`Je bod van €${amount} is verzonden naar ${product.seller.name}`);
+    setOfferDialogOpen(false);
+  };
 
   return (
     <div className="container mx-auto max-w-6xl px-4 mb-16">
@@ -176,6 +203,45 @@ const PreOwnedProductDetail: React.FC = () => {
                 <Button variant="outline" className="w-full border-[#00262F] text-[#00262F] font-bold py-3 rounded-md text-lg">
                   In winkelwagen
                 </Button>
+                
+                <Dialog open={offerDialogOpen} onOpenChange={setOfferDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full border-[#1EC0A3] text-[#1EC0A3] font-bold py-3 rounded-md text-lg">
+                      Doe een bod
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Doe een bod</DialogTitle>
+                      <DialogDescription>
+                        Stuur een bod naar de verkoper. Het minimale bod is €{minOfferAmount}.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="offer" className="text-right">
+                          Bod
+                        </label>
+                        <div className="col-span-3 relative">
+                          <span className="absolute left-3 top-1/2 transform -translate-y-1/2">€</span>
+                          <Input
+                            id="offer"
+                            type="number"
+                            value={offerAmount}
+                            onChange={(e) => setOfferAmount(e.target.value)}
+                            className="pl-7"
+                            placeholder={minOfferAmount.toString()}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" onClick={handleOfferSubmit} className="bg-[#1EC0A3]">
+                        Verstuur bod
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </div>
