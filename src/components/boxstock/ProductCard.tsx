@@ -1,4 +1,7 @@
+
 import React from 'react';
+import { Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface ProductCardProps {
   brand: string;
@@ -8,6 +11,9 @@ interface ProductCardProps {
   rating: number;
   discount?: boolean;
   preOwned?: boolean;
+  id?: number | string;
+  originalPrice?: string;
+  tag?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -17,90 +23,105 @@ const ProductCard: React.FC<ProductCardProps> = ({
   image,
   rating,
   discount = false,
-  preOwned = false
+  preOwned = false,
+  id = 1,
+  originalPrice,
+  tag
 }) => {
   return (
-    <div className="rounded self-stretch flex min-h-[446px] flex-col items-center w-56 my-auto">
-      <div className="rounded max-w-full w-56 overflow-hidden py-px">
-        <div className={`rounded ${preOwned ? 'relative aspect-[0.675]' : ''} flex flex-col items-stretch ${discount ? 'text-[10px] text-white font-bold whitespace-nowrap text-center uppercase tracking-[1.6px] leading-[1.4]' : ''} bg-[#F1F1F1] pt-3.5 pb-[92px] px-3`}>
-          {preOwned && (
+    <Link to={`/product/${id}`} className="group block">
+      <div className="rounded bg-white border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200">
+        {/* Image Container with fixed aspect ratio */}
+        <div className="relative">
+          {/* Consistent 1:1 aspect ratio for all product images */}
+          <div className="aspect-square bg-gray-100 overflow-hidden">
+            {/* Skeleton loader that shows before image loads */}
+            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+            
             <img
               src={image}
-              className="absolute h-full w-full object-cover inset-0"
-              alt={name}
+              alt={`${brand} ${name}`}
+              className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+              loading="lazy"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.onerror = null;
+                target.src = "https://cdn.builder.io/api/v1/image/assets/TEMP/placeholder.png?placeholderIfAbsent=true";
+              }}
             />
-          )}
-          
-          {discount && !preOwned && (
-            <div className="flex items-stretch gap-5 justify-between">
-              <div className="bg-[#E41A36] my-auto pt-[5px] pb-[11px] px-[22px] rounded-[28.643px] max-md:px-5">
-                KORTING
+          </div>
+
+          {/* Product tags and badges */}
+          <div className="absolute top-0 left-0 flex flex-col gap-2 p-2">
+            {tag && (
+              <div className="bg-[#E41A36] text-white text-xs font-semibold px-3 py-1 rounded">
+                {tag}
               </div>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/47b4de12a24d77edff0bb699cf87c3fd3f565fcc?placeholderIfAbsent=true"
-                className="aspect-[1] object-contain w-9 shrink-0 rounded-[20px]"
-                alt="Brand logo"
-              />
+            )}
+            {discount && (
+              <div className="bg-[#E41A36] text-white text-xs font-semibold px-3 py-1 rounded">
+                SALE
+              </div>
+            )}
+          </div>
+
+          {preOwned && (
+            <div className="absolute bottom-0 left-0 right-0 bg-[#1EC0A3] text-xs text-white font-semibold text-center py-1">
+              PRE-OWNED
             </div>
           )}
-          
-          {!discount && !preOwned && (
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/47b4de12a24d77edff0bb699cf87c3fd3f565fcc?placeholderIfAbsent=true"
-              className="aspect-[1] object-contain w-9 rounded-[20px]"
-              alt="Brand logo"
-            />
-          )}
-          
-          {!preOwned && (
-            <img
-              src={image}
-              className="aspect-[1.2] object-contain w-[201px] mt-[22px]"
-              alt={name}
-            />
-          )}
-          
-          {preOwned && (
-            <>
-              <img
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/55d6ea2b4d4328a81010dcc76aed82e12a88eaf1?placeholderIfAbsent=true"
-                className="aspect-[1] object-contain w-9 rounded-[20px] z-10"
-                alt="Brand logo"
-              />
-              <div className="relative flex items-center justify-center mt-[262px] max-md:mt-10">
-                <div className="self-stretch bg-[#1EC0A3] min-h-5 w-full gap-1 flex-1 shrink basis-[0%] my-auto px-2 py-[3px] rounded-[0px_0px_4px_4px]">
-                  PRE-OWNED
-                </div>
-              </div>
-            </>
-          )}
+
+          {/* Wishlist button */}
+          <button 
+            className="absolute top-2 right-2 bg-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-gray-50"
+            onClick={(e) => {
+              e.preventDefault();
+              console.log('Added to wishlist', name);
+            }}
+            aria-label="Add to wishlist"
+          >
+            <Heart size={18} className="text-gray-700" />
+          </button>
         </div>
         
-        <div className="flex w-full flex-col items-stretch mt-[9px]">
-          <div className="w-full text-sm text-[#00262F]">
-            <div className="text-[#00262F] font-normal leading-loose">
-              {brand}
-            </div>
-            <div className="text-[#00262F] font-bold leading-4">
-              {name}
-            </div>
+        {/* Product info section */}
+        <div className="p-4">
+          <div className="text-sm text-[#00262F] hover:underline">
+            {brand}
           </div>
-          <div className="flex gap-0.5 mt-2">
+          <h3 className="text-sm font-bold mt-1 mb-2 line-clamp-2 h-10 text-[#00262F]">
+            {name}
+          </h3>
+          
+          <div className="flex gap-1 mb-2">
             {[...Array(5)].map((_, i) => (
-              <img
-                key={i}
-                src={i < rating ? "https://cdn.builder.io/api/v1/image/assets/TEMP/d55df91c16f28f1b246aa0f286e78b46ce151626?placeholderIfAbsent=true" : "https://cdn.builder.io/api/v1/image/assets/TEMP/706f2c5119d9668cb1c579ec6585262270be9c52?placeholderIfAbsent=true"}
-                className="aspect-[1] object-contain w-[15px] shrink-0"
-                alt={i < rating ? "Filled star" : "Empty star"}
-              />
+              <svg 
+                key={i} 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="16" 
+                height="16" 
+                viewBox="0 0 24 24" 
+                fill={i < rating ? "currentColor" : "none"} 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="h-4 w-4 text-[#1EC0A3]"
+              >
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+              </svg>
             ))}
           </div>
-          <div className="text-[#00262F] text-sm font-normal leading-none mt-2">
-            {price}
+          
+          <div className="flex items-center">
+            <span className="font-semibold">{price}</span>
+            {originalPrice && (
+              <span className="text-xs text-gray-500 line-through ml-2">{originalPrice}</span>
+            )}
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

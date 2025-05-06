@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import { Link } from 'react-router-dom';
-import { ChevronDown, ChevronUp, Filter, Star } from 'lucide-react';
+import { ChevronDown, ChevronUp, Filter, Star, Search } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Brands: React.FC = () => {
   // State for filters
@@ -112,11 +114,9 @@ const Brands: React.FC = () => {
                         type="text" 
                         placeholder="Zoek Model" 
                         className="w-full border border-gray-300 rounded py-2 px-4 pl-10 focus:outline-none focus:ring-1 focus:ring-[#00262F]"
+                        aria-label="Zoek een model"
                       />
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="absolute top-2.5 left-3 text-gray-400">
-                        <circle cx="11" cy="11" r="8"/>
-                        <path d="m21 21-4.3-4.3"/>
-                      </svg>
+                      <Search className="absolute top-2.5 left-3 text-gray-400" size={18} />
                     </div>
                     
                     <div className="mt-3 max-h-48 overflow-y-auto space-y-2 pr-2">
@@ -219,21 +219,44 @@ const Brands: React.FC = () => {
                 </h2>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {featuredBrands.map((brand, index) => (
-                  <Link to={`/brands/${brand.name.toLowerCase().replace(/\s+/g, '-')}`} key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all">
-                    <div className="aspect-square bg-gray-100 relative flex items-center justify-center">
-                      <img 
-                        src={brand.image}
-                        alt={brand.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-4">
-                      <h3 className="font-medium text-[#00262F] text-center">{brand.name}</h3>
-                    </div>
-                  </Link>
-                ))}
+              {/* Horizontal scrollable row instead of grid */}
+              <div className="relative">
+                <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
+                  {featuredBrands.map((brand, index) => (
+                    <Link 
+                      to={`/brands/${brand.name.toLowerCase().replace(/\s+/g, '-')}`} 
+                      key={index} 
+                      className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all min-w-[200px] max-w-[200px]"
+                    >
+                      <div className="aspect-square bg-gray-100 relative flex items-center justify-center">
+                        {/* Skeleton loader that shows before image loads */}
+                        <Skeleton className="absolute inset-0" />
+                        <img 
+                          src={brand.image}
+                          alt={brand.name}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-medium text-[#00262F] text-center">{brand.name}</h3>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+                
+                {/* Navigation buttons (only shown on desktop) */}
+                <button 
+                  className="hidden md:flex absolute top-1/2 -left-4 transform -translate-y-1/2 bg-white rounded-full shadow-md p-3 min-w-12 min-h-12 items-center justify-center"
+                  aria-label="Previous brands"
+                >
+                  <ChevronDown size={20} className="rotate-90" />
+                </button>
+                <button 
+                  className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 bg-white rounded-full shadow-md p-3 min-w-12 min-h-12 items-center justify-center"
+                  aria-label="Next brands"
+                >
+                  <ChevronDown size={20} className="-rotate-90" />
+                </button>
               </div>
             </div>
           </div>

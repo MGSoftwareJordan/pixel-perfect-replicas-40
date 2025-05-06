@@ -1,5 +1,8 @@
+
 import React from 'react';
 import ProductCard from './ProductCard';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const RelatedProducts: React.FC = () => {
   const products = [
@@ -19,7 +22,8 @@ const RelatedProducts: React.FC = () => {
       price: '€178',
       image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/27fe542c912c5cbbc1326ae6bd677a0beb2ab12d?placeholderIfAbsent=true',
       rating: 4,
-      discount: true
+      discount: true,
+      originalPrice: '€210'
     },
     {
       id: 3,
@@ -37,7 +41,8 @@ const RelatedProducts: React.FC = () => {
       price: '€178',
       image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/dd32a857b0606cf7bc31f4fb99aad0f41f389582?placeholderIfAbsent=true',
       rating: 4,
-      discount: true
+      discount: true,
+      originalPrice: '€200'
     },
     {
       id: 5,
@@ -55,39 +60,55 @@ const RelatedProducts: React.FC = () => {
       price: '€178',
       image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/52924e7b618d870295833cfadc406be08fad2e6a?placeholderIfAbsent=true',
       rating: 4,
-      discount: true
+      discount: true,
+      originalPrice: '€220'
     }
   ];
 
   return (
-    <section className="flex w-full flex-col items-stretch mt-[60px] pl-20 pt-[9px] pb-[21px] max-md:max-w-full max-md:mt-10 max-md:pl-5">
-      <div className="self-center flex w-full max-w-[1194px] items-stretch gap-5 text-[#00262F] font-bold flex-wrap justify-between max-md:max-w-full">
-        <h2 className="text-[#00262F] text-[32px] leading-none">
-          Artikelen die hierop lijken
-        </h2>
-        <div className="flex items-stretch gap-[11px] text-base mt-1.5">
-          <div className="text-[#00262F] grow cursor-pointer">
-            Bekijk meer
-          </div>
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/6d39c0f1eb7f1243a62c529fa14d41d85453ba72?placeholderIfAbsent=true"
-            className="aspect-[1] object-contain w-6 shrink-0"
-            alt="Arrow right"
-          />
+    <section className="py-12 px-6 bg-white">
+      <div className="container mx-auto max-w-6xl">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-[#00262F]">
+            Artikelen die hierop lijken
+          </h2>
+          <Link to="/related" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+            Bekijk alle <ArrowRight size={18} />
+          </Link>
         </div>
-      </div>
-      <div className="flex items-center gap-2.5 mt-[37px] overflow-x-auto max-md:max-w-full">
-        {products.map(product => (
-          <ProductCard
-            key={product.id}
-            brand={product.brand}
-            name={product.name}
-            price={product.price}
-            image={product.image}
-            rating={product.rating}
-            discount={product.discount}
-          />
-        ))}
+        
+        <div className="relative">
+          <div className="flex overflow-x-auto gap-4 pb-4 scrollbar-hide">
+            {products.map(product => (
+              <div key={product.id} className="min-w-[250px] max-w-[250px]">
+                <ProductCard
+                  id={product.id}
+                  brand={product.brand}
+                  name={product.name}
+                  price={product.price}
+                  image={product.image}
+                  rating={product.rating}
+                  discount={product.discount}
+                  originalPrice={product.originalPrice}
+                />
+              </div>
+            ))}
+          </div>
+          
+          {/* Navigation buttons with better touch targets */}
+          <button 
+            className="hidden md:flex absolute top-1/2 -left-4 transform -translate-y-1/2 bg-white rounded-full shadow-md p-3 min-w-12 min-h-12 items-center justify-center"
+            aria-label="Previous items"
+          >
+            <ArrowRight size={20} className="rotate-180" />
+          </button>
+          <button 
+            className="hidden md:flex absolute top-1/2 -right-4 transform -translate-y-1/2 bg-white rounded-full shadow-md p-3 min-w-12 min-h-12 items-center justify-center"
+            aria-label="Next items"
+          >
+            <ArrowRight size={20} />
+          </button>
+        </div>
       </div>
     </section>
   );
