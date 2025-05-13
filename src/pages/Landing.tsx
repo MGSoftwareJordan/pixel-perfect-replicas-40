@@ -564,4 +564,4 @@ const Landing: React.FC = () => {
                   <div className="text-sm bg-[#E41A36]/10 text-[#E41A36] font-semibold rounded px-3 py-1.5 mb-3 inline-block">
                     Release: {release.releaseDate}
                   </div>
-                  <Link to={`/brands/${release.brand
+                  <Link to={`/brands/${release
