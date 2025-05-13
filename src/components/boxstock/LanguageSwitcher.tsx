@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { toast } from "sonner";
 
 interface Language {
   code: string;
@@ -26,17 +25,9 @@ const LanguageSwitcher: React.FC = () => {
   const [currentLang, setCurrentLang] = useState<Language>(languages[0]);
 
   const handleLanguageChange = (lang: Language) => {
-    if (lang.code === currentLang.code) return;
-    
     setCurrentLang(lang);
     // Here you would typically implement actual language change functionality
     console.log(`Language changed to ${lang.name}`);
-    
-    // Notify the user that the language was changed
-    toast.success(`Taal gewijzigd naar ${lang.name}`, {
-      position: "top-right",
-      duration: 3000,
-    });
   };
 
   return (

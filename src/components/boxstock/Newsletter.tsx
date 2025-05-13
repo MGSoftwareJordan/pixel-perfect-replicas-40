@@ -1,7 +1,6 @@
 
 import React, { useState } from 'react';
 import { Mail } from 'lucide-react';
-import { toast } from "sonner";
 
 const Newsletter: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -23,11 +22,6 @@ const Newsletter: React.FC = () => {
     setError('');
     setEmail('');
     
-    // Show toast notification
-    toast.success('Bedankt voor je aanmelding!', {
-      description: 'Je ontvangt binnenkort onze updates.'
-    });
-    
     // Reset the success message after a few seconds
     setTimeout(() => {
       setIsSubmitted(false);
@@ -35,7 +29,7 @@ const Newsletter: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-md:max-w-full">
+    <div className="w-full rounded-[0px_0px_0px_0px] max-md:max-w-full">
       <div className="flex w-full flex-col items-center justify-center bg-[#05414F] px-8 py-14 md:px-20 max-md:max-w-full">
         <div className="flex w-full max-w-2xl flex-col items-center">
           <div className="mb-6 bg-[#1EC0A3] rounded-full p-3">
@@ -82,28 +76,7 @@ const Newsletter: React.FC = () => {
             </div>
           )}
           
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            <div className="flex items-center gap-2 text-[#AEDDE8]/80 text-sm">
-              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
-              </svg>
-              <span>Maandelijkse trends</span>
-            </div>
-            <div className="flex items-center gap-2 text-[#AEDDE8]/80 text-sm">
-              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48 2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48 2.83-2.83"></path>
-              </svg>
-              <span>Exclusieve deals</span>
-            </div>
-            <div className="flex items-center gap-2 text-[#AEDDE8]/80 text-sm">
-              <svg className="w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 6 9 17l-5-5"></path>
-              </svg>
-              <span>€5 korting op eerste bestelling</span>
-            </div>
-          </div>
-          
-          <p className="text-[#AEDDE8]/80 text-sm mt-6">
+          <p className="text-[#AEDDE8]/80 text-sm mt-4">
             We respecteren je privacy. Je kunt je op elk moment uitschrijven.
           </p>
         </div>

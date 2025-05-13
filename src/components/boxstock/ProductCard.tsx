@@ -14,7 +14,6 @@ interface ProductCardProps {
   id?: number | string;
   originalPrice?: string;
   tag?: string;
-  category?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -27,11 +26,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   preOwned = false,
   id = 1,
   originalPrice,
-  tag,
-  category = "product"
+  tag
 }) => {
   return (
-    <Link to={`/${category}/${id}`} className="group block">
+    <Link to={`/product/${id}`} className="group block">
       <div className="rounded bg-white border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-200">
         {/* Image Container with fixed aspect ratio */}
         <div className="relative">
