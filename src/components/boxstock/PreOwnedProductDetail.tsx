@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Link } from 'react-router-dom';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 const PreOwnedProductDetail: React.FC = () => {
   // Sample pre-owned product
@@ -61,6 +63,42 @@ const PreOwnedProductDetail: React.FC = () => {
       listings: 12
     }
   };
+
+  // More listings from the same seller
+  const sellerOtherListings = [
+    {
+      id: 2,
+      name: "Jordan 4 Retro Thunder (2023)",
+      price: "€249",
+      condition: "8/10",
+      size: "EU 43",
+      image: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?q=80&w=1965&auto=format&fit=crop"
+    },
+    {
+      id: 3,
+      name: "Nike Dunk Low Retro Panda",
+      price: "€120",
+      condition: "9/10",
+      size: "EU 42",
+      image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1587&auto=format&fit=crop"
+    },
+    {
+      id: 4,
+      name: "Nike Air Force 1 Low '07",
+      price: "€85",
+      condition: "8/10",
+      size: "EU 44",
+      image: "https://images.unsplash.com/photo-1621665421558-831f91fd0500?q=80&w=1974&auto=format&fit=crop"
+    },
+    {
+      id: 5,
+      name: "Adidas Yeezy Boost 350 V2 Zebra",
+      price: "€220",
+      condition: "9/10",
+      size: "EU 43",
+      image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?q=80&w=2121&auto=format&fit=crop"
+    }
+  ];
 
   const [liked, setLiked] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -292,6 +330,59 @@ const PreOwnedProductDetail: React.FC = () => {
           <p className="text-gray-600">{product.seller.bio}</p>
         </div>
       </Card>
+
+      {/* NEW SECTION: More listings from this seller */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-[#00262F] flex items-center gap-2">
+            <User className="text-[#1EC0A3]" size={24} />
+            Artikelen van dit lid ({product.seller.listings})
+          </h2>
+          <Link to={`/profile/${product.seller.name}`} className="text-[#1EC0A3] hover:underline font-medium flex items-center">
+            Bekijk alle <span className="ml-1">→</span>
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          {sellerOtherListings.map((item) => (
+            <Link to={`/pre-owned/${item.id}`} key={item.id} className="block group">
+              <Card className="border border-gray-100 overflow-hidden hover:shadow-md transition-all h-full">
+                <div className="relative">
+                  <AspectRatio ratio={3/4} className="bg-gray-50">
+                    <img 
+                      src={item.image} 
+                      alt={item.name}
+                      className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
+                    />
+                  </AspectRatio>
+                  <div className="absolute bottom-0 left-0 right-0 bg-[#1EC0A3] text-white text-xs font-bold px-2 py-1 text-center">
+                    PRE-OWNED
+                  </div>
+                  <div className="absolute top-2 left-2 bg-white/80 px-2 py-1 rounded text-xs font-medium">
+                    {item.size}
+                  </div>
+                  <button 
+                    className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Favorite logic would go here
+                    }}
+                  >
+                    <Heart className="h-4 w-4" />
+                  </button>
+                </div>
+                <div className="p-3">
+                  <h4 className="font-medium text-sm text-[#00262F] line-clamp-2 mb-2">{item.name}</h4>
+                  <div className="flex justify-between items-center">
+                    <div className="font-bold text-[#E41A36]">{item.price}</div>
+                    <span className="text-xs bg-gray-100 px-2 py-1 rounded">{item.condition}</span>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      </div>
       
       <div className="bg-gray-50 rounded-xl p-6 shadow-sm border border-gray-100">
         <div className="flex flex-col md:flex-row items-start gap-6">
