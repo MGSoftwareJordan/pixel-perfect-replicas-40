@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
-import { ArrowRight, Star, Tag, CalendarCheck } from 'lucide-react';
+import { ArrowRight, Star, Tag, CalendarCheck, Shoe, ShoppingBag } from 'lucide-react';
 
 const Landing: React.FC = () => {
   // Featured products for the landing page
@@ -58,10 +58,10 @@ const Landing: React.FC = () => {
     }
   ];
 
-  // Accessories products
-  const accessoriesProducts = [
+  // Lifestyle collection - mixed categories
+  const lifestyleProducts = [
     {
-      id: 6,
+      id: 5,
       name: "Supreme Box Logo Beanie Red",
       price: "€89",
       sale: false,
@@ -72,20 +72,6 @@ const Landing: React.FC = () => {
     },
     {
       id: 7,
-      name: "Nike Tech Cap Black",
-      price: "€29",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
-      brand: "Nike",
-      rating: 4.5,
-      category: "accessories"
-    }
-  ];
-
-  // Clothing products
-  const clothingProducts = [
-    {
-      id: 9,
       name: "Stussy Basic Tee Black",
       price: "€49",
       sale: false,
@@ -95,7 +81,7 @@ const Landing: React.FC = () => {
       category: "clothing"
     },
     {
-      id: 10,
+      id: 8,
       name: "The North Face Nuptse Jacket Black",
       price: "€320",
       sale: false,
@@ -104,29 +90,15 @@ const Landing: React.FC = () => {
       rating: 4.9,
       tag: "BESTSELLER",
       category: "clothing"
-    }
-  ];
-
-  // Bags products
-  const bagsProducts = [
+    },
     {
-      id: 12,
+      id: 9,
       name: "Supreme Shoulder Bag SS21 Black",
       price: "€79",
       sale: false,
       image: "https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true",
       brand: "Supreme",
       rating: 4.5,
-      category: "bags"
-    },
-    {
-      id: 13,
-      name: "The North Face Base Camp Duffel S Black",
-      price: "€130",
-      sale: false,
-      image: "https://cdn.builder.io/api/v1/image/assets/TEMP/e780f41d5f9e59dfa77a1158315633f6c67db5ec?placeholderIfAbsent=true",
-      brand: "The North Face",
-      rating: 4.8,
       category: "bags"
     }
   ];
@@ -286,7 +258,7 @@ const Landing: React.FC = () => {
     <div className="bg-white">
       <Header />
       
-      {/* Hero Section - Improved with single CTA and better contrast */}
+      {/* Hero Section */}
       <section className="relative h-[600px] flex items-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
@@ -343,8 +315,29 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Top Brands - Improved with horizontal scrolling and better brand cards */}
+      {/* Featured Sneakers Section */}
       <section className="py-12 px-6 bg-gray-50">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
+              <Shoe className="text-[#E41A36]" size={28} />
+              <span>PREMIUM SNEAKERS</span>
+            </h2>
+            <Link to="/sneakers" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+              Bekijk alles <ArrowRight size={16} />
+            </Link>
+          </div>
+          
+          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Top Brands - Improved with horizontal scrolling */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h2 className="uppercase text-3xl font-bold flex items-center gap-3">
@@ -382,7 +375,7 @@ const Landing: React.FC = () => {
       </section>
 
       {/* Welcome Section - Enhanced with USPs and better layout */}
-      <section className="py-16 px-6 bg-white">
+      <section className="py-16 px-6 bg-[#00262F] text-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div>
@@ -391,7 +384,7 @@ const Landing: React.FC = () => {
                 <span className="text-4xl">BOXSTOCK</span>
               </h2>
               
-              <div className="space-y-4 text-gray-700 max-w-lg mb-6">
+              <div className="space-y-4 text-gray-300 max-w-lg mb-6">
                 <p>
                   We hebben de grootste collectie sneakers in Europa met meer dan <strong>10.000 paar</strong> van 50+ merken op voorraad.
                 </p>
@@ -442,118 +435,65 @@ const Landing: React.FC = () => {
               </div>
               
               <Link to="/over-ons">
-                <button className="bg-[#00262F] text-white px-6 py-3 font-bold uppercase hover:bg-[#00374F] transition-colors">
+                <button className="bg-[#1EC0A3] text-[#00262F] px-6 py-3 font-bold uppercase hover:bg-[#19a38b] transition-colors">
                   MEER OVER ONS
                 </button>
               </Link>
             </div>
             
             <div>
-              <div className="bg-[#00262F] text-white p-10 rounded-lg shadow-lg">
-                <h3 className="uppercase text-3xl font-bold mb-6 leading-tight">
-                  AUTHENTIEKE<br />
-                  SNEAKERS
-                </h3>
-                <div className="h-1 w-16 bg-[#E41A36] mb-6"></div>
-                <p className="mb-6 text-gray-300">
-                  Van limited editions tot dagelijkse favorieten – bij ons vind je altijd 100% authentieke sneakers, rechtstreeks van de meest geliefde merken.
-                </p>
-                <Link to="/sneakers">
-                  <button className="bg-white text-[#00262F] px-6 py-3 font-bold hover:bg-gray-100 transition-colors flex items-center gap-2">
-                    SHOP SNEAKERS <ArrowRight size={16} />
-                  </button>
-                </Link>
-              </div>
+              <img 
+                src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" 
+                alt="Premium sneakers collectie"
+                className="rounded-lg shadow-lg w-full h-auto"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sneakers Section */}
-      <section className="py-12 px-6 bg-gray-50">
+      {/* Lifestyle Collection Section - Combined products instead of separate categories */}
+      <section className="py-16 px-6 bg-white">
         <div className="container mx-auto">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="uppercase text-3xl font-bold">
-              SNEAKERS
+            <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
+              <ShoppingBag className="text-[#E41A36]" size={28} />
+              <span>LIFESTYLE COLLECTION</span>
             </h2>
-            <Link to="/sneakers" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
+            <Link to="/clothing" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
               Bekijk alles <ArrowRight size={16} />
             </Link>
           </div>
           
-          <div className="flex overflow-x-auto gap-4 pb-4 hide-scrollbar">
-            {featuredProducts.map((product) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            {lifestyleProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
-          </div>
-        </div>
-      </section>
-      
-      {/* Accessories & Clothing Section - Compact display */}
-      <section className="py-12 px-6 bg-white">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Accessories Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="uppercase text-2xl font-bold">
-                  ACCESSOIRES
-                </h2>
-                <Link to="/accessories" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-                  Bekijk alles <ArrowRight size={16} />
-                </Link>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {accessoriesProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-            
-            {/* Clothing Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="uppercase text-2xl font-bold">
-                  KLEDING
-                </h2>
-                <Link to="/clothing" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-                  Bekijk alles <ArrowRight size={16} />
-                </Link>
-              </div>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {clothingProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      
-      {/* Bags Section */}
-      <section className="py-12 px-6 bg-gray-50">
-        <div className="container mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="uppercase text-2xl font-bold">
-              TASSEN
-            </h2>
-            <Link to="/bags" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
-              Bekijk alles <ArrowRight size={16} />
-            </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {bagsProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          {/* Category buttons */}
+          <div className="flex flex-wrap justify-center gap-3 mt-10">
+            <Link to="/clothing">
+              <button className="bg-[#00262F] text-white px-6 py-3 font-semibold rounded-sm hover:bg-[#00374F] transition-colors">
+                KLEDING
+              </button>
+            </Link>
+            <Link to="/accessories">
+              <button className="bg-white border border-[#00262F] text-[#00262F] px-6 py-3 font-semibold rounded-sm hover:bg-gray-100 transition-colors">
+                ACCESSOIRES
+              </button>
+            </Link>
+            <Link to="/bags">
+              <button className="bg-white border border-[#00262F] text-[#00262F] px-6 py-3 font-semibold rounded-sm hover:bg-gray-100 transition-colors">
+                TASSEN
+              </button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Upcoming Releases Section - Improved with countdown and better display */}
-      <section className="py-16 px-6 bg-white">
+      {/* Upcoming Releases Section */}
+      <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
@@ -596,7 +536,7 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* History Block - Improved with better readability and image */}
+      {/* History Block */}
       <section className="py-16 px-6 bg-[#00262F] text-white">
         <div className="container mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -635,38 +575,8 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
-      {/* Newsletter - Improved with incentive */}
-      <section className="py-12 px-6 bg-gray-50">
-        <div className="container mx-auto max-w-3xl">
-          <div className="bg-white p-8 rounded-lg shadow-sm text-center">
-            <h3 className="text-2xl font-bold mb-2">Blijf op de hoogte</h3>
-            <p className="text-gray-600 mb-6">
-              Schrijf je in voor onze nieuwsbrief en ontvang <span className="text-[#E41A36] font-semibold">€5 korting</span> op je eerste bestelling!
-            </p>
-            
-            <form className="max-w-md mx-auto">
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="flex-grow">
-                  <label htmlFor="email" className="sr-only">E-mailadres</label>
-                  <input
-                    type="email"
-                    id="email"
-                    placeholder="Jouw e-mailadres"
-                    className="w-full border border-gray-300 rounded py-3 px-4 focus:outline-none focus:ring-1 focus:ring-[#00262F]"
-                    required
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="bg-[#00262F] text-white py-3 px-6 rounded font-medium hover:bg-[#00374F] transition-colors"
-                >
-                  Inschrijven
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </section>
+      {/* Improved Newsletter Section */}
+      <Newsletter />
       
       {/* Footer */}
       <Footer />
