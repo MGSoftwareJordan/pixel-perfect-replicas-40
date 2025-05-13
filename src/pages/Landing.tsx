@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
 import { ArrowRight, Star, Tag, CalendarCheck, ShoppingBag } from 'lucide-react';
+import PreOwnedProducts from '@/components/boxstock/PreOwnedProducts';
 
 const Landing: React.FC = () => {
   // Featured products for the landing page
@@ -492,6 +492,51 @@ const Landing: React.FC = () => {
         </div>
       </section>
 
+      {/* Pre-Owned Section */}
+      <section className="py-16 px-6 bg-[#F8F9FA]">
+        <div className="container mx-auto">
+          <div className="bg-gradient-to-r from-[#1EC0A3]/20 to-[#1EC0A3]/5 rounded-2xl overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+              <div className="p-8 md:p-12">
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#1EC0A3]/20 text-[#1EC0A3] font-medium text-sm mb-6">
+                  <Tag size={16} className="mr-2" />
+                  <span>PRE-OWNED</span>
+                </div>
+                <h2 className="text-3xl md:text-4xl font-bold text-[#00262F] mb-4">
+                  Ontdek onze pre-owned collectie
+                </h2>
+                <p className="text-gray-600 mb-8 max-w-lg">
+                  Duurzamer en vaak voordeliger! Koop en verkoop premium sneakers en streetwear die gecontroleerd zijn op authenticiteit en kwaliteit.
+                </p>
+                <div className="flex flex-wrap gap-4">
+                  <Link to="/pre-owned">
+                    <button className="bg-[#1EC0A3] hover:bg-[#19a38b] text-white font-bold px-6 py-3 rounded-md transition-colors flex items-center">
+                      Shop pre-owned <ArrowRight size={16} className="ml-2" />
+                    </button>
+                  </Link>
+                  <Link to="/verkopen">
+                    <button className="bg-white border-2 border-[#1EC0A3] text-[#1EC0A3] font-bold px-6 py-3 rounded-md hover:bg-[#1EC0A3]/10 transition-colors">
+                      Verkoop jouw items
+                    </button>
+                  </Link>
+                </div>
+              </div>
+              <div className="hidden md:block relative h-full">
+                <img 
+                  src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80" 
+                  alt="Pre-owned sneakers" 
+                  className="object-cover h-full w-full"
+                />
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-12">
+            <PreOwnedProducts limit={4} showHeading={false} />
+          </div>
+        </div>
+      </section>
+
       {/* Upcoming Releases Section */}
       <section className="py-16 px-6 bg-gray-50">
         <div className="container mx-auto">
@@ -519,69 +564,4 @@ const Landing: React.FC = () => {
                   <div className="text-sm bg-[#E41A36]/10 text-[#E41A36] font-semibold rounded px-3 py-1.5 mb-3 inline-block">
                     Release: {release.releaseDate}
                   </div>
-                  <Link to={`/brands/${release.brand.toLowerCase().replace(/\s+/g, '-')}`} className="text-[#00262F] hover:underline">
-                    {release.brand}
-                  </Link>
-                  <h3 className="font-bold text-lg mt-1 mb-3">{release.name}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold">{release.price}</span>
-                    <button className="bg-[#00262F] text-white px-4 py-2 text-sm rounded hover:bg-[#00374F] transition-colors">
-                      Notificeer mij
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* History Block */}
-      <section className="py-16 px-6 bg-[#00262F] text-white">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="max-w-lg">
-              <h2 className="uppercase text-3xl font-bold mb-8">
-                HOE IS DE TERM<br />
-                'SNEAKERS' ONTSTAAN?
-              </h2>
-              <div className="space-y-4 text-gray-300">
-                <p>
-                  Lang geleden in 1917, werden sportschoenen 'sneakers' genoemd omdat ze zo stil waren. De rubberen zool zorgde ervoor dat mensen konden "sluipen" (to sneak).
-                </p>
-                <p>
-                  Wat begon als functionele sportschoenen voor basketbal en tennis, werd vanaf de jaren 70 een mode-item. Run DMC zette de trend met "My Adidas" in 1986 en sindsdien zijn sneakers niet meer weg te denken uit de streetwear cultuur.
-                </p>
-                <p className="mb-8">
-                  Vandaag de dag is de sneakermarkt miljarden waard en verzamelen mensen zeldzame edities als kunststukken.
-                </p>
-              </div>
-              <Link to="/sneaker-historie">
-                <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-[#00262F] transition-colors">
-                  MEER HISTORIE
-                </button>
-              </Link>
-            </div>
-            <div className="flex items-center justify-center">
-              <div className="w-full max-w-md">
-                <img
-                  src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
-                  alt="Vintage sneakers"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Improved Newsletter Section */}
-      <Newsletter />
-      
-      {/* Footer */}
-      <Footer />
-    </div>
-  );
-};
-
-export default Landing;
+                  <Link to={`/brands/${release.brand
