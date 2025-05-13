@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
@@ -564,4 +565,69 @@ const Landing: React.FC = () => {
                   <div className="text-sm bg-[#E41A36]/10 text-[#E41A36] font-semibold rounded px-3 py-1.5 mb-3 inline-block">
                     Release: {release.releaseDate}
                   </div>
-                  <Link to={`/brands/${release
+                  <Link to={`/brands/${release.brand.toLowerCase().replace(/\s+/g, '-')}`} className="text-[#00262F] hover:underline">
+                    {release.brand}
+                  </Link>
+                  <h3 className="font-bold text-lg mt-1 mb-3">{release.name}</h3>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">{release.price}</span>
+                    <button className="bg-[#00262F] text-white px-4 py-2 text-sm rounded hover:bg-[#00374F] transition-colors">
+                      Notificeer mij
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* History Block */}
+      <section className="py-16 px-6 bg-[#00262F] text-white">
+        <div className="container mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="max-w-lg">
+              <h2 className="uppercase text-3xl font-bold mb-8">
+                HOE IS DE TERM<br />
+                'SNEAKERS' ONTSTAAN?
+              </h2>
+              <div className="space-y-4 text-gray-300">
+                <p>
+                  Lang geleden in 1917, werden sportschoenen 'sneakers' genoemd omdat ze zo stil waren. De rubberen zool zorgde ervoor dat mensen konden "sluipen" (to sneak).
+                </p>
+                <p>
+                  Wat begon als functionele sportschoenen voor basketbal en tennis, werd vanaf de jaren 70 een mode-item. Run DMC zette de trend met "My Adidas" in 1986 en sindsdien zijn sneakers niet meer weg te denken uit de streetwear cultuur.
+                </p>
+                <p className="mb-8">
+                  Vandaag de dag is de sneakermarkt miljarden waard en verzamelen mensen zeldzame edities als kunststukken.
+                </p>
+              </div>
+              <Link to="/sneaker-historie">
+                <button className="border border-white text-white px-6 py-3 font-bold uppercase hover:bg-white hover:text-[#00262F] transition-colors">
+                  MEER HISTORIE
+                </button>
+              </Link>
+            </div>
+            <div className="flex items-center justify-center">
+              <div className="w-full max-w-md">
+                <img
+                  src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
+                  alt="Vintage sneakers"
+                  className="w-full h-auto rounded-lg shadow-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Newsletter section */}
+      <Newsletter />
+      
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
+
+export default Landing;
