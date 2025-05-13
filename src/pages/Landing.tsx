@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
@@ -566,4 +567,21 @@ const Landing: React.FC = () => {
                 <img
                   src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
                   alt="Vintage sneakers"
-                  className="w-full h
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Improved Newsletter Section */}
+      <Newsletter />
+      
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
+};
+
+export default Landing;
