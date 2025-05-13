@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Newsletter from '@/components/boxstock/Newsletter';
-import { ArrowRight, Star, Tag, CalendarCheck, Shoe, ShoppingBag } from 'lucide-react';
+import { ArrowRight, Star, Tag, CalendarCheck, ShoppingBag } from 'lucide-react';
 
 const Landing: React.FC = () => {
   // Featured products for the landing page
@@ -320,7 +319,7 @@ const Landing: React.FC = () => {
         <div className="container mx-auto">
           <div className="flex items-center justify-between mb-8">
             <h2 className="uppercase text-3xl font-bold flex items-center gap-2">
-              <Shoe className="text-[#E41A36]" size={28} />
+              <ShoppingBag className="text-[#E41A36]" size={28} />
               <span>PREMIUM SNEAKERS</span>
             </h2>
             <Link to="/sneakers" className="text-[#00262F] hover:text-[#E41A36] font-medium flex items-center gap-1 transition-colors">
@@ -567,21 +566,4 @@ const Landing: React.FC = () => {
                 <img
                   src="https://images.unsplash.com/photo-1552346154-21d32810aba3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80"
                   alt="Vintage sneakers"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Improved Newsletter Section */}
-      <Newsletter />
-      
-      {/* Footer */}
-      <Footer />
-    </div>
-  );
-};
-
-export default Landing;
+                  className="w-full h
