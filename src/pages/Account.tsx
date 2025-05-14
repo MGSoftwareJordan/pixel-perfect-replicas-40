@@ -11,6 +11,7 @@ import AccountOffers from '@/components/account/AccountOffers';
 import AccountOrders from '@/components/account/AccountOrders';
 import AccountSettings from '@/components/account/AccountSettings';
 import AccountBrands from '@/components/account/AccountBrands';
+import AccountRecentlyViewed from '@/components/account/AccountRecentlyViewed';
 
 const Account: React.FC = () => {
   const { section = "overview" } = useParams();
@@ -26,8 +27,9 @@ const Account: React.FC = () => {
         return <AccountNotifications />;
       case "brands":
         return <AccountBrands />;
+      case "recently-viewed":
+        return <AccountRecentlyViewed />;
       case "listings":
-      case "packing-slips":
       case "offers":
         return <AccountOffers />;
       case "orders":

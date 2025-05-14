@@ -1,11 +1,9 @@
-
 import React, { useState } from 'react';
 import { Plus, Package, Filter, Eye, CheckCircle, Clock, FileText, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Card, CardContent } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 
@@ -60,31 +58,6 @@ const offeringsData = [
     date: '03-05-2025',
     image: 'https://placehold.co/150x150?text=NB',
     downloads: 0,
-  },
-];
-
-// Mock data for recently viewed items
-const recentlyViewedData = [
-  {
-    id: 'rv001',
-    name: 'Nike Dunk Low',
-    price: '€110.00',
-    image: 'https://placehold.co/150x150?text=Dunk',
-    viewedAt: '13-05-2025',
-  },
-  {
-    id: 'rv002',
-    name: 'Adidas Stan Smith',
-    price: '€90.00',
-    image: 'https://placehold.co/150x150?text=Stan+Smith',
-    viewedAt: '13-05-2025',
-  },
-  {
-    id: 'rv003',
-    name: 'Converse Chuck Taylor',
-    price: '€70.00',
-    image: 'https://placehold.co/150x150?text=Converse',
-    viewedAt: '12-05-2025',
   },
 ];
 
@@ -149,15 +122,12 @@ const AccountOffers: React.FC = () => {
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-        <TabsList className="grid grid-cols-3 mb-8">
+        <TabsList className="grid grid-cols-2 mb-8">
           <TabsTrigger value="offerings" className="text-center">
             Aanbiedingen ({offeringCount})
           </TabsTrigger>
           <TabsTrigger value="packingSlips" className="text-center">
             Pakbonnen ({packingSlipsCount})
-          </TabsTrigger>
-          <TabsTrigger value="recentlyViewed" className="text-center">
-            Recent Bekeken ({recentlyViewedData.length})
           </TabsTrigger>
         </TabsList>
         
@@ -334,37 +304,6 @@ const AccountOffers: React.FC = () => {
                 </p>
               </div>
             )}
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="recentlyViewed">
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold mb-4">Recent bekeken items</h2>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {recentlyViewedData.map((item) => (
-                <Card key={item.id} className="overflow-hidden">
-                  <div className="aspect-w-1 aspect-h-1 w-full">
-                    <AspectRatio ratio={1/1}>
-                      <img 
-                        src={item.image} 
-                        alt={item.name} 
-                        className="object-cover w-full h-full"
-                      />
-                    </AspectRatio>
-                  </div>
-                  <CardContent className="p-4">
-                    <h3 className="font-medium text-[#00262F]">{item.name}</h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="font-bold">{item.price}</span>
-                      <span className="text-xs text-gray-500 flex items-center">
-                        <Eye className="h-3 w-3 mr-1" /> {item.viewedAt}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
           </div>
         </TabsContent>
       </Tabs>

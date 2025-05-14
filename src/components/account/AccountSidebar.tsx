@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, Bell, Heart, CheckCircle, ShoppingBag, FileText, Package, Settings } from 'lucide-react';
+import { User, Bell, Heart, CheckCircle, ShoppingBag, FileText, Eye, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface AccountSidebarProps {
@@ -22,6 +22,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
     { id: "favorites", name: "Favorieten", icon: Heart, path: "/account/favorites" },
     { id: "brands", name: "Merken", icon: CheckCircle, path: "/account/brands" },
     { id: "offers", name: "Aanbiedingen", icon: FileText, path: "/account/offers", count: 5 },
+    { id: "recently-viewed", name: "Recent Bekeken", icon: Eye, path: "/account/recently-viewed" },
     { id: "orders", name: "Bestellingen", icon: ShoppingBag, path: "/account/orders", count: 7 },
     { id: "settings", name: "Instellingen", icon: Settings, path: "/account/settings" },
   ];
