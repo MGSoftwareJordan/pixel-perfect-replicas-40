@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -8,14 +8,15 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image as ImageIcon, FileImage, FileVideo, Package, CreditCard, Wallet, Check, Edit } from 'lucide-react';
+import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image as ImageIcon, FileImage, FileVideo, Package, CreditCard, Wallet, Check, Edit, Search, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 
-type OfferStep = 'photos' | 'details' | 'price' | 'shipping' | 'payment' | 'review';
+// Simplified flow steps
+type OfferStep = 'photos' | 'details' | 'price' | 'review';
 
 const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState<OfferStep>('photos');
@@ -31,6 +32,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   const [openCategoryPopover, setOpenCategoryPopover] = useState(false);
   const [openBrandPopover, setOpenBrandPopover] = useState(false);
   const [customBrand, setCustomBrand] = useState<string>('');
+  const [tipsSectionExpanded, setTipsSectionExpanded] = useState(false);
+  const [isGeneratingTitle, setIsGeneratingTitle] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   
   // Form for offer details
   const form = useForm({
@@ -54,7 +58,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       companyName: "",
       vatNumber: "",
       kvkNumber: ""
-    }
+    },
+    // Live validation mode
+    mode: "onChange"
   });
 
   // Product data (mock)
@@ -139,9 +145,20 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     { id: 'fair', label: 'Redelijk', description: 'Het item heeft zichtbare tekenen van slijtage.' }
   ];
 
-  // Handle different step flows based on offer type
+  // Get steps and total step count
   const getSteps = (): OfferStep[] => {
-    return ['photos', 'details', 'price', 'shipping', 'payment', 'review'];
+    return ['photos', 'details', 'price', 'review'];
+  };
+
+  // Get step name for display
+  const getStepDisplayName = (stepName: OfferStep): string => {
+    switch(stepName) {
+      case 'photos': return 'Foto\'s';
+      case 'details': return 'Details';
+      case 'price': return 'Prijs';
+      case 'review': return 'Overzicht';
+      default: return '';
+    }
   };
 
   // Get current step number for display
@@ -153,6 +170,31 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   const getTotalSteps = (): number => {
     return getSteps().length;
   };
+  
+  // Generate product title based on photos (mock AI functionality)
+  const generateProductTitle = () => {
+    setIsGeneratingTitle(true);
+    
+    // Simulate AI processing time
+    setTimeout(() => {
+      const titles = [
+        "Nike Air Force 1 Low White",
+        "Jordan 1 High Retro OG University Blue",
+        "Adidas Yeezy Boost 350 V2 Zebra",
+        "New Balance 550 White Green",
+        "Puma Suede Classic XXI"
+      ];
+      
+      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
+      form.setValue('title', randomTitle);
+      setIsGeneratingTitle(false);
+      
+      toast({
+        title: "Titel gegenereerd",
+        description: "We hebben een titel gegenereerd op basis van je foto's.",
+      });
+    }, 1500);
+  };
 
   // Handle form steps
   const nextStep = () => {
@@ -161,6 +203,8 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     
     if (currentIndex < steps.length - 1) {
       setStep(steps[currentIndex + 1]);
+      // Track progress event (mock)
+      console.log(`Step completed: ${step}, Time spent: X seconds`);
     } else {
       // Complete the form
       handleSubmit();
@@ -177,6 +221,16 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   };
 
   const handleSubmit = () => {
+    // Validate terms
+    if (!acceptedTerms) {
+      toast({
+        title: "Accepteer de voorwaarden",
+        description: "Je moet akkoord gaan met onze voorwaarden om door te gaan.",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     // Submit form data
     toast({
       title: "Aanbieding succesvol aangemaakt",
@@ -186,19 +240,43 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     onClose();
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
+  // Image handling functions with improved compression
+  const compressImage = useCallback(async (file: File): Promise<File> => {
+    // Simple check if the file is already small enough
+    if (file.size < 1024 * 1024) {
+      return file; // Return original if less than 1MB
+    }
+    
+    // In a real app, we would compress the image here
+    // For demo purposes, we'll just log that we're compressing
+    console.log(`Compressing image: ${file.name}`);
+    return file;
+  }, []);
+
+  const handleFileUpload = useCallback(async (e: React.ChangeEvent<HTMLInputElement>, type: 'image' | 'video') => {
     const files = e.target.files;
     if (files && files.length > 0) {
-      // In a real app, we'd upload to server and get URLs
-      // For now, create temporary URLs
-      const newPhotos = Array.from(files).map(file => ({
-        url: URL.createObjectURL(file),
-        type
-      }));
+      // Process each file with compression for images
+      const processedFiles = await Promise.all(
+        Array.from(files).map(async (file) => {
+          if (type === 'image') {
+            const compressedFile = await compressImage(file);
+            return {
+              url: URL.createObjectURL(compressedFile),
+              type: 'image' as const
+            };
+          } else {
+            return {
+              url: URL.createObjectURL(file),
+              type: 'video' as const
+            };
+          }
+        })
+      );
       
-      setPhotos([...photos, ...newPhotos]);
+      setPhotos([...photos, ...processedFiles]);
     }
-  };
+  }, [photos, compressImage]);
 
   const removePhoto = (index: number) => {
     const newPhotos = [...photos];
@@ -227,6 +305,14 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       setCustomBrand('');
     }
     setOpenBrandPopover(false);
+  };
+  
+  // Reorder photos with drag and drop (placeholder for future implementation)
+  const reorderPhotos = (startIndex: number, endIndex: number) => {
+    const result = Array.from(photos);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    setPhotos(result);
   };
 
   const renderStepContent = () => {
@@ -404,17 +490,31 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               <p className="mt-1">Maximaal 20 foto's en video's toegestaan</p>
             </div>
 
-            {photos.length > 0 && (
-              <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-                <h3 className="text-base font-medium mb-3 text-blue-700">Fotografietips:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-blue-600">
-                  <li>Neem foto's in goed, natuurlijk licht</li>
-                  <li>Toon het item van verschillende kanten</li>
-                  <li>Fotografeer eventuele defecten of slijtage</li>
-                  <li>Voeg een foto toe van labels of logo's voor authenticiteit</li>
-                </ul>
+            {/* Collapsible tips section */}
+            <div className="mt-6">
+              <div 
+                className="flex items-center justify-between p-4 bg-blue-50 rounded-t-lg cursor-pointer"
+                onClick={() => setTipsSectionExpanded(!tipsSectionExpanded)}
+              >
+                <h3 className="text-base font-medium text-blue-700">Fotografietips:</h3>
+                {tipsSectionExpanded ? (
+                  <ChevronUp className="h-5 w-5 text-blue-700" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-blue-700" />
+                )}
               </div>
-            )}
+              
+              {tipsSectionExpanded && (
+                <div className="p-4 bg-blue-50 rounded-b-lg">
+                  <ul className="list-disc pl-5 space-y-1 text-sm text-blue-600">
+                    <li>Neem foto's in goed, natuurlijk licht</li>
+                    <li>Toon het item van verschillende kanten</li>
+                    <li>Fotografeer eventuele defecten of slijtage</li>
+                    <li>Voeg een foto toe van labels of logo's voor authenticiteit</li>
+                  </ul>
+                </div>
+              )}
+            </div>
             
             {/* Fixed floating button for easier upload after scrolling */}
             <div className="fixed bottom-20 right-6 z-10">
@@ -486,7 +586,33 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </Popover>
               </div>
 
-              {/* Product type selection moved to details page */}
+              {/* Title with AI generator */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium">Titel</label>
+                  {photos.length >= 1 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="h-8 text-xs flex gap-1 items-center"
+                      onClick={generateProductTitle}
+                      disabled={isGeneratingTitle}
+                    >
+                      <Sparkles className="h-3 w-3 mr-1" />
+                      {isGeneratingTitle ? "Genereren..." : "Genereer titel"}
+                    </Button>
+                  )}
+                </div>
+                <Input 
+                  placeholder="Bijv. Nike Air Force 1 Low White" 
+                  {...form.register('title')}
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Een goede titel bevat merk, model en kleur
+                </p>
+              </div>
+
+              {/* Product type selection (only show for resell) */}
               <div>
                 <label className="block text-sm font-medium mb-2">Type product</label>
                 <div className="grid grid-cols-2 gap-3">
@@ -521,17 +647,6 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">Titel</label>
-                <Input 
-                  placeholder="Bijv. Nike Air Force 1 Low White" 
-                  {...form.register('title')}
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  Een goede titel bevat merk, model en kleur
-                </p>
-              </div>
-
               <div className="flex gap-4 flex-col sm:flex-row">
                 <div className="flex-1">
                   <label className="block text-sm font-medium mb-2">Merk</label>
@@ -551,7 +666,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         </svg>
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
+                    <PopoverContent className="w-full p-0 bg-white">
                       <Command>
                         <CommandInput placeholder="Zoek merk..." className="h-9" />
                         <CommandEmpty>Geen merk gevonden.</CommandEmpty>
@@ -615,7 +730,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               {offerType === 'secondhand' && (
                 <div>
                   <label className="block text-sm font-medium mb-2">Wat is de conditie van je item?</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 gap-3">
                     {conditions.map(condition => (
                       <div 
                         key={condition.id}
@@ -643,7 +758,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               <div>
                 <label className="block text-sm font-medium mb-2">Beschrijving</label>
                 <Textarea 
-                  placeholder="Beschrijf je item: materiaal, pasvorm, wanneer gekocht, etc."
+                  placeholder="Beschrijf je item: materiaal, pasvorm, wanneer gekocht, defecten, etc."
                   className="min-h-[100px]"
                   {...form.register('description')}
                 />
@@ -726,23 +841,8 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </p>
               </div>
 
-              <div className="flex items-center bg-blue-50 p-4 rounded-lg">
-                <div className="mr-3 text-blue-500 text-xl">💡</div>
-                <div className="text-sm text-blue-700">
-                  Tip: Items met een competitieve prijs worden gemiddeld 40% sneller verkocht!
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'shipping':
-        return (
-          <div className="p-6 overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-6">Verzending</h2>
-            
-            <div className="space-y-6">
-              <div>
+              {/* Shipping information */}
+              <div className="border-t pt-6 mt-6">
                 <h3 className="font-medium mb-3">Verzendmethode</h3>
                 <div className="space-y-3">
                   <div className="border rounded-lg p-3 flex items-center cursor-pointer border-[#1EC0A3] bg-[#1EC0A3]/5">
@@ -754,112 +854,24 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         <h4 className="font-medium">BoxStock Verzending</h4>
                         <span className="text-sm font-medium">€3.95</span>
                       </div>
-                      <p className="text-sm text-gray-500">Pakketbezorging via PostNL</p>
-                    </div>
-                  </div>
-                  
-                  <div className="border rounded-lg p-3 flex items-center cursor-pointer border-gray-200">
-                    <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center"></div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-center">
-                        <h4 className="font-medium">Eigen verzending</h4>
-                        <span className="text-sm font-medium">Door jou bepaald</span>
-                      </div>
-                      <p className="text-sm text-gray-500">Jij regelt de verzending en kosten</p>
+                      <p className="text-sm text-gray-500">Koper betaalt verzendkosten</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center bg-blue-50 p-4 rounded-lg mt-4">
-                  <div className="mr-3 text-blue-500 text-xl">ℹ️</div>
-                  <div className="text-sm text-blue-700">
-                    Verzendgegevens worden bij je account instellingen opgeslagen, niet per aanbieding.
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex items-end space-x-2 justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-[#1EC0A3]"
-                  onClick={() => {
-                    // In a real app, this would navigate to account settings
-                    toast({
-                      title: "Verzendgegevens",
-                      description: "Je kunt je verzendgegevens wijzigen in je accountinstellingen.",
-                    });
-                  }}
-                >
-                  Verzendgegevens aanpassen
-                </Button>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 'payment':
-        return (
-          <div className="p-6 overflow-y-auto">
-            <h2 className="text-xl font-semibold mb-6">Ontvang je geld</h2>
-            
-            <div className="space-y-5">
-              <p className="text-gray-600">
-                Je ontvangt een uitbetaling wanneer je item is verkocht.
-              </p>
-              
-              {/* Only showing bank transfer as payment method as requested */}
-              <div 
-                className="border rounded-lg p-4 cursor-pointer transition-all border-[#1EC0A3] bg-[#1EC0A3]/5"
-              >
-                <div className="flex items-center">
-                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                    <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center">
-                      <CreditCard className="h-5 w-5 mr-2 text-gray-600" />
-                      <h4 className="font-medium">Bankoverschrijving</h4>
-                    </div>
-                    <p className="text-sm text-gray-500 mt-1">Ontvang je geld via bankoverschrijving</p>
-                  </div>
-                </div>
-                
-                <div className="mt-3 pl-8 space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">IBAN Rekeningnummer</label>
-                    <Input type="text" placeholder="NL00 INGB 0000 0000 00" {...form.register('bankAccount')} />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Naam bank</label>
-                    <Input type="text" placeholder="Bijv. ING, ABN AMRO" {...form.register('bankName')} />
-                  </div>
+                <div className="flex items-center mt-4 p-3 rounded-lg border border-blue-100 bg-blue-50">
+                  <span className="text-sm text-blue-700">
+                    Verzendgegevens worden bij je account instellingen opgeslagen
+                  </span>
                 </div>
               </div>
 
-              <div className="flex items-center bg-blue-50 p-4 rounded-lg">
-                <div className="mr-3 text-blue-500 text-xl">ℹ️</div>
-                <div className="text-sm text-blue-700">
-                  Je bankgegevens worden veilig opgeslagen en zijn alleen zichtbaar voor jou. 
-                  In je account instellingen kun je deze gegevens op elk moment wijzigen.
+              {/* Safe pay badge */}
+              <div className="flex items-center p-4 bg-green-50 border border-green-100 rounded-lg">
+                <div className="mr-3 text-green-600 text-xl">🔒</div>
+                <div className="text-sm text-green-700">
+                  <span className="font-medium">BoxStock Safe Pay</span> - Wij houden de betaling vast tot de koper het item heeft ontvangen en goedgekeurd.
                 </div>
-              </div>
-
-              <div className="flex items-end space-x-2 justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-[#1EC0A3]"
-                  onClick={() => {
-                    // In a real app, this would navigate to account settings
-                    toast({
-                      title: "Bankgegevens",
-                      description: "Je kunt je bankgegevens wijzigen in je accountinstellingen.",
-                    });
-                  }}
-                >
-                  Opslaan in account
-                </Button>
               </div>
             </div>
           </div>
@@ -959,7 +971,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       variant="ghost" 
                       size="sm" 
                       className="ml-2 h-6 text-xs flex gap-1 items-center text-[#1EC0A3]"
-                      onClick={() => editStep('shipping')}
+                      onClick={() => editStep('price')}
                     >
                       <Edit className="h-3 w-3" />
                     </Button>
@@ -969,14 +981,6 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   <div className="text-sm text-gray-500">Uitbetaalmethode</div>
                   <div className="flex items-center">
                     <span>Bankoverschrijving</span>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="ml-2 h-6 text-xs flex gap-1 items-center text-[#1EC0A3]"
-                      onClick={() => editStep('payment')}
-                    >
-                      <Edit className="h-3 w-3" />
-                    </Button>
                   </div>
                 </div>
                 {smartPricing && (
@@ -998,7 +1002,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               </div>
               
               {/* Only show photos for secondhand */}
-              {photos.length > 0 && (
+              {offerType === 'secondhand' && photos.length > 0 && (
                 <div className="p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div className="text-sm text-gray-500">Foto's</div>
@@ -1034,11 +1038,14 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
             
             <div className="border rounded-lg p-4">
-              <h3 className="font-medium mb-4">Algemene voorwaarden</h3>
-              
               <div className="flex items-start mb-8">
-                <input type="checkbox" id="termsAgreement" className="mt-1" />
-                <label htmlFor="termsAgreement" className="ml-2 text-sm">
+                <div 
+                  className={`mr-3 mt-1 h-5 w-5 border-2 rounded ${acceptedTerms ? 'bg-[#1EC0A3] border-[#1EC0A3]' : 'border-gray-300'} flex items-center justify-center cursor-pointer`}
+                  onClick={() => setAcceptedTerms(!acceptedTerms)}
+                >
+                  {acceptedTerms && <Check className="h-3 w-3 text-white" />}
+                </div>
+                <label className="text-sm cursor-pointer" onClick={() => setAcceptedTerms(!acceptedTerms)}>
                   Ik heb de algemene voorwaarden gelezen en ga hiermee akkoord
                 </label>
               </div>
@@ -1068,18 +1075,26 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               {getCurrentStepNumber()}/{getTotalSteps()}
             </div>
           </DialogTitle>
-          {/* Progress circles */}
-          <div className="flex justify-center items-center gap-1 mt-4">
-            {getSteps().map((s, i) => (
+          
+          {/* Progress bar with labels instead of dots */}
+          <div className="mt-6 mb-1">
+            <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
               <div 
-                key={i}
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  step === s ? 'bg-[#1EC0A3]' : 
-                  getSteps().indexOf(s) < getSteps().indexOf(step) ? 
-                  'bg-[#1EC0A3]/50' : 'bg-gray-200'
-                }`}
-              />
-            ))}
+                className="absolute top-0 left-0 h-full bg-[#1EC0A3] rounded-full transition-all duration-300"
+                style={{ width: `${(getCurrentStepNumber() / getTotalSteps()) * 100}%` }}
+              ></div>
+            </div>
+            <div className="flex justify-between mt-2">
+              {getSteps().map((s, i) => (
+                <div 
+                  key={i} 
+                  className={`text-xs ${step === s ? 'text-[#1EC0A3] font-medium' : 
+                  getSteps().indexOf(s) < getSteps().indexOf(step) ? 'text-gray-500' : 'text-gray-400'}`}
+                >
+                  {getStepDisplayName(s)}
+                </div>
+              ))}
+            </div>
           </div>
         </DialogHeader>
         
@@ -1118,4 +1133,3 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 };
 
 export default AddOfferFlow;
-
