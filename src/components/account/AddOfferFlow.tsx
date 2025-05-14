@@ -26,6 +26,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [secondhandCondition, setSecondhandCondition] = useState<string>('excellent');
   const [paymentMethod, setPaymentMethod] = useState<'bank' | null>('bank');
+  const [viewPhotoIndex, setViewPhotoIndex] = useState<number | null>(null);
 
   // Form for offer details
   const form = useForm({
@@ -60,7 +61,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     { id: '004', name: 'ASICS Gel-Lyte V Social Status', brand: 'ASICS', price: '€179.00', image: 'https://placehold.co/150x150?text=ASICS' }
   ];
 
-  // Only EU sizes as requested
+  // EU sizes only as requested
   const shoeSizes = [
     '32', '32.5', '33', '33.5', '34', '34.5', '35', '35.5',
     '36', '36.5', '37', '37.5', '38', '38.5', '39', '39.5',
@@ -83,6 +84,42 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     { id: 'hats', name: 'Petten & Hoeden' },
     { id: 'other', name: 'Overig' }
   ];
+
+  // Brand options for dropdown
+  const brands = [
+    { value: 'nike', label: 'Nike' },
+    { value: 'adidas', label: 'Adidas' },
+    { value: 'jordan', label: 'Jordan' },
+    { value: 'puma', label: 'Puma' },
+    { value: 'reebok', label: 'Reebok' },
+    { value: 'new_balance', label: 'New Balance' },
+    { value: 'asics', label: 'ASICS' },
+    { value: 'vans', label: 'Vans' },
+    { value: 'converse', label: 'Converse' },
+    { value: 'not_present', label: 'Niet aanwezig' },
+    { value: 'other', label: 'Anders (zelf invoeren)' }
+  ];
+
+  // Size options based on category
+  const getSizesForCategory = (categoryId: string | null) => {
+    if (!categoryId) return shoeSizes;
+
+    switch(categoryId) {
+      case 'sneakers':
+        return shoeSizes;
+      case 'sportswear':
+      case 'streetwear':
+      case 'outerwear':
+      case 'tshirts':
+      case 'hoodies':
+        return ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', '4XL'];
+      case 'accessories':
+      case 'hats':
+        return ['One Size', 'XS', 'S', 'M', 'L', 'XL'];
+      default:
+        return shoeSizes;
+    }
+  };
 
   const conditions = [
     { id: 'new', label: 'Nieuw met labels', description: 'Het item is ongedragen en heeft nog de originele labels.' },
@@ -273,17 +310,68 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               Maak duidelijke foto's van je item vanuit verschillende hoeken. Goede foto's verhogen je kans op verkoop!
             </p>
             
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+            {/* Tabs for photos/videos upload */}
+            <Tabs defaultValue="photos" className="w-full mb-6">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="photos">Foto's</TabsTrigger>
+                <TabsTrigger value="videos">Video's</TabsTrigger>
+              </TabsList>
+              <TabsContent value="photos" className="mt-4">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <FileImage className="w-10 h-10 mb-3 text-gray-400" />
+                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Klik om foto's te uploaden</span></p>
+                    <p className="text-xs text-gray-500">PNG, JPG (MAX. 5 MB)</p>
+                  </div>
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="image/*" 
+                    multiple
+                    onChange={(e) => handleFileUpload(e, 'image')} 
+                  />
+                </label>
+              </TabsContent>
+              <TabsContent value="videos" className="mt-4">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <FileVideo className="w-10 h-10 mb-3 text-gray-400" />
+                    <p className="mb-2 text-sm text-gray-500"><span className="font-semibold">Klik om een video te uploaden</span></p>
+                    <p className="text-xs text-gray-500">MP4, MOV (MAX. 30 MB)</p>
+                  </div>
+                  <input 
+                    type="file" 
+                    className="hidden" 
+                    accept="video/*" 
+                    onChange={(e) => handleFileUpload(e, 'video')} 
+                  />
+                </label>
+              </TabsContent>
+            </Tabs>
+            
+            {/* Photo gallery */}
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-6">
               {photos.map((photo, index) => (
-                <div key={index} className="relative aspect-square rounded-md overflow-hidden border border-gray-200">
+                <div 
+                  key={index} 
+                  className="relative aspect-square rounded-md overflow-hidden border border-gray-200 group cursor-pointer"
+                  onClick={() => setViewPhotoIndex(index)}
+                >
                   {photo.type === 'image' ? (
-                    <img src={photo.url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
+                    <img 
+                      src={photo.url} 
+                      alt={`Upload ${index}`} 
+                      className="w-full h-full object-contain" 
+                    />
                   ) : (
-                    <video src={photo.url} className="w-full h-full object-cover" controls />
+                    <video src={photo.url} className="w-full h-full object-cover" />
                   )}
                   <button 
-                    className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md"
-                    onClick={() => removePhoto(index)}
+                    className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removePhoto(index);
+                    }}
                   >
                     <X size={16} />
                   </button>
@@ -294,31 +382,75 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               ))}
               
               {photos.length < 8 && (
-                <>
-                  <label className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="image/*"
-                      onChange={(e) => handleFileUpload(e, 'image')}
-                    />
-                    <FileImage className="h-8 w-8 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-500">Foto toevoegen</span>
-                  </label>
-                  
-                  <label className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
-                    <input
-                      type="file"
-                      className="hidden"
-                      accept="video/*"
-                      onChange={(e) => handleFileUpload(e, 'video')}
-                    />
-                    <FileVideo className="h-8 w-8 text-gray-400 mb-2" />
-                    <span className="text-sm text-gray-500">Video toevoegen</span>
-                  </label>
-                </>
+                <label className="aspect-square rounded-md border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors">
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*,video/*"
+                    onChange={(e) => {
+                      const fileType = e.target.files?.[0]?.type.startsWith('video/') ? 'video' : 'image';
+                      handleFileUpload(e, fileType);
+                    }}
+                  />
+                  <Plus className="h-8 w-8 text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-500">Toevoegen</span>
+                </label>
               )}
             </div>
+            
+            {/* Photo zoom modal */}
+            {viewPhotoIndex !== null && photos[viewPhotoIndex] && (
+              <Dialog open={viewPhotoIndex !== null} onOpenChange={() => setViewPhotoIndex(null)}>
+                <DialogContent className="sm:max-w-[80vw] md:max-w-[70vw] lg:max-w-[60vw] p-0">
+                  <div className="relative">
+                    {photos[viewPhotoIndex].type === 'image' ? (
+                      <img 
+                        src={photos[viewPhotoIndex].url} 
+                        alt={`Photo ${viewPhotoIndex}`} 
+                        className="w-full h-auto max-h-[80vh] object-contain" 
+                      />
+                    ) : (
+                      <video 
+                        src={photos[viewPhotoIndex].url} 
+                        controls 
+                        className="w-full h-auto max-h-[80vh]"
+                      />
+                    )}
+                    <div className="absolute top-2 right-2">
+                      <Button 
+                        variant="outline" 
+                        size="icon" 
+                        className="rounded-full bg-white" 
+                        onClick={() => setViewPhotoIndex(null)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                  <DialogFooter className="p-4">
+                    <div className="flex justify-between w-full items-center">
+                      <Button 
+                        variant="outline" 
+                        disabled={viewPhotoIndex === 0} 
+                        onClick={() => setViewPhotoIndex(Math.max(0, (viewPhotoIndex || 0) - 1))}
+                      >
+                        Vorige
+                      </Button>
+                      <div className="text-sm text-gray-500">
+                        {viewPhotoIndex + 1} van {photos.length}
+                      </div>
+                      <Button 
+                        variant="outline" 
+                        disabled={viewPhotoIndex === photos.length - 1} 
+                        onClick={() => setViewPhotoIndex(Math.min(photos.length - 1, (viewPhotoIndex || 0) + 1))}
+                      >
+                        Volgende
+                      </Button>
+                    </div>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
             
             <div className="text-center text-sm text-gray-500">
               <p>Voeg minimaal 3 foto's toe van je product</p>
@@ -336,6 +468,28 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </ul>
               </div>
             )}
+            
+            {/* Fixed floating button for easier upload after scrolling */}
+            {photos.length >= 3 && (
+              <div className="fixed bottom-20 right-6 z-10">
+                <Button 
+                  className="rounded-full w-12 h-12 shadow-lg bg-[#1EC0A3] hover:bg-[#18a88f]"
+                  onClick={() => document.getElementById('additional-upload')?.click()}
+                >
+                  <Plus className="h-6 w-6" />
+                </Button>
+                <input
+                  id="additional-upload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*,video/*"
+                  onChange={(e) => {
+                    const fileType = e.target.files?.[0]?.type.startsWith('video/') ? 'video' : 'image';
+                    handleFileUpload(e, fileType);
+                  }}
+                />
+              </div>
+            )}
           </div>
         );
 
@@ -348,7 +502,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               <div className="space-y-5">
                 <div className="mb-6">
                   <label className="block text-sm font-medium mb-2">Categorie</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {categories.map(category => (
                       <div 
                         key={category.id}
@@ -378,22 +532,37 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 <div className="flex gap-4">
                   <div className="flex-1">
                     <label className="block text-sm font-medium mb-2">Merk</label>
-                    <Input 
-                      placeholder="Bijv. Nike, Adidas" 
-                      {...form.register('brand')}
-                    />
+                    <Select {...form.register('brand')}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecteer een merk" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {brands.map(brand => (
+                          <SelectItem key={brand.value} value={brand.value}>{brand.label}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="flex-1">
                     <label className="block text-sm font-medium mb-2">Maat</label>
-                    <Input 
-                      placeholder="Bijv. 42, M, XL" 
-                      {...form.register('size')}
-                    />
+                    <div className="flex gap-2">
+                      <Select {...form.register('size')}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Selecteer maat" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {getSizesForCategory(selectedCategory).map(size => (
+                            <SelectItem key={size} value={size}>{size}</SelectItem>
+                          ))}
+                          <SelectItem value="custom">Anders (zelf invoeren)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Conditie</label>
+                  <label className="block text-sm font-medium mb-2">Wat is de conditie van je item?</label>
                   <div className="space-y-3">
                     {conditions.map(condition => (
                       <div 
@@ -529,6 +698,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       <span>Je ontvangt</span>
                       <span className="text-[#1EC0A3]">€76.50</span>
                     </div>
+                    <p className="text-xs text-gray-500 mt-3 italic">
+                      Let op: Verzendkosten worden betaald door de koper en zijn niet inbegrepen in deze berekening.
+                    </p>
                   </div>
 
                   <div className="flex items-center bg-blue-50 p-4 rounded-lg">
@@ -738,7 +910,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   </div>
                 </div>
                 
-                {/* Added verzendgegevens for resell flow */}
+                {/* Verzendgegevens for resell flow */}
                 <div className="p-4 border border-gray-200 rounded-lg mt-6">
                   <h3 className="font-medium mb-3">Verzendgegevens</h3>
                   
@@ -821,42 +993,40 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
 
-              {/* Factuurgegevens for resell flow */}
-              {offerType === 'resell' && (
-                <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                  <h3 className="font-medium mb-2">Factuurgegevens</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Deze gegevens worden gebruikt voor de factuur die bij je uitbetaling wordt gevoegd.
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
-                      <Input 
-                        type="text" 
-                        placeholder="Bijv. jouw bedrijfsnaam" 
-                        {...form.register('companyName')}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
-                      <Input 
-                        type="text" 
-                        placeholder="Bijv. NL123456789B01" 
-                        {...form.register('vatNumber')}
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
-                      <Input 
-                        type="text" 
-                        placeholder="Bijv. 12345678" 
-                        {...form.register('kvkNumber')}
-                      />
-                    </div>
+              {/* Factuurgegevens for both resell and secondhand flows */}
+              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <h3 className="font-medium mb-2">Factuurgegevens</h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  Deze gegevens worden gebruikt voor de factuur die bij je uitbetaling wordt gevoegd.
+                </p>
+                
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. jouw bedrijfsnaam" 
+                      {...form.register('companyName')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. NL123456789B01" 
+                      {...form.register('vatNumber')}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. 12345678" 
+                      {...form.register('kvkNumber')}
+                    />
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         );
