@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Plus, Package, Filter, Eye, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -6,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
+import AddOfferFlow from './AddOfferFlow';
 
 // Mock data for offerings
 export const offeringsData = [
@@ -91,6 +93,7 @@ const AccountOffers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const [isAddOfferOpen, setIsAddOfferOpen] = useState(false);
   const navigate = useNavigate();
 
   const filteredOfferings = offeringsData.filter(offering => {
@@ -107,6 +110,10 @@ const AccountOffers: React.FC = () => {
 
   const handleViewOfferDetail = (offerId: string) => {
     navigate(`/account/offers/${offerId}`);
+  };
+
+  const openAddOfferDialog = () => {
+    setIsAddOfferOpen(true);
   };
 
   return (
@@ -182,7 +189,10 @@ const AccountOffers: React.FC = () => {
           {offeringCount} Aanbiedingen
         </span>
         
-        <Button className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2">
+        <Button 
+          className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2"
+          onClick={openAddOfferDialog}
+        >
           <Plus size={18} />
           <span>Aanbieding Toevoegen</span>
         </Button>
@@ -271,12 +281,21 @@ const AccountOffers: React.FC = () => {
           <p className="text-gray-500 mb-6 max-w-md mx-auto">
             Er zijn geen aanbiedingen die voldoen aan de geselecteerde filters.
           </p>
-          <Button className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2">
+          <Button 
+            className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2"
+            onClick={openAddOfferDialog}
+          >
             <Plus size={18} />
             <span>Nieuwe Aanbieding Toevoegen</span>
           </Button>
         </div>
       )}
+      
+      {/* Add offer dialog */}
+      <AddOfferFlow 
+        open={isAddOfferOpen}
+        onClose={() => setIsAddOfferOpen(false)}
+      />
     </div>
   );
 };

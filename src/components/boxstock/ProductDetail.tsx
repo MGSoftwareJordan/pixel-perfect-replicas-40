@@ -1,9 +1,16 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import ProductGallery from './ProductGallery';
 import ProductInfo from './ProductInfo';
+import AddOfferFlow from '@/components/account/AddOfferFlow';
 
 const ProductDetail: React.FC = () => {
+  const [isAddOfferOpen, setIsAddOfferOpen] = useState(false);
+
+  const handleSellItemClick = () => {
+    setIsAddOfferOpen(true);
+  };
+
   return (
     <div className="flex w-full flex-col items-center pb-3.5 px-[70px] max-md:max-w-full max-md:px-5">
       <div className="w-full max-w-[1199px] max-md:max-w-full">
@@ -22,7 +29,10 @@ const ProductDetail: React.FC = () => {
                     </div>
                   </div>
                   <div className="flex max-w-full w-[490px] flex-col items-center text-xl mt-8">
-                    <button className="w-full text-white font-bold leading-[1.2] bg-[#E41A36] pt-[17px] pb-[11px] px-[49px] rounded-md hover:bg-[#c01730] transition-colors max-md:px-5">
+                    <button 
+                      onClick={handleSellItemClick}
+                      className="w-full text-white font-bold leading-[1.2] bg-[#E41A36] pt-[17px] pb-[11px] px-[49px] rounded-md hover:bg-[#c01730] transition-colors max-md:px-5"
+                    >
                       Verkoop dit item
                     </button>
                     <div className="text-[#00262F] font-normal underline decoration-solid decoration-auto underline-offset-auto underline mt-4 hover:text-[#064559] cursor-pointer transition-colors">
@@ -38,6 +48,12 @@ const ProductDetail: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Add offer modal */}
+      <AddOfferFlow 
+        open={isAddOfferOpen}
+        onClose={() => setIsAddOfferOpen(false)}
+      />
     </div>
   );
 };
