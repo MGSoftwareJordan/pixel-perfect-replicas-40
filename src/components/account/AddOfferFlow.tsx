@@ -46,7 +46,10 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       country: "Nederland",
       bankAccount: "",
       bankName: "",
-      paypalEmail: ""
+      paypalEmail: "",
+      companyName: "",
+      vatNumber: "",
+      kvkNumber: ""
     }
   });
 
@@ -65,20 +68,20 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     '44', '44.5', '45', '45.5', '46', '46.5', '47', '47.5'
   ];
 
-  // Updated categories with cleaner presentation
+  // Updated categories with cleaner presentation - removed icons
   const categories = [
-    { id: 'sneakers', name: 'Sneakers', icon: '👟' },
-    { id: 'sportswear', name: 'Sportkleding', icon: '🏃‍♂️' },
-    { id: 'streetwear', name: 'Streetwear', icon: '🧥' },
-    { id: 'accessories', name: 'Accessoires', icon: '👜' },
-    { id: 'denim', name: 'Denim', icon: '👖' },
-    { id: 'outerwear', name: 'Jassen', icon: '🧥' },
-    { id: 'tshirts', name: 'T-shirts', icon: '👕' },
-    { id: 'hoodies', name: 'Hoodies', icon: '🧣' },
-    { id: 'collectibles', name: 'Verzamelobjecten', icon: '🏆' },
-    { id: 'vintage', name: 'Vintage', icon: '📷' },
-    { id: 'hats', name: 'Petten & Hoeden', icon: '🧢' },
-    { id: 'other', name: 'Overig', icon: '📦' }
+    { id: 'sneakers', name: 'Sneakers' },
+    { id: 'sportswear', name: 'Sportkleding' },
+    { id: 'streetwear', name: 'Streetwear' },
+    { id: 'accessories', name: 'Accessoires' },
+    { id: 'denim', name: 'Denim' },
+    { id: 'outerwear', name: 'Jassen' },
+    { id: 'tshirts', name: 'T-shirts' },
+    { id: 'hoodies', name: 'Hoodies' },
+    { id: 'collectibles', name: 'Verzamelobjecten' },
+    { id: 'vintage', name: 'Vintage' },
+    { id: 'hats', name: 'Petten & Hoeden' },
+    { id: 'other', name: 'Overig' }
   ];
 
   const conditions = [
@@ -154,7 +157,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     switch (step) {
       case 'type':
         return (
-          <div className="px-6 py-6">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold text-center mb-8">Eenvoudig Verkopen</h2>
             <p className="text-gray-600 mb-8 text-center">
               Verkoop je producten aan ons of via resell of consignatie. We bieden twee opties zodat je kunt kiezen wat het beste bij je verleden past.
@@ -209,7 +212,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'product':
         return (
-          <div className="px-6 py-6">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Kies een item om te verkopen</h2>
             
             <div className="relative mb-6">
@@ -254,7 +257,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'photos':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Foto's en video's</h2>
             <p className="text-gray-600 mb-4">
               Maak duidelijke foto's van je item vanuit verschillende hoeken. Goede foto's verhogen je kans op verkoop!
@@ -328,25 +331,24 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'details':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             {offerType === 'secondhand' ? (
               <div className="space-y-5">
                 <div className="mb-6">
                   <label className="block text-sm font-medium mb-2">Categorie</label>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                     {categories.map(category => (
                       <div 
                         key={category.id}
                         className={cn(
-                          "border rounded-lg p-3 flex flex-col items-center cursor-pointer transition-all text-center",
+                          "border rounded-lg p-3 text-center cursor-pointer transition-all",
                           selectedCategory === category.id ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
                         )}
                         onClick={() => setSelectedCategory(category.id)}
                       >
-                        <div className="text-2xl mb-1">{category.icon}</div>
-                        <div className="font-medium text-xs">{category.name}</div>
+                        <div className="font-medium text-sm">{category.name}</div>
                       </div>
                     ))}
                   </div>
@@ -489,7 +491,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'price':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Stel je prijs in</h2>
             
             <div className="space-y-6">
@@ -598,7 +600,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'shipping':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Verzending</h2>
             
             {offerType === 'secondhand' ? (
@@ -674,7 +676,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               </div>
             ) : (
               // Resell shipping options
-              <div className="mt-6">
+              <div>
                 <h3 className="text-base font-medium mb-3">Verkoopmethode</h3>
                 <div className="space-y-5">
                   <div 
@@ -744,6 +746,46 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     )}
                   </div>
                 </div>
+                
+                {/* Added packing slip information for resell flow, similar to secondhand */}
+                <div className="p-4 border border-gray-200 rounded-lg mt-6">
+                  <h3 className="font-medium mb-3">Verzendgegevens</h3>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Voornaam</label>
+                      <Input type="text" {...form.register('firstName')} />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Achternaam</label>
+                      <Input type="text" {...form.register('lastName')} />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium mb-1">Adres</label>
+                    <Input type="text" className="mb-2" {...form.register('address')} />
+                  </div>
+                  
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+                    <div className="sm:col-span-1">
+                      <label className="block text-sm font-medium mb-1">Postcode</label>
+                      <Input type="text" {...form.register('postalCode')} />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-sm font-medium mb-1">Stad</label>
+                      <Input type="text" {...form.register('city')} />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium mb-1">Land</label>
+                    <select className="w-full p-2.5 border border-gray-200 rounded-md bg-white">
+                      <option value="Nederland">Nederland</option>
+                      <option value="België">België</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -751,7 +793,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'payment':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Ontvang je geld</h2>
             
             <div className="space-y-5">
@@ -851,15 +893,27 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 <div className="space-y-3">
                   <div>
                     <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
-                    <Input type="text" placeholder="Bijv. jouw bedrijfsnaam" />
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. jouw bedrijfsnaam" 
+                      {...form.register('companyName')}
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
-                    <Input type="text" placeholder="Bijv. NL123456789B01" />
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. NL123456789B01" 
+                      {...form.register('vatNumber')}
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
-                    <Input type="text" placeholder="Bijv. 12345678" />
+                    <Input 
+                      type="text" 
+                      placeholder="Bijv. 12345678" 
+                      {...form.register('kvkNumber')}
+                    />
                   </div>
                 </div>
               </div>
@@ -869,7 +923,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'review':
         return (
-          <div className="px-6 py-6 overflow-y-auto">
+          <div className="p-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Controleer je aanbieding</h2>
             
             <div className="border rounded-lg overflow-hidden mb-6">
