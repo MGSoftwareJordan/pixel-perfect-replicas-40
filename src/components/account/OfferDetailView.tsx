@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, FileText, Package, Clock, Tag, Download, CheckCircle, X } from 'lucide-react';
+import { ArrowLeft, FileText, Package, Clock, Tag, Download, CheckCircle, X, Copy, Pencil, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { StatusBadge } from './AccountOffers';
+import { StatusTimeline } from '@/components/ui/status-timeline';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -17,6 +19,7 @@ const OfferDetailView: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [showPackingSlip, setShowPackingSlip] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   
   // Find the specific offering by ID
   const offering = offeringsData.find(offer => offer.id === id);
@@ -41,6 +44,16 @@ const OfferDetailView: React.FC = () => {
     toast.success("Pakbon is gedownload!");
     // In a real app, this would trigger a download of the packing slip
   };
+
+  const handleCopyId = () => {
+    navigator.clipboard.writeText(offering.id);
+    toast.success("ID gekopieerd naar klembord");
+  };
+
+  const handleEdit = () => {
+    setEditMode(true);
+    toast.info("Bewerkmodus is momenteel niet volledig geïmplementeerd");
+  };
   
   return (
     <div>
@@ -62,11 +75,35 @@ const OfferDetailView: React.FC = () => {
           <Card>
             <CardHeader>
               <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-xl mb-1">{offering.name}</CardTitle>
-                  <CardDescription>#{offering.id} - {offering.date}</CardDescription>
+                <div className="flex items-start gap-2">
+                  <div>
+                    <CardTitle className="text-xl mb-1 flex items-center">
+                      {offering.name}
+                      <button 
+                        className="ml-2 text-gray-400 hover:text-gray-600" 
+                        onClick={handleCopyId}
+                        aria-label="Kopieer ID"
+                      >
+                        <div className="flex items-center text-sm font-normal">
+                          #{offering.id}
+                          <Copy className="h-3.5 w-3.5 ml-1" />
+                        </div>
+                      </button>
+                    </CardTitle>
+                    <CardDescription>Geplaatst op: {offering.date}</CardDescription>
+                  </div>
                 </div>
-                <StatusBadge status={offering.status} />
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-1"
+                    onClick={handleEdit}
+                  >
+                    <Pencil size={16} />
+                    <span>Bewerken</span>
+                  </Button>
+                  <StatusBadge status={offering.status} />
+                </div>
               </div>
             </CardHeader>
             
@@ -103,8 +140,8 @@ const OfferDetailView: React.FC = () => {
                       <p className="text-lg font-medium">{offering.price}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-gray-500">Status</p>
-                      <StatusBadge status={offering.status} />
+                      <p className="text-sm text-gray-500">Je ontvangt</p>
+                      <p className="text-lg font-medium text-green-600">{offering.earnings}</p>
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Geplaatst op</p>
@@ -174,31 +211,13 @@ const OfferDetailView: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    offering.status === 'active' || offering.status === 'approved'
-                      ? 'bg-green-100 text-green-600'
-                      : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    <CheckCircle size={18} />
-                  </div>
-                  <div>
-                    <p className="font-medium">
-                      {offering.status === 'active' || offering.status === 'approved' 
-                        ? 'Actief' 
-                        : 'Wachtend op goedkeuring'}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {offering.status === 'active' || offering.status === 'approved'
-                        ? 'Je aanbieding is live en zichtbaar voor kopers'
-                        : 'Je aanbieding wordt momenteel beoordeeld'}
-                    </p>
-                  </div>
-                </div>
+                {/* Timeline component */}
+                <StatusTimeline status={offering.status} />
                 
                 {offering.type === 'resell' && offering.status === 'pending' && (
-                  <div className="bg-yellow-50 text-yellow-700 p-3 rounded-md text-sm border border-yellow-100">
-                    Resell aanbiedingen moeten eerst worden goedgekeurd voordat ze zichtbaar zijn.
+                  <div className="bg-yellow-50 text-yellow-700 p-3 rounded-md text-sm border border-yellow-100 mt-4">
+                    Resell aanbiedingen moeten eerst worden goedgekeurd voordat ze zichtbaar zijn. 
+                    Dit duurt ongeveer 24-48 uur.
                   </div>
                 )}
                 
@@ -218,6 +237,43 @@ const OfferDetailView: React.FC = () => {
                     </Button>
                   </div>
                 )}
+                
+                {/* FAQ Accordion */}
+                <div className="border-t pt-4 mt-4">
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="faq-1">
+                      <AccordionTrigger className="text-sm font-medium">
+                        Wat is het verschil tussen Resell en Tweedehands?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-600">
+                        Resell items zijn nieuwe producten die je doorverkoopt. Tweedehands items zijn gebruikte producten.
+                        Resell items worden extra gecontroleerd op authenticiteit.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="faq-2">
+                      <AccordionTrigger className="text-sm font-medium">
+                        Waarom duurt de goedkeuring zo lang?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-600">
+                        Onze experts controleren handmatig elk Resell item om authenticiteit te garanderen.
+                        Dit duurt gemiddeld 24-48 uur.
+                      </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="faq-3">
+                      <AccordionTrigger className="text-sm font-medium">
+                        Waarom is mijn aanbieding afgekeurd?
+                      </AccordionTrigger>
+                      <AccordionContent className="text-sm text-gray-600">
+                        Aanbiedingen kunnen worden afgekeurd als ze niet voldoen aan onze richtlijnen voor 
+                        authenticiteit, kwaliteit, of als de afbeeldingen niet duidelijk genoeg zijn.
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  
+                  <Button variant="link" className="p-0 mt-2 h-auto text-sm text-[#1EC0A3]">
+                    Bekijk alle veelgestelde vragen <ChevronRight size={14} className="ml-1" />
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -236,6 +292,25 @@ const OfferDetailView: React.FC = () => {
               </Button>
             </CardContent>
           </Card>
+          
+          {offering.status === 'active' && (
+            <Card className="mt-4 bg-blue-50 border-blue-100">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg text-blue-700">Promoot je aanbieding</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-blue-600 mb-4">
+                  Maak je aanbieding 3x zichtbaarder en krijg meer potentiële kopers.
+                </p>
+                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                  Boost deze aanbieding
+                </Button>
+                <p className="text-xs text-blue-500 mt-2 text-center">
+                  Vanaf €2,99 per week
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
       
@@ -306,6 +381,8 @@ const OfferDetailView: React.FC = () => {
           </div>
         </DialogContent>
       </Dialog>
+      
+      {/* Edit Dialog would go here in a full implementation */}
     </div>
   );
 };

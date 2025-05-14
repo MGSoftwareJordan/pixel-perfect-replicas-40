@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Plus, Package, Filter, Eye, Download } from 'lucide-react';
+import { Plus, Package, Filter, Eye, Download, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,8 +8,24 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
 import { useNavigate } from 'react-router-dom';
 import AddOfferFlow from './AddOfferFlow';
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MoreMenu } from '@/components/ui/more-menu';
+import { toast } from 'sonner';
+import OfferCard from './OfferCard';
 
-// Mock data for offerings
+// Mock data for offerings with earnings added
 export const offeringsData = [
   {
     id: '001',
@@ -20,6 +36,7 @@ export const offeringsData = [
     date: '12-05-2025',
     image: 'https://placehold.co/150x150?text=Nike',
     downloads: 0,
+    earnings: '€108.00',
   },
   {
     id: '002',
@@ -30,6 +47,7 @@ export const offeringsData = [
     date: '10-05-2025',
     image: 'https://placehold.co/150x150?text=Adidas',
     downloads: 2,
+    earnings: '€198.00',
   },
   {
     id: '003',
@@ -40,6 +58,7 @@ export const offeringsData = [
     date: '08-05-2025',
     image: 'https://placehold.co/150x150?text=Jordan',
     downloads: 1,
+    earnings: '€288.00',
   },
   {
     id: '004',
@@ -50,6 +69,7 @@ export const offeringsData = [
     date: '05-05-2025',
     image: 'https://placehold.co/150x150?text=Puma',
     downloads: 0,
+    earnings: '€58.50',
   },
   {
     id: '005',
@@ -60,11 +80,12 @@ export const offeringsData = [
     date: '03-05-2025',
     image: 'https://placehold.co/150x150?text=NB',
     downloads: 0,
+    earnings: '€85.50',
   },
 ];
 
-// Status badge component
-export const StatusBadge = ({ status }: { status: string }) => {
+// Status badge component - verbeterd met tooltips
+export const StatusBadge = ({ status, onClick }: { status: string; onClick?: () => void }) => {
   const getStatusDetails = () => {
     switch (status) {
       case 'active':
@@ -75,28 +96,111 @@ export const StatusBadge = ({ status }: { status: string }) => {
         return { text: 'Goedgekeurd', color: 'bg-blue-100 text-blue-600' };
       case 'rejected':
         return { text: 'Afgekeurd', color: 'bg-red-100 text-red-600' };
+      case 'sold':
+        return { text: 'Verkocht', color: 'bg-purple-100 text-purple-600' };
       default:
         return { text: status, color: 'bg-gray-100 text-gray-600' };
     }
   };
   
   const { text, color } = getStatusDetails();
+  const tooltipText = {
+    active: 'Deze aanbieding is live en zichtbaar voor kopers',
+    pending: 'Deze aanbieding wordt momenteel gecontroleerd',
+    approved: 'Deze aanbieding is goedgekeurd en wordt binnenkort live gezet',
+    rejected: 'Deze aanbieding is afgekeurd',
+    sold: 'Deze aanbieding is verkocht'
+  }[status] || '';
   
-  return (
-    <span className={`px-2 py-1 rounded-full text-xs font-medium ${color}`}>
+  const badge = (
+    <span 
+      className={`px-2 py-1 rounded-full text-xs font-medium ${color} ${onClick ? 'cursor-pointer hover:opacity-80' : ''}`}
+      onClick={onClick ? (e) => {
+        e.stopPropagation();
+        onClick();
+      } : undefined}
+    >
       {text}
     </span>
   );
+  
+  if (tooltipText) {
+    return (
+      <TooltipProvider>
+        <Tooltip delayDuration={300}>
+          <TooltipTrigger asChild>
+            {badge}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{tooltipText}</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  }
+  
+  return badge;
 };
+
+type SortField = 'date' | 'price' | 'status' | null;
+type SortDirection = 'asc' | 'desc';
 
 const AccountOffers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [isAddOfferOpen, setIsAddOfferOpen] = useState(false);
+  const [sortField, setSortField] = useState<SortField>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('desc');
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
   const navigate = useNavigate();
 
-  const filteredOfferings = offeringsData.filter(offering => {
+  // Helper function for sorting
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      // Toggle direction if same field
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // Set new field and default to descending
+      setSortField(field);
+      setSortDirection('desc');
+    }
+  };
+
+  // Sort the offerings
+  const getSortedOfferings = () => {
+    if (!sortField) return [...offeringsData];
+    
+    return [...offeringsData].sort((a, b) => {
+      if (sortField === 'date') {
+        // Sort by date (format is DD-MM-YYYY)
+        const dateA = a.date.split('-').reverse().join('-');
+        const dateB = b.date.split('-').reverse().join('-');
+        return sortDirection === 'asc' 
+          ? dateA.localeCompare(dateB) 
+          : dateB.localeCompare(dateA);
+      }
+      
+      if (sortField === 'price') {
+        // Extract numeric value from price
+        const priceA = parseFloat(a.price.replace('€', '').replace(',', '.'));
+        const priceB = parseFloat(b.price.replace('€', '').replace(',', '.'));
+        return sortDirection === 'asc' ? priceA - priceB : priceB - priceA;
+      }
+      
+      if (sortField === 'status') {
+        // Custom status order: active, approved, pending, rejected
+        const statusOrder = { active: 1, approved: 2, pending: 3, rejected: 4 };
+        const valueA = statusOrder[a.status as keyof typeof statusOrder] || 5;
+        const valueB = statusOrder[b.status as keyof typeof statusOrder] || 5;
+        return sortDirection === 'asc' ? valueA - valueB : valueB - valueA;
+      }
+      
+      return 0;
+    });
+  };
+
+  const filteredOfferings = getSortedOfferings().filter(offering => {
     const matchesSearch = offering.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           offering.id.includes(searchTerm);
     const matchesType = selectedType ? offering.type === selectedType : true;
@@ -115,6 +219,34 @@ const AccountOffers: React.FC = () => {
   const openAddOfferDialog = () => {
     setIsAddOfferOpen(true);
   };
+  
+  const handleEditOffer = (offerId: string) => {
+    toast.info(`Bewerken van aanbieding #${offerId} is momenteel niet beschikbaar.`);
+  };
+  
+  const handleDuplicateOffer = (offerId: string) => {
+    toast.success(`Aanbieding #${offerId} is gedupliceerd.`);
+  };
+  
+  const handlePauseOffer = (offerId: string) => {
+    toast.success(`Aanbieding #${offerId} is gepauzeerd.`);
+  };
+  
+  const handleDeleteOffer = (offerId: string) => {
+    toast.success(`Aanbieding #${offerId} is verwijderd.`);
+  };
+  
+  const handleDownloadPackingSlip = (offerId: string) => {
+    toast.success(`Pakbon voor aanbieding #${offerId} is gedownload.`);
+  };
+  
+  const handleFilterByStatus = (status: string) => {
+    setSelectedStatus(selectedStatus === status ? null : status);
+  };
+
+  // Detect if we should use cards view on mobile
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const effectiveViewMode = isMobile ? 'cards' : viewMode;
 
   return (
     <div>
@@ -178,16 +310,60 @@ const AccountOffers: React.FC = () => {
           onClick={() => setSelectedStatus(selectedStatus ? null : "active")}
         >
           <Filter size={18} />
-          <span>{selectedStatus === "active" ? "Actief" : "Status"}</span>
+          <span>{selectedStatus ? selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1) : "Status"}</span>
           <span className="text-xs ml-1">▼</span>
         </Button>
+        
+        <Select
+          value={sortField?.toString() || ''}
+          onValueChange={(value) => handleSort(value as SortField)}
+        >
+          <SelectTrigger className="w-[180px] border-gray-200">
+            <SelectValue placeholder="Sorteren op..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="date">Datum {sortField === 'date' && (sortDirection === 'asc' ? '↑' : '↓')}</SelectItem>
+            <SelectItem value="price">Prijs {sortField === 'price' && (sortDirection === 'asc' ? '↑' : '↓')}</SelectItem>
+            <SelectItem value="status">Status {sortField === 'status' && (sortDirection === 'asc' ? '↑' : '↓')}</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
       
-      {/* New offer count and add offer button row */}
+      {/* New offer count, view toggle and add offer button row */}
       <div className="flex justify-between items-center mb-4">
-        <span className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg">
-          {offeringCount} Aanbiedingen
-        </span>
+        <div className="flex items-center gap-4">
+          <span className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg">
+            {offeringCount} Aanbiedingen
+          </span>
+          
+          <div className="hidden md:flex gap-1">
+            <Button 
+              variant={viewMode === 'table' ? "default" : "outline"} 
+              size="sm"
+              onClick={() => setViewMode('table')}
+              aria-label="Tabelweergave"
+              className="h-9"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 3h18v18H3zM21 9H3M21 15H3M12 3v18"/>
+              </svg>
+            </Button>
+            <Button 
+              variant={viewMode === 'cards' ? "default" : "outline"} 
+              size="sm"
+              onClick={() => setViewMode('cards')}
+              aria-label="Kaartweergave"
+              className="h-9"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+            </Button>
+          </div>
+        </div>
         
         <Button 
           className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2"
@@ -199,79 +375,170 @@ const AccountOffers: React.FC = () => {
       </div>
       
       {hasOfferings ? (
-        <div className="bg-white rounded-xl border border-gray-100 p-4">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Product</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Prijs</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Datum</TableHead>
-                <TableHead>Acties</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredOfferings.map((offering) => (
-                <TableRow key={offering.id} className="cursor-pointer hover:bg-gray-50" onClick={() => handleViewOfferDetail(offering.id)}>
-                  <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
-                        <AspectRatio ratio={1/1}>
-                          <img src={offering.image} alt={offering.name} className="object-cover w-full h-full" />
-                        </AspectRatio>
-                      </div>
-                      <div>
-                        <p className="font-medium">{offering.name}</p>
-                        <p className="text-xs text-gray-500">#{offering.id}</p>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      offering.type === 'resell' 
-                        ? 'bg-purple-100 text-purple-600'
-                        : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      {offering.type === 'resell' ? 'Resell' : 'Tweedehands'}
-                    </span>
-                  </TableCell>
-                  <TableCell>{offering.price}</TableCell>
-                  <TableCell>
-                    <StatusBadge status={offering.status} />
-                  </TableCell>
-                  <TableCell>{offering.date}</TableCell>
-                  <TableCell>
-                    <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleViewOfferDetail(offering.id);
-                        }}
+        <>
+          {/* Table view for desktop */}
+          {effectiveViewMode === 'table' && (
+            <div className="bg-white rounded-xl border border-gray-100 p-4">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>
+                      <button 
+                        className="flex items-center font-medium text-left"
+                        onClick={() => handleSort('price')}
                       >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      {offering.downloads > 0 && (
-                        <Button 
-                          variant="ghost" 
-                          size="icon"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            // In a real app, this would trigger a download
-                          }}
-                        >
-                          <Download className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
+                        Prijs
+                        {sortField === 'price' && (
+                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
+                        )}
+                        {!sortField && <ArrowUpDown size={14} className="ml-1" />}
+                      </button>
+                    </TableHead>
+                    <TableHead>Je ontvangt</TableHead>
+                    <TableHead>
+                      <button 
+                        className="flex items-center font-medium text-left"
+                        onClick={() => handleSort('status')}
+                      >
+                        Status
+                        {sortField === 'status' && (
+                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
+                        )}
+                        {!sortField && <ArrowUpDown size={14} className="ml-1" />}
+                      </button>
+                    </TableHead>
+                    <TableHead>
+                      <button 
+                        className="flex items-center font-medium text-left"
+                        onClick={() => handleSort('date')}
+                      >
+                        Datum
+                        {sortField === 'date' && (
+                          sortDirection === 'asc' ? <ArrowUp size={14} className="ml-1" /> : <ArrowDown size={14} className="ml-1" />
+                        )}
+                        {!sortField && <ArrowUpDown size={14} className="ml-1" />}
+                      </button>
+                    </TableHead>
+                    <TableHead>Acties</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredOfferings.map((offering) => (
+                    <TableRow key={offering.id} className="cursor-pointer hover:bg-gray-50" onClick={() => handleViewOfferDetail(offering.id)}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
+                            <AspectRatio ratio={1/1}>
+                              <img src={offering.image} alt={offering.name} className="object-cover w-full h-full" />
+                            </AspectRatio>
+                          </div>
+                          <div>
+                            <p className="font-medium">{offering.name}</p>
+                            <p className="text-xs text-gray-500">#{offering.id}</p>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          offering.type === 'resell' 
+                            ? 'bg-purple-100 text-purple-600'
+                            : 'bg-blue-100 text-blue-600'
+                        }`}>
+                          {offering.type === 'resell' ? 'Resell' : 'Tweedehands'}
+                        </span>
+                      </TableCell>
+                      <TableCell>{offering.price}</TableCell>
+                      <TableCell className="text-green-600 font-medium">{offering.earnings}</TableCell>
+                      <TableCell>
+                        <StatusBadge 
+                          status={offering.status} 
+                          onClick={() => handleFilterByStatus(offering.status)} 
+                        />
+                      </TableCell>
+                      <TableCell>{offering.date}</TableCell>
+                      <TableCell>
+                        <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button 
+                                  variant="ghost" 
+                                  size="icon" 
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleViewOfferDetail(offering.id);
+                                  }}
+                                  className="h-8 w-8"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Bekijken</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          
+                          {offering.downloads > 0 && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button 
+                                    variant="ghost" 
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleDownloadPackingSlip(offering.id);
+                                    }}
+                                  >
+                                    <Download className="h-4 w-4" />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p>Download pakbon</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          )}
+                          
+                          <MoreMenu
+                            offerId={offering.id}
+                            onView={handleViewOfferDetail}
+                            onEdit={handleEditOffer}
+                            onDuplicate={handleDuplicateOffer}
+                            onPause={handlePauseOffer}
+                            onDelete={handleDeleteOffer}
+                          />
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+          
+          {/* Cards view for mobile */}
+          {effectiveViewMode === 'cards' && (
+            <div className="grid grid-cols-1 gap-4">
+              {filteredOfferings.map((offering) => (
+                <OfferCard
+                  key={offering.id}
+                  offering={offering}
+                  onViewDetails={handleViewOfferDetail}
+                  onEditOffer={handleEditOffer}
+                  onDuplicateOffer={handleDuplicateOffer}
+                  onPauseOffer={handlePauseOffer}
+                  onDeleteOffer={handleDeleteOffer}
+                  onDownloadPackingSlip={handleDownloadPackingSlip}
+                />
               ))}
-            </TableBody>
-          </Table>
-        </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className="text-center py-16 bg-white rounded-xl border border-gray-100">
           <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-6">
