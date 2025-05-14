@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -15,10 +16,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command";
 
 // Simplified flow steps
-type OfferStep = 'photos' | 'details' | 'price' | 'review';
+type OfferStep = 'start' | 'photos' | 'details' | 'price' | 'review';
 
 const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  const [step, setStep] = useState<OfferStep>('photos');
+  const [step, setStep] = useState<OfferStep>('start');
   const [offerType, setOfferType] = useState<'resell' | 'secondhand'>('secondhand');
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [sizeType, setSizeType] = useState<'EU'>('EU');
@@ -146,12 +147,13 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   // Get steps and total step count
   const getSteps = (): OfferStep[] => {
-    return ['photos', 'details', 'price', 'review'];
+    return offerType === 'secondhand' ? ['start', 'photos', 'details', 'price', 'review'] : ['start', 'details', 'price', 'review'];
   };
 
   // Get step name for display
   const getStepDisplayName = (stepName: OfferStep): string => {
     switch(stepName) {
+      case 'start': return 'Type';
       case 'photos': return 'Foto\'s';
       case 'details': return 'Details';
       case 'price': return 'Prijs';
@@ -162,12 +164,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   // Get current step number for display
   const getCurrentStepNumber = (): number => {
-    return getSteps().indexOf(step) + 1;
+    return getSteps().indexOf(step);
   };
 
   // Get total steps
   const getTotalSteps = (): number => {
-    return getSteps().length;
+    return getSteps().length - 1; // Subtract 1 as 'start' isn't counted in the progress bar
   };
   
   // Generate product title based on photos (mock AI functionality)
@@ -201,7 +203,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     const currentIndex = steps.indexOf(step);
     
     if (currentIndex < steps.length - 1) {
-      setStep(steps[currentIndex + 1]);
+      // If we're moving from start to the next step, set the appropriate next step based on offerType
+      if (step === 'start') {
+        setStep(offerType === 'secondhand' ? 'photos' : 'details');
+      } else {
+        setStep(steps[currentIndex + 1]);
+      }
       // Track progress event (mock)
       console.log(`Step completed: ${step}, Time spent: X seconds`);
     } else {
@@ -215,7 +222,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     const currentIndex = steps.indexOf(step);
     
     if (currentIndex > 0) {
-      setStep(steps[currentIndex - 1]);
+      // If we're on 'details' and coming back, we might need to go to photos or start
+      if (step === 'details' && offerType === 'resell') {
+        setStep('start');
+      } else {
+        setStep(steps[currentIndex - 1]);
+      }
     }
   };
 
@@ -316,6 +328,57 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   const renderStepContent = () => {
     switch (step) {
+      case 'start':
+        return (
+          <div className="p-6 overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-6">Wat wil je verkopen?</h2>
+            
+            <div className="space-y-5">
+              <p className="text-gray-600 mb-6">
+                Kies het type product dat je wilt aanbieden. Dit bepaalt welke informatie we van je vragen.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div 
+                  className={cn(
+                    "border rounded-lg p-6 cursor-pointer transition-all hover:shadow-md",
+                    offerType === 'secondhand' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
+                  )}
+                  onClick={() => setOfferType('secondhand')}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mb-3 h-6 w-6 rounded-full border-2 flex items-center justify-center">
+                      {offerType === 'secondhand' && <div className="h-3 w-3 rounded-full bg-[#1EC0A3]"></div>}
+                    </div>
+                    <h3 className="font-medium text-lg mb-2">Tweedehands</h3>
+                    <p className="text-sm text-gray-500">
+                      Verkoop jouw gedragen items. Upload foto's van het daadwerkelijke item.
+                    </p>
+                  </div>
+                </div>
+                
+                <div 
+                  className={cn(
+                    "border rounded-lg p-6 cursor-pointer transition-all hover:shadow-md",
+                    offerType === 'resell' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
+                  )}
+                  onClick={() => setOfferType('resell')}
+                >
+                  <div className="flex flex-col items-center text-center">
+                    <div className="mb-3 h-6 w-6 rounded-full border-2 flex items-center justify-center">
+                      {offerType === 'resell' && <div className="h-3 w-3 rounded-full bg-[#1EC0A3]"></div>}
+                    </div>
+                    <h3 className="font-medium text-lg mb-2">Resell</h3>
+                    <p className="text-sm text-gray-500">
+                      Verkoop nieuwe items met doos en labels. We gebruiken onze eigen productfoto's.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
       case 'photos':
         return (
           <div className="p-6 overflow-y-auto">
@@ -543,41 +606,6 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             <div className="space-y-5">
-              {/* Product type selection - RESTORED */}
-              <div className="mb-4">
-                <label className="block text-sm font-medium mb-2">Type product</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <div 
-                    className={cn(
-                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
-                      offerType === 'secondhand' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
-                    )}
-                    onClick={() => setOfferType('secondhand')}
-                  >
-                    <div className="flex items-center">
-                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                        {offerType === 'secondhand' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                      </div>
-                      <span>Tweedehands</span>
-                    </div>
-                  </div>
-                  <div 
-                    className={cn(
-                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
-                      offerType === 'resell' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
-                    )}
-                    onClick={() => setOfferType('resell')}
-                  >
-                    <div className="flex items-center">
-                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                        {offerType === 'resell' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                      </div>
-                      <span>Resell</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Type-ahead for category selection */}
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">Categorie</label>
@@ -1067,13 +1095,13 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
         <DialogHeader className="p-6 border-b">
           <DialogTitle className="flex items-center justify-between">
             <div className="flex items-center">
-              <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'photos'} className="mr-2">
+              <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'start'} className="mr-2">
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <span>Nieuwe aanbieding</span>
             </div>
             <div className="text-sm text-gray-500">
-              {getCurrentStepNumber()}/{getTotalSteps()}
+              {getCurrentStepNumber() + 1}/{getTotalSteps() + 1}
             </div>
           </DialogTitle>
           
@@ -1082,11 +1110,11 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             <div className="relative h-2 bg-gray-200 rounded-full overflow-hidden">
               <div 
                 className="absolute top-0 left-0 h-full bg-[#1EC0A3] rounded-full transition-all duration-300"
-                style={{ width: `${(getCurrentStepNumber() / getTotalSteps()) * 100}%` }}
+                style={{ width: `${((getCurrentStepNumber()) / getTotalSteps()) * 100}%` }}
               ></div>
             </div>
             <div className="flex justify-between mt-2">
-              {getSteps().map((s, i) => (
+              {getSteps().slice(1).map((s, i) => (
                 <div 
                   key={i} 
                   className={`text-xs ${step === s ? 'text-[#1EC0A3] font-medium' : 
@@ -1111,7 +1139,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               Annuleren
             </Button>
             <div>
-              <Button variant="outline" onClick={prevStep} className="mr-2" disabled={step === 'photos'}>
+              <Button variant="outline" onClick={prevStep} className="mr-2" disabled={step === 'start'}>
                 Vorige
               </Button>
               <Button 
