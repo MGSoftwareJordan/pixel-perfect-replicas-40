@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,7 +6,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
-import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image, Video } from 'lucide-react';
+import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image as ImageIcon, FileImage, FileVideo } from 'lucide-react';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
@@ -239,7 +238,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'photos':
         return (
-          <div className="py-6">
+          <div className="py-6 max-h-[60vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Foto's en video's</h2>
             <p className="text-gray-600 mb-4">
               Maak duidelijke foto's van je item vanuit verschillende hoeken. Goede foto's verhogen je kans op verkoop!
@@ -274,7 +273,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       accept="image/*"
                       onChange={(e) => handleFileUpload(e, 'image')}
                     />
-                    <Image className="h-8 w-8 text-gray-400 mb-2" />
+                    <FileImage className="h-10 w-10 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">Foto toevoegen</span>
                   </label>
                   
@@ -285,7 +284,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       accept="video/*"
                       onChange={(e) => handleFileUpload(e, 'video')}
                     />
-                    <Video className="h-8 w-8 text-gray-400 mb-2" />
+                    <FileVideo className="h-10 w-10 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">Video toevoegen</span>
                   </label>
                 </>
@@ -313,7 +312,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'details':
         return (
-          <div className="py-6">
+          <div className="py-6 max-h-[60vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             {offerType === 'secondhand' ? (
@@ -463,7 +462,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'price':
         return (
-          <div className="py-6">
+          <div className="py-6 max-h-[60vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Stel je prijs in</h2>
             
             <div className="space-y-6">
@@ -572,7 +571,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'shipping':
         return (
-          <div className="py-6">
+          <div className="py-6 max-h-[60vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Verzending</h2>
             
             {offerType === 'secondhand' ? (
@@ -725,7 +724,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'review':
         return (
-          <div className="py-6">
+          <div className="py-6 max-h-[60vh] overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Controleer je aanbieding</h2>
             
             <div className="border rounded-lg overflow-hidden mb-6">
@@ -794,7 +793,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         <img src={photo.url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <Video className="h-5 w-5 text-gray-400" />
+                          <FileVideo className="h-5 w-5 text-gray-400" />
                         </div>
                       )}
                     </div>
@@ -827,64 +826,62 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[95%] md:max-w-[85%] lg:max-w-[75%] xl:max-w-[65%] p-0 max-h-[90vh] overflow-hidden">
-        <div className="flex flex-col h-full">
-          {/* Header */}
-          <DialogHeader className="p-6 border-b">
-            <DialogTitle className="flex items-center">
-              <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'type'} className="mr-2">
-                <ArrowLeft className="h-4 w-4" />
-              </Button>
-              <span>Nieuwe aanbieding</span>
-            </DialogTitle>
-            {/* Progress circles */}
-            <div className="flex justify-center items-center gap-1 mt-4">
-              {getSteps().map((s, i) => (
-                <div 
-                  key={i}
-                  className={`h-2 w-2 rounded-full transition-colors ${
-                    step === s ? 'bg-[#1EC0A3]' : 
-                    getSteps().indexOf(s) < getSteps().indexOf(step) ? 
-                    'bg-[#1EC0A3]/50' : 'bg-gray-200'
-                  }`}
-                />
-              ))}
-            </div>
-          </DialogHeader>
-          
-          {/* Content */}
-          <div className="overflow-y-auto p-6">
-            {renderStepContent()}
+      <DialogContent className="sm:max-w-[95%] md:max-w-[85%] lg:max-w-[75%] xl:max-w-[65%] p-0 max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <DialogHeader className="p-6 border-b">
+          <DialogTitle className="flex items-center">
+            <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'type'} className="mr-2">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+            <span>Nieuwe aanbieding</span>
+          </DialogTitle>
+          {/* Progress circles */}
+          <div className="flex justify-center items-center gap-1 mt-4">
+            {getSteps().map((s, i) => (
+              <div 
+                key={i}
+                className={`h-2 w-2 rounded-full transition-colors ${
+                  step === s ? 'bg-[#1EC0A3]' : 
+                  getSteps().indexOf(s) < getSteps().indexOf(step) ? 
+                  'bg-[#1EC0A3]/50' : 'bg-gray-200'
+                }`}
+              />
+            ))}
           </div>
-          
-          {/* Footer */}
-          <DialogFooter className="p-6 border-t">
-            <div className="w-full flex justify-between">
-              <Button variant="outline" onClick={onClose}>
-                Annuleren
-              </Button>
-              <div>
-                <Button variant="outline" onClick={prevStep} className="mr-2" disabled={step === 'type'}>
-                  Vorige
-                </Button>
-                <Button 
-                  className="bg-[#1EC0A3] hover:bg-[#18a88f]"
-                  onClick={nextStep}
-                  disabled={
-                    (step === 'type' && !offerType) ||
-                    (step === 'product' && !selectedProduct && offerType === 'resell') ||
-                    (step === 'photos' && photos.length === 0 && offerType === 'secondhand') ||
-                    (step === 'details' && offerType === 'secondhand' && !secondhandCategory) ||
-                    (step === 'shipping' && offerType === 'resell' && !saleMethod)
-                  }
-                >
-                  {step === 'review' ? 'Afronden' : 'Volgende'}
-                  {step !== 'review' && <ArrowRight className="ml-1 h-4 w-4" />}
-                </Button>
-              </div>
-            </div>
-          </DialogFooter>
+        </DialogHeader>
+        
+        {/* Content */}
+        <div className="flex-1 overflow-hidden">
+          {renderStepContent()}
         </div>
+        
+        {/* Footer - always visible and fixed at bottom */}
+        <DialogFooter className="p-6 border-t mt-auto">
+          <div className="w-full flex justify-between">
+            <Button variant="outline" onClick={onClose}>
+              Annuleren
+            </Button>
+            <div>
+              <Button variant="outline" onClick={prevStep} className="mr-2" disabled={step === 'type'}>
+                Vorige
+              </Button>
+              <Button 
+                className="bg-[#1EC0A3] hover:bg-[#18a88f]"
+                onClick={nextStep}
+                disabled={
+                  (step === 'type' && !offerType) ||
+                  (step === 'product' && !selectedProduct && offerType === 'resell') ||
+                  (step === 'photos' && photos.length === 0 && offerType === 'secondhand') ||
+                  (step === 'details' && offerType === 'secondhand' && !secondhandCategory) ||
+                  (step === 'shipping' && offerType === 'resell' && !saleMethod)
+                }
+              >
+                {step === 'review' ? 'Afronden' : 'Volgende'}
+                {step !== 'review' && <ArrowRight className="ml-1 h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
