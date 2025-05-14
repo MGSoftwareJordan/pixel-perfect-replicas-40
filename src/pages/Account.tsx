@@ -7,8 +7,7 @@ import AccountSidebar from '@/components/account/AccountSidebar';
 import AccountOverview from '@/components/account/AccountOverview';
 import AccountFavorites from '@/components/account/AccountFavorites';
 import AccountNotifications from '@/components/account/AccountNotifications';
-import AccountListings from '@/components/account/AccountListings';
-import AccountPackingSlips from '@/components/account/AccountPackingSlips';
+import AccountOffers from '@/components/account/AccountOffers';
 import AccountOrders from '@/components/account/AccountOrders';
 import AccountSettings from '@/components/account/AccountSettings';
 import AccountBrands from '@/components/account/AccountBrands';
@@ -28,9 +27,9 @@ const Account: React.FC = () => {
       case "brands":
         return <AccountBrands />;
       case "listings":
-        return <AccountListings />;
       case "packing-slips":
-        return <AccountPackingSlips />;
+      case "offers":
+        return <AccountOffers />;
       case "orders":
         return <AccountOrders />;
       case "settings":

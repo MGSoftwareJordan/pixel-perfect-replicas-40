@@ -21,8 +21,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
     { id: "notifications", name: "Notificaties", icon: Bell, path: "/account/notifications", count: 1 },
     { id: "favorites", name: "Favorieten", icon: Heart, path: "/account/favorites" },
     { id: "brands", name: "Merken", icon: CheckCircle, path: "/account/brands" },
-    { id: "listings", name: "Aanbiedingen", icon: FileText, path: "/account/listings", count: 0 },
-    { id: "packing-slips", name: "Pakbonnen", icon: Package, path: "/account/packing-slips", count: 0 },
+    { id: "offers", name: "Aanbiedingen", icon: FileText, path: "/account/offers", count: 5 },
     { id: "orders", name: "Bestellingen", icon: ShoppingBag, path: "/account/orders", count: 7 },
     { id: "settings", name: "Instellingen", icon: Settings, path: "/account/settings" },
   ];
