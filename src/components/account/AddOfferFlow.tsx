@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -58,11 +59,20 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     '44', '44.5', '45', '45.5', '46', '46.5', '47', '47.5'
   ];
 
+  // Updated categories to be more similar to Vinted's style
   const categories = [
     { id: 'sneakers', name: 'Sneakers', icon: '👟' },
-    { id: 'clothing', name: 'Kleding', icon: '👕' },
+    { id: 'sportswear', name: 'Sportkleding', icon: '🏃‍♂️' },
+    { id: 'streetwear', name: 'Streetwear', icon: '🧥' },
     { id: 'accessories', name: 'Accessoires', icon: '👜' },
-    { id: 'collectibles', name: 'Verzamelobjecten', icon: '🏆' }
+    { id: 'denim', name: 'Denim', icon: '👖' },
+    { id: 'outerwear', name: 'Jassen', icon: '🧥' },
+    { id: 'tshirts', name: 'T-shirts', icon: '👕' },
+    { id: 'hoodies', name: 'Hoodies', icon: '🧣' },
+    { id: 'collectibles', name: 'Verzamelobjecten', icon: '🏆' },
+    { id: 'vintage', name: 'Vintage', icon: '📷' },
+    { id: 'hats', name: 'Petten & Hoeden', icon: '🧢' },
+    { id: 'other', name: 'Overig', icon: '📦' }
   ];
 
   const conditions = [
@@ -138,7 +148,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     switch (step) {
       case 'type':
         return (
-          <div className="py-6">
+          <div className="px-4 py-6">
             <h2 className="text-xl font-semibold text-center mb-8">Eenvoudig Verkopen</h2>
             <p className="text-gray-600 mb-8 text-center">
               Verkoop je producten aan ons of via resell of consignatie. We bieden twee opties zodat je kunt kiezen wat het beste bij je verleden past.
@@ -193,7 +203,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'product':
         return (
-          <div className="py-6">
+          <div className="px-4 py-6">
             <h2 className="text-xl font-semibold mb-6">Kies een item om te verkopen</h2>
             
             <div className="relative mb-6">
@@ -238,7 +248,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'photos':
         return (
-          <div className="py-6 max-h-[60vh] overflow-y-auto">
+          <div className="px-4 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Foto's en video's</h2>
             <p className="text-gray-600 mb-4">
               Maak duidelijke foto's van je item vanuit verschillende hoeken. Goede foto's verhogen je kans op verkoop!
@@ -273,7 +283,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       accept="image/*"
                       onChange={(e) => handleFileUpload(e, 'image')}
                     />
-                    <FileImage className="h-10 w-10 text-gray-400 mb-2" />
+                    <FileImage className="h-8 w-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">Foto toevoegen</span>
                   </label>
                   
@@ -284,7 +294,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       accept="video/*"
                       onChange={(e) => handleFileUpload(e, 'video')}
                     />
-                    <FileVideo className="h-10 w-10 text-gray-400 mb-2" />
+                    <FileVideo className="h-8 w-8 text-gray-400 mb-2" />
                     <span className="text-sm text-gray-500">Video toevoegen</span>
                   </label>
                 </>
@@ -297,9 +307,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             {photos.length > 0 && (
-              <div className="mt-6">
-                <h3 className="text-base font-medium mb-3">Fotografietips:</h3>
-                <ul className="list-disc pl-5 space-y-1 text-sm text-gray-600">
+              <div className="mt-6 bg-blue-50 p-4 rounded-lg">
+                <h3 className="text-base font-medium mb-3 text-blue-700">Fotografietips:</h3>
+                <ul className="list-disc pl-5 space-y-1 text-sm text-blue-600">
                   <li>Neem foto's in goed, natuurlijk licht</li>
                   <li>Toon het item van verschillende kanten</li>
                   <li>Fotografeer eventuele defecten of slijtage</li>
@@ -312,15 +322,34 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'details':
         return (
-          <div className="py-6 max-h-[60vh] overflow-y-auto">
+          <div className="px-4 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             {offerType === 'secondhand' ? (
               <div className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium mb-2">Categorie</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                    {categories.map(category => (
+                  <div className="flex gap-2 mb-4 overflow-x-auto pb-2 -mx-2 px-2">
+                    <div className="flex gap-2">
+                      {categories.slice(0, 6).map(category => (
+                        <div 
+                          key={category.id}
+                          className={cn(
+                            "flex-shrink-0 rounded-full py-1.5 px-4 text-sm font-medium cursor-pointer transition-colors",
+                            secondhandCategory === category.id 
+                              ? "bg-[#1EC0A3] text-white" 
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          )}
+                          onClick={() => setSecondhandCategory(category.id)}
+                        >
+                          <span>{category.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-5">
+                    {categories.slice(6).map(category => (
                       <div 
                         key={category.id}
                         className={cn(
@@ -330,7 +359,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         onClick={() => setSecondhandCategory(category.id)}
                       >
                         <div className="text-2xl mb-1">{category.icon}</div>
-                        <div className="font-medium text-sm">{category.name}</div>
+                        <div className="font-medium text-xs">{category.name}</div>
                       </div>
                     ))}
                   </div>
@@ -462,7 +491,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'price':
         return (
-          <div className="py-6 max-h-[60vh] overflow-y-auto">
+          <div className="px-4 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Stel je prijs in</h2>
             
             <div className="space-y-6">
@@ -481,7 +510,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     </div>
                   </div>
                   
-                  <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg shadow-sm">
                     <h3 className="font-medium mb-2">Prijssuggestie</h3>
                     <p className="text-sm text-gray-600 mb-3">
                       Vergelijkbare items worden verkocht voor €72 - €98
@@ -490,13 +519,13 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-gray-500">€0</span>
                       <div className="h-2 flex-1 bg-gray-200 rounded-full relative">
-                        <div className="absolute h-4 w-4 bg-[#1EC0A3] rounded-full top-1/2 left-[80%] transform -translate-y-1/2"></div>
+                        <div className="absolute h-5 w-5 bg-[#1EC0A3] rounded-full top-1/2 left-[80%] transform -translate-y-1/2 border-2 border-white shadow-md"></div>
                       </div>
                       <span className="text-gray-500">€200</span>
                     </div>
                   </div>
                   
-                  <div className="p-4 border border-gray-200 rounded-lg">
+                  <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                     <div className="flex justify-between mb-2">
                       <span className="text-gray-600">Verkoopprijs</span>
                       <span className="font-bold">€85.00</span>
@@ -511,7 +540,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     </div>
                   </div>
 
-                  <div className="flex items-center bg-blue-50 p-3 rounded-lg">
+                  <div className="flex items-center bg-blue-50 p-4 rounded-lg">
                     <div className="mr-3 text-blue-500 text-xl">💡</div>
                     <div className="text-sm text-blue-700">
                       Tip: Items met een competitieve prijs worden gemiddeld 40% sneller verkocht!
@@ -571,7 +600,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'shipping':
         return (
-          <div className="py-6 max-h-[60vh] overflow-y-auto">
+          <div className="px-4 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Verzending</h2>
             
             {offerType === 'secondhand' ? (
@@ -724,7 +753,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'review':
         return (
-          <div className="py-6 max-h-[60vh] overflow-y-auto">
+          <div className="px-4 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Controleer je aanbieding</h2>
             
             <div className="border rounded-lg overflow-hidden mb-6">
@@ -851,12 +880,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
         </DialogHeader>
         
         {/* Content */}
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
           {renderStepContent()}
         </div>
         
         {/* Footer - always visible and fixed at bottom */}
-        <DialogFooter className="p-6 border-t mt-auto">
+        <DialogFooter className="p-6 border-t mt-auto bg-white">
           <div className="w-full flex justify-between">
             <Button variant="outline" onClick={onClose}>
               Annuleren
