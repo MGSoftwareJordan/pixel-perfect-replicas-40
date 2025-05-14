@@ -21,6 +21,7 @@ import PreOwned from "./pages/PreOwned";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
+import Account from "./pages/Account";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,11 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          
+          {/* Account pages */}
+          <Route path="/account" element={<Account />} />
+          <Route path="/account/:section" element={<Account />} />
+          
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
