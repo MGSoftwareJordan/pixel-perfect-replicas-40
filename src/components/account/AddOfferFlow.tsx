@@ -625,7 +625,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       </svg>
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0">
+                  <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-white">
                     <Command>
                       <CommandInput placeholder="Zoek categorie..." className="h-9" />
                       <CommandEmpty>Geen categorie gevonden.</CommandEmpty>
@@ -694,7 +694,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         </svg>
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0 bg-white">
+                    <PopoverContent className="w-[--radix-popover-trigger-width] p-0 bg-white">
                       <Command>
                         <CommandInput placeholder="Zoek merk..." className="h-9" />
                         <CommandEmpty>Geen merk gevonden.</CommandEmpty>
@@ -1090,7 +1090,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[95%] md:max-w-[85%] lg:max-w-[75%] xl:max-w-[65%] p-0 max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="sm:max-w-[95%] md:max-w-[85%] lg:max-w-[75%] xl:max-w-[65%] p-0 max-h-[90vh] overflow-hidden flex flex-col" aria-describedby="dialog-description">
+        <div id="dialog-description" className="sr-only">Modal voor het toevoegen van een nieuwe aanbieding op BoxStock</div>
+        
         {/* Header */}
         <DialogHeader className="p-6 border-b">
           <DialogTitle className="flex items-center justify-between">
