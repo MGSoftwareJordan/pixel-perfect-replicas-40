@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -544,6 +543,41 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             <div className="space-y-5">
+              {/* Product type selection - RESTORED */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Type product</label>
+                <div className="grid grid-cols-2 gap-3">
+                  <div 
+                    className={cn(
+                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
+                      offerType === 'secondhand' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
+                    )}
+                    onClick={() => setOfferType('secondhand')}
+                  >
+                    <div className="flex items-center">
+                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
+                        {offerType === 'secondhand' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                      </div>
+                      <span>Tweedehands</span>
+                    </div>
+                  </div>
+                  <div 
+                    className={cn(
+                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
+                      offerType === 'resell' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
+                    )}
+                    onClick={() => setOfferType('resell')}
+                  >
+                    <div className="flex items-center">
+                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
+                        {offerType === 'resell' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                      </div>
+                      <span>Resell</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Type-ahead for category selection */}
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">Categorie</label>
@@ -612,41 +646,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </p>
               </div>
 
-              {/* Product type selection (only show for resell) */}
-              <div>
-                <label className="block text-sm font-medium mb-2">Type product</label>
-                <div className="grid grid-cols-2 gap-3">
-                  <div 
-                    className={cn(
-                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
-                      offerType === 'secondhand' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
-                    )}
-                    onClick={() => setOfferType('secondhand')}
-                  >
-                    <div className="flex items-center">
-                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                        {offerType === 'secondhand' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                      </div>
-                      <span>Tweedehands</span>
-                    </div>
-                  </div>
-                  <div 
-                    className={cn(
-                      "border rounded-lg p-3 cursor-pointer transition-all hover:shadow-md",
-                      offerType === 'resell' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200"
-                    )}
-                    onClick={() => setOfferType('resell')}
-                  >
-                    <div className="flex items-center">
-                      <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                        {offerType === 'resell' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                      </div>
-                      <span>Resell</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              {/* Brand and size sections */}
               <div className="flex gap-4 flex-col sm:flex-row">
                 <div className="flex-1">
                   <label className="block text-sm font-medium mb-2">Merk</label>
@@ -755,6 +755,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               )}
 
+              {/* Description */}
               <div>
                 <label className="block text-sm font-medium mb-2">Beschrijving</label>
                 <Textarea 
