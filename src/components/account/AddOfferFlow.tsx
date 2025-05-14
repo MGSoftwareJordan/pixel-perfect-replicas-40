@@ -20,12 +20,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   const [offerType, setOfferType] = useState<'resell' | 'secondhand' | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [sizeType, setSizeType] = useState<'EU' | 'UK' | 'US'>('EU');
+  const [sizeType, setSizeType] = useState<'EU'>('EU');
   const [saleMethod, setSaleMethod] = useState<'direct' | 'consignment' | null>(null);
   const [photos, setPhotos] = useState<{ url: string, type: 'image' | 'video' }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [secondhandCondition, setSecondhandCondition] = useState<string>('excellent');
-  const [paymentMethod, setPaymentMethod] = useState<'bank' | 'paypal' | 'store_credit' | null>('bank');
+  const [paymentMethod, setPaymentMethod] = useState<'bank' | null>('bank');
 
   // Form for offer details
   const form = useForm({
@@ -46,7 +46,6 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       country: "Nederland",
       bankAccount: "",
       bankName: "",
-      paypalEmail: "",
       companyName: "",
       vatNumber: "",
       kvkNumber: ""
@@ -61,6 +60,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     { id: '004', name: 'ASICS Gel-Lyte V Social Status', brand: 'ASICS', price: '€179.00', image: 'https://placehold.co/150x150?text=ASICS' }
   ];
 
+  // Only EU sizes as requested
   const shoeSizes = [
     '32', '32.5', '33', '33.5', '34', '34.5', '35', '35.5',
     '36', '36.5', '37', '37.5', '38', '38.5', '39', '39.5',
@@ -99,6 +99,16 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     } else {
       return ['type', 'photos', 'details', 'price', 'shipping', 'payment', 'review'];
     }
+  };
+
+  // Get current step number for display
+  const getCurrentStepNumber = (): number => {
+    return getSteps().indexOf(step) + 1;
+  };
+
+  // Get total steps
+  const getTotalSteps = (): number => {
+    return getSteps().length;
   };
 
   // Handle form steps
@@ -424,26 +434,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
               // Resell product info form with improved size selector
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-3">Maat systeem</label>
-                  <div className="inline-flex rounded-md shadow-sm mb-4">
-                    {(['EU', 'UK', 'US'] as const).map((type) => (
-                      <button
-                        key={type}
-                        type="button"
-                        className={cn(
-                          "px-4 py-2 text-sm font-medium border",
-                          type === 'EU' ? "rounded-l-md" : "",
-                          type === 'US' ? "rounded-r-md" : "",
-                          sizeType === type 
-                            ? "bg-[#1EC0A3] text-white border-[#1EC0A3]" 
-                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                        )}
-                        onClick={() => setSizeType(type)}
-                      >
-                        {type}
-                      </button>
-                    ))}
-                  </div>
+                  <label className="block text-sm font-medium mb-3">Maat</label>
                   
                   <div className="grid grid-cols-5 gap-2 max-h-[210px] overflow-y-auto p-1">
                     {shoeSizes.map((size) => (
@@ -747,7 +738,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   </div>
                 </div>
                 
-                {/* Added packing slip information for resell flow, similar to secondhand */}
+                {/* Added verzendgegevens for resell flow */}
                 <div className="p-4 border border-gray-200 rounded-lg mt-6">
                   <h3 className="font-medium mb-3">Verzendgegevens</h3>
                   
@@ -801,16 +792,13 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 Selecteer hoe je je geld wilt ontvangen wanneer je item is verkocht.
               </p>
               
+              {/* Only showing bank transfer as payment method as requested */}
               <div 
-                className={cn(
-                  "border rounded-lg p-4 cursor-pointer transition-all",
-                  paymentMethod === 'bank' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
-                )}
-                onClick={() => setPaymentMethod('bank')}
+                className="border rounded-lg p-4 cursor-pointer transition-all border-[#1EC0A3] bg-[#1EC0A3]/5"
               >
                 <div className="flex items-center">
                   <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                    {paymentMethod === 'bank' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                    <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center">
@@ -821,102 +809,54 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   </div>
                 </div>
                 
-                {paymentMethod === 'bank' && (
-                  <div className="mt-3 pl-8 space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium mb-1">IBAN Rekeningnummer</label>
-                      <Input type="text" placeholder="NL00 INGB 0000 0000 00" {...form.register('bankAccount')} />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium mb-1">Naam bank</label>
-                      <Input type="text" placeholder="Bijv. ING, ABN AMRO" {...form.register('bankName')} />
-                    </div>
+                <div className="mt-3 pl-8 space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">IBAN Rekeningnummer</label>
+                    <Input type="text" placeholder="NL00 INGB 0000 0000 00" {...form.register('bankAccount')} />
                   </div>
-                )}
-              </div>
-              
-              <div 
-                className={cn(
-                  "border rounded-lg p-4 cursor-pointer transition-all",
-                  paymentMethod === 'paypal' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
-                )}
-                onClick={() => setPaymentMethod('paypal')}
-              >
-                <div className="flex items-center">
-                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                    {paymentMethod === 'paypal' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center">
-                      <Wallet className="h-5 w-5 mr-2 text-gray-600" />
-                      <h4 className="font-medium">PayPal</h4>
-                    </div>
-                    <p className="text-sm text-gray-500 mt-1">Ontvang je geld op je PayPal account</p>
-                  </div>
-                </div>
-                
-                {paymentMethod === 'paypal' && (
-                  <div className="mt-3 pl-8">
-                    <label className="block text-sm font-medium mb-1">PayPal e-mail</label>
-                    <Input type="email" placeholder="jouw@email.com" {...form.register('paypalEmail')} />
-                  </div>
-                )}
-              </div>
-              
-              <div 
-                className={cn(
-                  "border rounded-lg p-4 cursor-pointer transition-all",
-                  paymentMethod === 'store_credit' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
-                )}
-                onClick={() => setPaymentMethod('store_credit')}
-              >
-                <div className="flex items-center">
-                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
-                    {paymentMethod === 'store_credit' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center">
-                      <Package className="h-5 w-5 mr-2 text-gray-600" />
-                      <h4 className="font-medium">BoxStock tegoed</h4>
-                    </div>
-                    <p className="text-sm text-gray-500 mt-1">Ontvang 10% extra als tegoed in je BoxStock account</p>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Naam bank</label>
+                    <Input type="text" placeholder="Bijv. ING, ABN AMRO" {...form.register('bankName')} />
                   </div>
                 </div>
               </div>
 
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                <h3 className="font-medium mb-2">Pakbon informatie</h3>
-                <p className="text-sm text-gray-600 mb-3">
-                  Deze gegevens worden gebruikt voor de pakbon die bij je verzending wordt gevoegd.
-                </p>
-                
-                <div className="space-y-3">
-                  <div>
-                    <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
-                    <Input 
-                      type="text" 
-                      placeholder="Bijv. jouw bedrijfsnaam" 
-                      {...form.register('companyName')}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
-                    <Input 
-                      type="text" 
-                      placeholder="Bijv. NL123456789B01" 
-                      {...form.register('vatNumber')}
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
-                    <Input 
-                      type="text" 
-                      placeholder="Bijv. 12345678" 
-                      {...form.register('kvkNumber')}
-                    />
+              {/* Factuurgegevens for resell flow */}
+              {offerType === 'resell' && (
+                <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                  <h3 className="font-medium mb-2">Factuurgegevens</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Deze gegevens worden gebruikt voor de factuur die bij je uitbetaling wordt gevoegd.
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
+                      <Input 
+                        type="text" 
+                        placeholder="Bijv. jouw bedrijfsnaam" 
+                        {...form.register('companyName')}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
+                      <Input 
+                        type="text" 
+                        placeholder="Bijv. NL123456789B01" 
+                        {...form.register('vatNumber')}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
+                      <Input 
+                        type="text" 
+                        placeholder="Bijv. 12345678" 
+                        {...form.register('kvkNumber')}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         );
@@ -931,7 +871,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden">
                   <AspectRatio ratio={1/1}>
                     <img 
-                      src={offerType === 'resell' && selectedProduct ? popularProducts.find(p => p.id === selectedProduct)?.image : (photos[0]?.url || 'https://placehold.co/150x150?text=No+Image')} 
+                      src={offerType === 'resell' && selectedProduct ? popularProducts.find(p => p.id === selectedProduct)?.image : 'https://placehold.co/150x150?text=No+Image'} 
                       alt="Product" 
                       className="object-cover w-full h-full" 
                     />
@@ -982,33 +922,35 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         saleMethod === 'direct' ? 'Doorverkopen' : 'Consigneren'}</div>
                 </div>
                 <div>
-                  <div className="text-sm text-gray-500">Betaalmethode</div>
-                  <div>{paymentMethod === 'bank' ? 'Bankoverschrijving' : 
-                        paymentMethod === 'paypal' ? 'PayPal' : 'BoxStock Tegoed'}</div>
+                  <div className="text-sm text-gray-500">Uitbetaalmethode</div>
+                  <div>{'Bankoverschrijving'}</div>
                 </div>
               </div>
               
-              <div className="p-4">
-                <div className="text-sm text-gray-500 mb-2">Foto's</div>
-                <div className="flex flex-wrap gap-2">
-                  {photos.slice(0, 4).map((photo, index) => (
-                    <div key={index} className="w-16 h-16 rounded overflow-hidden">
-                      {photo.type === 'image' ? (
-                        <img src={photo.url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <FileVideo className="h-5 w-5 text-gray-400" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                  {photos.length > 4 && (
-                    <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
-                      <span className="text-gray-500">+{photos.length - 4}</span>
-                    </div>
-                  )}
+              {/* Only show photos for secondhand, not resell */}
+              {offerType === 'secondhand' && (
+                <div className="p-4">
+                  <div className="text-sm text-gray-500 mb-2">Foto's</div>
+                  <div className="flex flex-wrap gap-2">
+                    {photos.slice(0, 4).map((photo, index) => (
+                      <div key={index} className="w-16 h-16 rounded overflow-hidden">
+                        {photo.type === 'image' ? (
+                          <img src={photo.url} alt={`Upload ${index}`} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                            <FileVideo className="h-5 w-5 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    {photos.length > 4 && (
+                      <div className="w-16 h-16 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-gray-500">+{photos.length - 4}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
             
             <div className="border rounded-lg p-4">
@@ -1033,11 +975,16 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       <DialogContent className="sm:max-w-[95%] md:max-w-[85%] lg:max-w-[75%] xl:max-w-[65%] p-0 max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <DialogHeader className="p-6 border-b">
-          <DialogTitle className="flex items-center">
-            <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'type'} className="mr-2">
-              <ArrowLeft className="h-4 w-4" />
-            </Button>
-            <span>Nieuwe aanbieding</span>
+          <DialogTitle className="flex items-center justify-between">
+            <div className="flex items-center">
+              <Button variant="ghost" size="icon" onClick={prevStep} disabled={step === 'type'} className="mr-2">
+                <ArrowLeft className="h-4 w-4" />
+              </Button>
+              <span>Nieuwe aanbieding</span>
+            </div>
+            <div className="text-sm text-gray-500">
+              {getCurrentStepNumber()}/{getTotalSteps()}
+            </div>
           </DialogTitle>
           {/* Progress circles */}
           <div className="flex justify-center items-center gap-1 mt-4">
