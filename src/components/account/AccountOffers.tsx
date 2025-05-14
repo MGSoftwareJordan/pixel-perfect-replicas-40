@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Plus, Package, Filter, Eye, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -107,6 +106,7 @@ const AccountOffers: React.FC = () => {
   const offeringCount = offeringsData.length;
 
   const handleViewOfferDetail = (offerId: string) => {
+    // Correctly navigate to the offer detail page
     navigate(`/account/offers/${offerId}`);
   };
 

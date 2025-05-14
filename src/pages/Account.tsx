@@ -19,7 +19,7 @@ const Account: React.FC = () => {
   
   // Render different content based on section
   const renderContent = () => {
-    // Handle offer detail view
+    // Handle offer detail view when section is offers and id is provided
     if (section === "offers" && id) {
       return <OfferDetailView />;
     }
@@ -35,7 +35,6 @@ const Account: React.FC = () => {
         return <AccountBrands />;
       case "recently-viewed":
         return <AccountRecentlyViewed />;
-      case "listings":
       case "offers":
         return <AccountOffers />;
       case "orders":
