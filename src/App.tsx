@@ -22,6 +22,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
+import OfferDetailView from "./components/account/OfferDetailView";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           {/* Account pages */}
           <Route path="/account" element={<Account />} />
           <Route path="/account/:section" element={<Account />} />
+          <Route path="/account/offers/:id" element={<Account />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

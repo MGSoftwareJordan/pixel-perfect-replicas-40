@@ -1,14 +1,16 @@
+
 import React, { useState } from 'react';
-import { Plus, Package, Filter, Eye, CheckCircle, Clock, FileText, Tag } from 'lucide-react';
+import { Plus, Package, Filter, Eye, CheckCircle, Clock, FileText, Tag, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 // Mock data for offerings
-const offeringsData = [
+export const offeringsData = [
   {
     id: '001',
     type: 'resell',
@@ -62,7 +64,7 @@ const offeringsData = [
 ];
 
 // Status badge component
-const StatusBadge = ({ status }: { status: string }) => {
+export const StatusBadge = ({ status }: { status: string }) => {
   const getStatusDetails = () => {
     switch (status) {
       case 'active':
@@ -92,6 +94,7 @@ const AccountOffers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const filteredOfferings = offeringsData.filter(offering => {
     const matchesSearch = offering.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -105,6 +108,10 @@ const AccountOffers: React.FC = () => {
   const hasOfferings = filteredOfferings.length > 0;
   const offeringCount = offeringsData.length;
   const packingSlipsCount = offeringsData.filter(o => o.downloads > 0).length;
+
+  const handleViewOfferDetail = (offerId: string) => {
+    navigate(`/account/offers/${offerId}`);
+  };
 
   return (
     <div>
@@ -200,7 +207,7 @@ const AccountOffers: React.FC = () => {
                 </TableHeader>
                 <TableBody>
                   {filteredOfferings.map((offering) => (
-                    <TableRow key={offering.id}>
+                    <TableRow key={offering.id} className="cursor-pointer hover:bg-gray-50" onClick={() => handleViewOfferDetail(offering.id)}>
                       <TableCell className="font-medium">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
@@ -229,13 +236,27 @@ const AccountOffers: React.FC = () => {
                       </TableCell>
                       <TableCell>{offering.date}</TableCell>
                       <TableCell>
-                        <div className="flex space-x-2">
-                          <Button variant="ghost" size="icon">
+                        <div className="flex space-x-2" onClick={(e) => e.stopPropagation()}>
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleViewOfferDetail(offering.id);
+                            }}
+                          >
                             <Eye className="h-4 w-4" />
                           </Button>
                           {offering.downloads > 0 && (
-                            <Button variant="ghost" size="icon">
-                              <FileText className="h-4 w-4" />
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // In a real app, this would trigger a download
+                              }}
+                            >
+                              <Download className="h-4 w-4" />
                             </Button>
                           )}
                         </div>
@@ -285,8 +306,17 @@ const AccountOffers: React.FC = () => {
                           <Clock className="h-4 w-4 inline mr-1" /> 
                           {offering.date}
                         </span>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex items-center gap-2"
+                          onClick={() => handleViewOfferDetail(offering.id)}
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span>Bekijken</span>
+                        </Button>
                         <Button variant="outline" size="sm" className="flex items-center gap-2">
-                          <FileText className="h-4 w-4" />
+                          <Download className="h-4 w-4" />
                           <span>Download ({offering.downloads}x)</span>
                         </Button>
                       </div>

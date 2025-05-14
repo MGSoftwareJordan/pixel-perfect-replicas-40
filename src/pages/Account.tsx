@@ -12,12 +12,18 @@ import AccountOrders from '@/components/account/AccountOrders';
 import AccountSettings from '@/components/account/AccountSettings';
 import AccountBrands from '@/components/account/AccountBrands';
 import AccountRecentlyViewed from '@/components/account/AccountRecentlyViewed';
+import OfferDetailView from '@/components/account/OfferDetailView';
 
 const Account: React.FC = () => {
-  const { section = "overview" } = useParams();
+  const { section = "overview", id } = useParams();
   
   // Render different content based on section
   const renderContent = () => {
+    // Handle offer detail view
+    if (section === "offers" && id) {
+      return <OfferDetailView />;
+    }
+
     switch (section) {
       case "overview":
         return <AccountOverview />;
