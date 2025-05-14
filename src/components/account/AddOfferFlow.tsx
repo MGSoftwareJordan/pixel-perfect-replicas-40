@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,11 +20,11 @@ type OfferStep = 'start' | 'photos' | 'details' | 'price' | 'review';
 const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState<OfferStep>('start');
   const [offerType, setOfferType] = useState<'resell' | 'secondhand'>('secondhand');
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>('42');
   const [sizeType, setSizeType] = useState<'EU'>('EU');
   const [photos, setPhotos] = useState<{ url: string, type: 'image' | 'video' }[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>('sneakers');
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>('Sneakers');
   const [secondhandCondition, setSecondhandCondition] = useState<string>('excellent');
   const [smartPricing, setSmartPricing] = useState<boolean>(false);
   const [viewPhotoIndex, setViewPhotoIndex] = useState<number | null>(null);
@@ -39,12 +38,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   // Form for offer details
   const form = useForm({
     defaultValues: {
-      title: "",
-      brand: "",
+      title: "Nike Air Force 1 Low White",
+      brand: "nike",
       size: "",
-      price: "",
+      price: "85",
       condition: "excellent",
-      description: "",
+      description: "Nieuw in doos, nooit gedragen. Originele labels aanwezig. Verzending mogelijk.",
       firstName: "",
       lastName: "",
       email: "",
@@ -62,6 +61,14 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     // Live validation mode
     mode: "onChange"
   });
+
+  // Effect to set initial category name based on default selectedCategory
+  useEffect(() => {
+    if (selectedCategory) {
+      const categoryName = categories.find(c => c.id === selectedCategory)?.name || 'Sneakers';
+      setSelectedCategoryName(categoryName);
+    }
+  }, []);
 
   // Product data (mock)
   const popularProducts = [
@@ -115,6 +122,26 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     { value: 'not_present', label: 'Niet aanwezig' },
     { value: 'other', label: 'Anders (zelf invoeren)' }
   ];
+
+  // Add a placeholder image to ensure photo preview works
+  useEffect(() => {
+    if (photos.length === 0 && offerType === 'secondhand') {
+      setPhotos([
+        { 
+          url: 'https://placehold.co/400x400?text=Sneaker+Example', 
+          type: 'image' 
+        },
+        { 
+          url: 'https://placehold.co/400x400?text=Side+View', 
+          type: 'image' 
+        },
+        { 
+          url: 'https://placehold.co/400x400?text=Back+View', 
+          type: 'image' 
+        }
+      ]);
+    }
+  }, [offerType, photos.length]);
 
   // Size options based on category
   const getSizesForCategory = (categoryId: string | null) => {
@@ -615,11 +642,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       variant="outline"
                       role="combobox"
                       aria-expanded={openCategoryPopover}
-                      className="w-full justify-between"
+                      className="w-full justify-between bg-white"
                     >
-                      {selectedCategory
-                        ? categories.find((category) => category.id === selectedCategory)?.name
-                        : "Selecteer een categorie..."}
+                      {selectedCategoryName || "Selecteer een categorie..."}
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`ml-2 h-4 w-4 transition-transform ${openCategoryPopover ? "rotate-180" : ""}`}>
                         <path d="m6 9 6 6 6-6"/>
                       </svg>
@@ -684,10 +709,10 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         variant="outline"
                         role="combobox"
                         aria-expanded={openBrandPopover}
-                        className="w-full justify-between"
+                        className="w-full justify-between bg-white"
                       >
                         {form.watch('brand')
-                          ? brands.find((brand) => brand.value === form.watch('brand'))?.label || customBrand
+                          ? brands.find((brand) => brand.value === form.watch('brand'))?.label || customBrand || "Nike"
                           : "Selecteer een merk..."}
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`ml-2 h-4 w-4 transition-transform ${openBrandPopover ? "rotate-180" : ""}`}>
                           <path d="m6 9 6 6 6-6"/>
@@ -956,7 +981,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                       className="ml-2 h-6 text-xs flex gap-1 items-center text-[#1EC0A3]"
                       onClick={() => editStep('details')}
                     >
-                      <Edit className="h-3 w-3" />
+                      <Edit className="h-3 w-3" /> 
                     </Button>
                   </div>
                 </div>
