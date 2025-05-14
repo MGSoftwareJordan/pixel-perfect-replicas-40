@@ -106,7 +106,6 @@ const AccountOffers: React.FC = () => {
   const offeringCount = offeringsData.length;
 
   const handleViewOfferDetail = (offerId: string) => {
-    // Correctly navigate to the offer detail page
     navigate(`/account/offers/${offerId}`);
   };
 
@@ -119,10 +118,6 @@ const AccountOffers: React.FC = () => {
             Bekijk je huidige en gepauzeerde aanbiedingen en bijbehorende pakbonnen.
           </p>
         </div>
-        
-        <span className="px-4 py-2 bg-[#00262F] text-white rounded-full text-center font-bold">
-          {offeringCount} Aanbiedingen
-        </span>
       </div>
       
       <div className="flex flex-col sm:flex-row items-stretch gap-4 mb-8">
@@ -178,6 +173,18 @@ const AccountOffers: React.FC = () => {
           <Filter size={18} />
           <span>{selectedStatus === "active" ? "Actief" : "Status"}</span>
           <span className="text-xs ml-1">▼</span>
+        </Button>
+      </div>
+      
+      {/* New offer count and add offer button row */}
+      <div className="flex justify-between items-center mb-4">
+        <span className="px-4 py-2 bg-[#00262F] text-white rounded-full text-center font-bold">
+          {offeringCount} Aanbiedingen
+        </span>
+        
+        <Button className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2">
+          <Plus size={18} />
+          <span>Aanbieding Toevoegen</span>
         </Button>
       </div>
       
