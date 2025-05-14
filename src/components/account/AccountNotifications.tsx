@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X } from 'lucide-react';
+import { X, Bell } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 const AccountNotifications: React.FC = () => {
