@@ -178,7 +178,7 @@ const AccountOffers: React.FC = () => {
       
       {/* New offer count and add offer button row */}
       <div className="flex justify-between items-center mb-4">
-        <span className="px-4 py-2 bg-[#00262F] text-white rounded-full text-center font-bold">
+        <span className="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg">
           {offeringCount} Aanbiedingen
         </span>
         

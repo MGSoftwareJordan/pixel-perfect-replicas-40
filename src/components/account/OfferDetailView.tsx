@@ -151,7 +151,7 @@ const OfferDetailView: React.FC = () => {
               </div>
             </CardContent>
             
-            <CardFooter className="border-t flex justify-between">
+            <CardFooter className="border-t flex justify-between items-center pt-4">
               <div className="flex items-center text-sm text-gray-500">
                 <Tag className="h-4 w-4 mr-1" />
                 <span>ID: {offering.id}</span>
@@ -168,7 +168,7 @@ const OfferDetailView: React.FC = () => {
         </div>
         
         <div className="lg:col-span-1">
-          <Card>
+          <Card className="sticky top-4">
             <CardHeader>
               <CardTitle className="text-lg">Status</CardTitle>
             </CardHeader>
