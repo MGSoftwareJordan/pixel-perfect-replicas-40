@@ -1,10 +1,21 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const SizeSelector: React.FC = () => {
+type SizeSelectorProps = {
+  onSizeSelect?: (size: string) => void;
+  selectedSize?: string | null;
+  className?: string;
+};
+
+const SizeSelector: React.FC<SizeSelectorProps> = ({ 
+  onSizeSelect,
+  selectedSize: propSelectedSize,
+  className
+}) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(propSelectedSize || null);
   
   const sizes = [
     "EU 38", "EU 39", "EU 40", "EU 41", "EU 42", 
@@ -17,19 +28,20 @@ const SizeSelector: React.FC = () => {
 
   const selectSize = (size: string) => {
     setSelectedSize(size);
+    if (onSizeSelect) onSizeSelect(size);
     setIsOpen(false);
   };
 
   return (
-    <div className="min-h-12 w-full text-base text-[rgba(204,204,204,1)] font-medium relative">
+    <div className={cn("min-h-12 w-full text-base font-medium relative", className)}>
       <div className="flex w-full flex-col">
-        <div className="flex w-full max-w-[335px] flex-col">
+        <div className="flex w-full flex-col">
           <div 
-            className="items-stretch border border-[color:var(--Neutrals-Black-200,#C3C5DB)] flex w-full flex-col overflow-hidden justify-center bg-white py-3 rounded-lg border-solid max-md:max-w-full cursor-pointer hover:border-[#00262F] transition-colors"
+            className="items-stretch border border-[color:var(--Neutrals-Black-200,#C3C5DB)] flex w-full flex-col overflow-hidden justify-center bg-white py-3 rounded-lg border-solid cursor-pointer hover:border-[#00262F] transition-colors"
             onClick={toggleDropdown}
           >
-            <div className="flex w-full gap-2 flex-wrap px-4 max-md:max-w-full">
-              <div className="min-w-60 gap-2 flex-1 shrink basis-[0%] max-md:max-w-full text-[#00262F]">
+            <div className="flex w-full gap-2 flex-wrap px-4">
+              <div className="min-w-60 gap-2 flex-1 shrink basis-[0%] text-[#00262F]">
                 {selectedSize || "Kies maat"}
               </div>
               {isOpen ? (
@@ -41,7 +53,7 @@ const SizeSelector: React.FC = () => {
           </div>
           
           {isOpen && (
-            <div className="absolute z-10 w-full max-w-[335px] mt-1 bg-white border border-[#C3C5DB] rounded-lg shadow-lg">
+            <div className="absolute z-10 w-full mt-1 bg-white border border-[#C3C5DB] rounded-lg shadow-lg">
               <ul className="py-1 max-h-[300px] overflow-y-auto">
                 {sizes.map((size, index) => (
                   <li 

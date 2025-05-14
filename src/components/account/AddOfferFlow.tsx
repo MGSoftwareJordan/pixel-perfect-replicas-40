@@ -6,23 +6,26 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
-import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image as ImageIcon, FileImage, FileVideo } from 'lucide-react';
+import { Camera, Upload, X, ArrowLeft, ArrowRight, Plus, Image as ImageIcon, FileImage, FileVideo, Package, CreditCard, Wallet } from 'lucide-react';
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { cn } from '@/lib/utils';
 import { toast } from '@/hooks/use-toast';
 
-type OfferStep = 'type' | 'product' | 'photos' | 'details' | 'price' | 'shipping' | 'review';
+type OfferStep = 'type' | 'product' | 'photos' | 'details' | 'price' | 'shipping' | 'payment' | 'review';
 
 const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState<OfferStep>('type');
   const [offerType, setOfferType] = useState<'resell' | 'secondhand' | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [sizeType, setSizeType] = useState<'EU' | 'UK' | 'US'>('EU');
   const [saleMethod, setSaleMethod] = useState<'direct' | 'consignment' | null>(null);
   const [photos, setPhotos] = useState<{ url: string, type: 'image' | 'video' }[]>([]);
-  const [secondhandCategory, setSecondhandCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [secondhandCondition, setSecondhandCondition] = useState<string>('excellent');
+  const [paymentMethod, setPaymentMethod] = useState<'bank' | 'paypal' | 'store_credit' | null>('bank');
 
   // Form for offer details
   const form = useForm({
@@ -40,7 +43,10 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
       address: "",
       city: "",
       postalCode: "",
-      country: "Nederland"
+      country: "Nederland",
+      bankAccount: "",
+      bankName: "",
+      paypalEmail: ""
     }
   });
 
@@ -59,7 +65,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     '44', '44.5', '45', '45.5', '46', '46.5', '47', '47.5'
   ];
 
-  // Updated categories to be more similar to Vinted's style
+  // Updated categories with cleaner presentation
   const categories = [
     { id: 'sneakers', name: 'Sneakers', icon: '👟' },
     { id: 'sportswear', name: 'Sportkleding', icon: '🏃‍♂️' },
@@ -86,9 +92,9 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   // Handle different step flows based on offer type
   const getSteps = (): OfferStep[] => {
     if (offerType === 'resell') {
-      return ['type', 'product', 'details', 'price', 'shipping', 'review'];
+      return ['type', 'product', 'details', 'price', 'shipping', 'payment', 'review'];
     } else {
-      return ['type', 'photos', 'details', 'price', 'shipping', 'review'];
+      return ['type', 'photos', 'details', 'price', 'shipping', 'payment', 'review'];
     }
   };
 
@@ -148,7 +154,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     switch (step) {
       case 'type':
         return (
-          <div className="px-4 py-6">
+          <div className="px-6 py-6">
             <h2 className="text-xl font-semibold text-center mb-8">Eenvoudig Verkopen</h2>
             <p className="text-gray-600 mb-8 text-center">
               Verkoop je producten aan ons of via resell of consignatie. We bieden twee opties zodat je kunt kiezen wat het beste bij je verleden past.
@@ -203,7 +209,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'product':
         return (
-          <div className="px-4 py-6">
+          <div className="px-6 py-6">
             <h2 className="text-xl font-semibold mb-6">Kies een item om te verkopen</h2>
             
             <div className="relative mb-6">
@@ -248,7 +254,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'photos':
         return (
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="px-6 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Foto's en video's</h2>
             <p className="text-gray-600 mb-4">
               Maak duidelijke foto's van je item vanuit verschillende hoeken. Goede foto's verhogen je kans op verkoop!
@@ -322,41 +328,22 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'details':
         return (
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="px-6 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             {offerType === 'secondhand' ? (
               <div className="space-y-5">
-                <div>
+                <div className="mb-6">
                   <label className="block text-sm font-medium mb-2">Categorie</label>
-                  <div className="flex gap-2 mb-4 overflow-x-auto pb-2 -mx-2 px-2">
-                    <div className="flex gap-2">
-                      {categories.slice(0, 6).map(category => (
-                        <div 
-                          key={category.id}
-                          className={cn(
-                            "flex-shrink-0 rounded-full py-1.5 px-4 text-sm font-medium cursor-pointer transition-colors",
-                            secondhandCategory === category.id 
-                              ? "bg-[#1EC0A3] text-white" 
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                          )}
-                          onClick={() => setSecondhandCategory(category.id)}
-                        >
-                          <span>{category.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-5">
-                    {categories.slice(6).map(category => (
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                    {categories.map(category => (
                       <div 
                         key={category.id}
                         className={cn(
                           "border rounded-lg p-3 flex flex-col items-center cursor-pointer transition-all text-center",
-                          secondhandCategory === category.id ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
+                          selectedCategory === category.id ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
                         )}
-                        onClick={() => setSecondhandCategory(category.id)}
+                        onClick={() => setSelectedCategory(category.id)}
                       >
                         <div className="text-2xl mb-1">{category.icon}</div>
                         <div className="font-medium text-xs">{category.name}</div>
@@ -432,32 +419,38 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               </div>
             ) : (
-              // Resell product info form
+              // Resell product info form with improved size selector
               <div className="space-y-6">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Maat</label>
-                  <div className="mb-6 flex justify-center">
-                    <div className="inline-flex rounded-md border border-gray-200">
-                      <Button variant="ghost" className={cn("rounded-l-md", !selectedSize || selectedSize === 'EU' ? "bg-gray-100" : "")}>
-                        EU
-                      </Button>
-                      <Button variant="ghost" className={cn("", selectedSize === 'UK' ? "bg-gray-100" : "")}>
-                        UK
-                      </Button>
-                      <Button variant="ghost" className={cn("rounded-r-md", selectedSize === 'US' ? "bg-gray-100" : "")}>
-                        US
-                      </Button>
-                    </div>
+                  <label className="block text-sm font-medium mb-3">Maat systeem</label>
+                  <div className="inline-flex rounded-md shadow-sm mb-4">
+                    {(['EU', 'UK', 'US'] as const).map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        className={cn(
+                          "px-4 py-2 text-sm font-medium border",
+                          type === 'EU' ? "rounded-l-md" : "",
+                          type === 'US' ? "rounded-r-md" : "",
+                          sizeType === type 
+                            ? "bg-[#1EC0A3] text-white border-[#1EC0A3]" 
+                            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+                        )}
+                        onClick={() => setSizeType(type)}
+                      >
+                        {type}
+                      </button>
+                    ))}
                   </div>
                   
-                  <div className="grid grid-cols-4 gap-2 max-h-[250px] overflow-y-auto p-1">
+                  <div className="grid grid-cols-5 gap-2 max-h-[210px] overflow-y-auto p-1">
                     {shoeSizes.map((size) => (
                       <Button
                         key={size}
                         variant="outline"
                         className={cn(
-                          "h-12",
-                          selectedSize === size ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : ""
+                          "h-12 text-center",
+                          selectedSize === size ? "border-[#1EC0A3] bg-[#1EC0A3]/5 text-[#1EC0A3]" : ""
                         )}
                         onClick={() => setSelectedSize(size)}
                       >
@@ -469,12 +462,17 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
                 <div>
                   <label className="block text-sm font-medium mb-1">Conditie</label>
-                  <select className="w-full p-3 border border-gray-200 rounded-md bg-white">
-                    <option value="new">Nieuw met doos</option>
-                    <option value="new-no-box">Nieuw zonder doos</option>
-                    <option value="like-new">Zo goed als nieuw</option>
-                    <option value="used">Gedragen</option>
-                  </select>
+                  <Select defaultValue="new">
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecteer conditie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="new">Nieuw met doos</SelectItem>
+                      <SelectItem value="new-no-box">Nieuw zonder doos</SelectItem>
+                      <SelectItem value="like-new">Zo goed als nieuw</SelectItem>
+                      <SelectItem value="used">Gedragen</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div>
@@ -491,7 +489,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'price':
         return (
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="px-6 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Stel je prijs in</h2>
             
             <div className="space-y-6">
@@ -553,7 +551,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   <div>
                     <label className="block text-sm font-medium mb-1">Maat</label>
                     <div className="p-3 bg-gray-50 border border-gray-200 rounded-md">
-                      {selectedSize || 'EU 42'}
+                      {sizeType} {selectedSize || '42'}
                     </div>
                   </div>
                   
@@ -600,7 +598,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
 
       case 'shipping':
         return (
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="px-6 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Verzending</h2>
             
             {offerType === 'secondhand' ? (
@@ -751,9 +749,127 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
           </div>
         );
 
+      case 'payment':
+        return (
+          <div className="px-6 py-6 overflow-y-auto">
+            <h2 className="text-xl font-semibold mb-6">Ontvang je geld</h2>
+            
+            <div className="space-y-5">
+              <p className="text-gray-600">
+                Selecteer hoe je je geld wilt ontvangen wanneer je item is verkocht.
+              </p>
+              
+              <div 
+                className={cn(
+                  "border rounded-lg p-4 cursor-pointer transition-all",
+                  paymentMethod === 'bank' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
+                )}
+                onClick={() => setPaymentMethod('bank')}
+              >
+                <div className="flex items-center">
+                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
+                    {paymentMethod === 'bank' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center">
+                      <CreditCard className="h-5 w-5 mr-2 text-gray-600" />
+                      <h4 className="font-medium">Bankoverschrijving</h4>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Ontvang je geld via bankoverschrijving</p>
+                  </div>
+                </div>
+                
+                {paymentMethod === 'bank' && (
+                  <div className="mt-3 pl-8 space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium mb-1">IBAN Rekeningnummer</label>
+                      <Input type="text" placeholder="NL00 INGB 0000 0000 00" {...form.register('bankAccount')} />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium mb-1">Naam bank</label>
+                      <Input type="text" placeholder="Bijv. ING, ABN AMRO" {...form.register('bankName')} />
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div 
+                className={cn(
+                  "border rounded-lg p-4 cursor-pointer transition-all",
+                  paymentMethod === 'paypal' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
+                )}
+                onClick={() => setPaymentMethod('paypal')}
+              >
+                <div className="flex items-center">
+                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
+                    {paymentMethod === 'paypal' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center">
+                      <Wallet className="h-5 w-5 mr-2 text-gray-600" />
+                      <h4 className="font-medium">PayPal</h4>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Ontvang je geld op je PayPal account</p>
+                  </div>
+                </div>
+                
+                {paymentMethod === 'paypal' && (
+                  <div className="mt-3 pl-8">
+                    <label className="block text-sm font-medium mb-1">PayPal e-mail</label>
+                    <Input type="email" placeholder="jouw@email.com" {...form.register('paypalEmail')} />
+                  </div>
+                )}
+              </div>
+              
+              <div 
+                className={cn(
+                  "border rounded-lg p-4 cursor-pointer transition-all",
+                  paymentMethod === 'store_credit' ? "border-[#1EC0A3] bg-[#1EC0A3]/5" : "border-gray-200 hover:border-gray-300"
+                )}
+                onClick={() => setPaymentMethod('store_credit')}
+              >
+                <div className="flex items-center">
+                  <div className="mr-3 h-5 w-5 rounded-full border-2 flex items-center justify-center">
+                    {paymentMethod === 'store_credit' && <div className="h-2.5 w-2.5 rounded-full bg-[#1EC0A3]"></div>}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center">
+                      <Package className="h-5 w-5 mr-2 text-gray-600" />
+                      <h4 className="font-medium">BoxStock tegoed</h4>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Ontvang 10% extra als tegoed in je BoxStock account</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                <h3 className="font-medium mb-2">Pakbon informatie</h3>
+                <p className="text-sm text-gray-600 mb-3">
+                  Deze gegevens worden gebruikt voor de pakbon die bij je verzending wordt gevoegd.
+                </p>
+                
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">Bedrijfsnaam (optioneel)</label>
+                    <Input type="text" placeholder="Bijv. jouw bedrijfsnaam" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">BTW nummer (optioneel)</label>
+                    <Input type="text" placeholder="Bijv. NL123456789B01" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">KVK nummer (optioneel)</label>
+                    <Input type="text" placeholder="Bijv. 12345678" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
       case 'review':
         return (
-          <div className="px-4 py-6 overflow-y-auto">
+          <div className="px-6 py-6 overflow-y-auto">
             <h2 className="text-xl font-semibold mb-6">Controleer je aanbieding</h2>
             
             <div className="border rounded-lg overflow-hidden mb-6">
@@ -810,6 +926,11 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   <div className="text-sm text-gray-500">Verzending</div>
                   <div>{offerType === 'secondhand' ? 'BoxStock Verzending' : 
                         saleMethod === 'direct' ? 'Doorverkopen' : 'Consigneren'}</div>
+                </div>
+                <div>
+                  <div className="text-sm text-gray-500">Betaalmethode</div>
+                  <div>{paymentMethod === 'bank' ? 'Bankoverschrijving' : 
+                        paymentMethod === 'paypal' ? 'PayPal' : 'BoxStock Tegoed'}</div>
                 </div>
               </div>
               
@@ -901,7 +1022,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                   (step === 'type' && !offerType) ||
                   (step === 'product' && !selectedProduct && offerType === 'resell') ||
                   (step === 'photos' && photos.length === 0 && offerType === 'secondhand') ||
-                  (step === 'details' && offerType === 'secondhand' && !secondhandCategory) ||
+                  (step === 'details' && offerType === 'secondhand' && !selectedCategory) ||
                   (step === 'shipping' && offerType === 'resell' && !saleMethod)
                 }
               >
