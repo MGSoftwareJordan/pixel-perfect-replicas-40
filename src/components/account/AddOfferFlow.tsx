@@ -17,6 +17,20 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 // Simplified flow steps
 type OfferStep = 'start' | 'photos' | 'details' | 'price' | 'review';
 
+// Mock products data for search feature
+const MOCK_PRODUCTS = [
+  { id: 1, name: "Nike Dunk Low Panda", image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7", brand: "Nike", price: "€149.99" },
+  { id: 2, name: "Jordan 1 Retro High OG", image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b", brand: "Jordan", price: "€189.99" },
+  { id: 3, name: "Adidas Yeezy Boost 350", image: "https://images.unsplash.com/photo-1518770660439-4636190af475", brand: "Adidas", price: "€220.00" },
+  { id: 4, name: "New Balance 550", image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6", brand: "New Balance", price: "€120.00" },
+  { id: 5, name: "Puma Suede Classic", image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d", brand: "Puma", price: "€80.00" },
+  { id: 6, name: "Converse Chuck Taylor", image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158", brand: "Converse", price: "€70.00" },
+  { id: 7, name: "Nike Air Force 1", image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a", brand: "Nike", price: "€110.00" },
+  { id: 8, name: "Jordan 4 Retro", image: "https://images.unsplash.com/photo-1607522370275-f14206abe5d3", brand: "Jordan", price: "€210.00" },
+  { id: 9, name: "Adidas Stan Smith", image: "https://images.unsplash.com/photo-1543508282-6319a3e2621f", brand: "Adidas", price: "€90.00" },
+  { id: 10, name: "Vans Old Skool", image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77", brand: "Vans", price: "€65.00" },
+];
+
 const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
   const [step, setStep] = useState<OfferStep>('start');
   const [offerType, setOfferType] = useState<'resell' | 'secondhand'>('secondhand');
@@ -32,18 +46,20 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
   const [openBrandPopover, setOpenBrandPopover] = useState(false);
   const [customBrand, setCustomBrand] = useState<string>('');
   const [tipsSectionExpanded, setTipsSectionExpanded] = useState(false);
-  const [isGeneratingTitle, setIsGeneratingTitle] = useState(false);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [productSearchQuery, setProductSearchQuery] = useState('');
+  const [selectedProduct, setSelectedProduct] = useState<typeof MOCK_PRODUCTS[0] | null>(null);
   
   // Form for offer details
   const form = useForm({
     defaultValues: {
-      title: "Nike Air Force 1 Low White",
+      title: "",
       brand: "nike",
       size: "",
       price: "85",
       condition: "excellent",
-      description: "Nieuw in doos, nooit gedragen. Originele labels aanwezig. Verzending mogelijk.",
+      description: "",
       firstName: "",
       lastName: "",
       email: "",
@@ -61,6 +77,12 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     // Live validation mode
     mode: "onChange"
   });
+  
+  // Filter products based on search query
+  const filteredProducts = MOCK_PRODUCTS.filter((product) => 
+    product.name.toLowerCase().includes(productSearchQuery.toLowerCase()) ||
+    product.brand.toLowerCase().includes(productSearchQuery.toLowerCase())
+  );
 
   // Effect to set initial category name based on default selectedCategory
   useEffect(() => {
@@ -70,13 +92,17 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     }
   }, []);
 
-  // Product data (mock)
-  const popularProducts = [
-    { id: '001', name: 'Jordan XXXIII University Red', brand: 'Air Jordan', price: '€93.00', image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/240df11c1b0446d48308edbcb679fa99a4d7cbe3?placeholderIfAbsent=true' },
-    { id: '002', name: 'Nike ACG Air Mada Low Ash Green', brand: 'Nike', price: '€47.00', image: 'https://placehold.co/150x150?text=Nike' },
-    { id: '003', name: 'Nike ACG Air Mowabb OG Gravity Purple', brand: 'Nike', price: '€105.00', image: 'https://placehold.co/150x150?text=Nike' },
-    { id: '004', name: 'ASICS Gel-Lyte V Social Status', brand: 'ASICS', price: '€179.00', image: 'https://placehold.co/150x150?text=ASICS' }
-  ];
+  // Update form when a product is selected
+  useEffect(() => {
+    if (selectedProduct) {
+      form.setValue('title', selectedProduct.name);
+      form.setValue('brand', selectedProduct.brand.toLowerCase());
+      
+      // Set other fields that might come from the product data
+      const suggestedPrice = selectedProduct.price.replace('€', '');
+      form.setValue('price', suggestedPrice);
+    }
+  }, [selectedProduct, form]);
 
   // EU sizes only
   const shoeSizes = [
@@ -199,27 +225,34 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
     return getSteps().length - 1; // Subtract 1 as 'start' isn't counted in the progress bar
   };
   
-  // Generate product title based on photos (mock AI functionality)
-  const generateProductTitle = () => {
-    setIsGeneratingTitle(true);
+  // Generate product description based on selected product and photos (mock AI functionality)
+  const generateProductDescription = () => {
+    setIsGeneratingDescription(true);
     
     // Simulate AI processing time
     setTimeout(() => {
-      const titles = [
-        "Nike Air Force 1 Low White",
-        "Jordan 1 High Retro OG University Blue",
-        "Adidas Yeezy Boost 350 V2 Zebra",
-        "New Balance 550 White Green",
-        "Puma Suede Classic XXI"
-      ];
+      let description = "";
       
-      const randomTitle = titles[Math.floor(Math.random() * titles.length)];
-      form.setValue('title', randomTitle);
-      setIsGeneratingTitle(false);
+      if (selectedProduct) {
+        if (selectedProduct.brand === "Nike") {
+          description = `Originele ${selectedProduct.name} in uitstekende staat. Deze schoenen zijn nauwelijks gedragen en zien er nieuw uit. De Nike klassieker is perfect voor dagelijks gebruik. Verzending mogelijk.`;
+        } else if (selectedProduct.brand === "Adidas") {
+          description = `Authentieke ${selectedProduct.name} in zeer goede conditie. Deze Adidas sneakers hebben minimale gebruikssporen en zijn nog lang niet versleten. Alle originele details aanwezig. Verzending mogelijk.`;
+        } else if (selectedProduct.brand === "Jordan") {
+          description = `Echte ${selectedProduct.name} in top staat. Deze iconische Jordan sneakers zijn weinig gedragen en hebben alle originele details. Perfect voor verzamelaars. Verzending mogelijk.`;
+        } else {
+          description = `${selectedProduct.name} in uitstekende conditie. Nauwelijks gedragen en in zeer goede staat. Originele doos en labels aanwezig. Verzending mogelijk.`;
+        }
+      } else {
+        description = "Dit product is in uitstekende staat. Nauwelijks gebruikt en ziet er nog als nieuw uit. Alle originele onderdelen zijn aanwezig. Voor vragen kunt u altijd contact opnemen. Verzending mogelijk.";
+      }
+      
+      form.setValue('description', description);
+      setIsGeneratingDescription(false);
       
       toast({
-        title: "Titel gegenereerd",
-        description: "We hebben een titel gegenereerd op basis van je foto's.",
+        title: "Beschrijving gegenereerd",
+        description: "We hebben een beschrijving gegenereerd op basis van je product.",
       });
     }, 1500);
   };
@@ -633,6 +666,101 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
             <h2 className="text-xl font-semibold mb-6">Product informatie</h2>
             
             <div className="space-y-5">
+              {/* Product search - NEW SECTION */}
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">Zoek product</label>
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        type="text"
+                        placeholder="Zoek op productnaam, merk..."
+                        className="pl-9"
+                        value={productSearchQuery}
+                        onChange={(e) => setProductSearchQuery(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  
+                  {productSearchQuery.length > 0 && (
+                    <div className="bg-white rounded-lg border p-3">
+                      {filteredProducts.length > 0 ? (
+                        <>
+                          <h4 className="text-sm font-medium mb-2">Gevonden producten:</h4>
+                          <div className="grid grid-cols-3 gap-2">
+                            {filteredProducts.slice(0, 6).map((product) => (
+                              <div 
+                                key={product.id} 
+                                className={`cursor-pointer rounded-lg overflow-hidden border transition-all ${selectedProduct?.id === product.id ? 'border-[#1EC0A3] ring-1 ring-[#1EC0A3]' : 'border-gray-200 hover:border-gray-300'}`}
+                                onClick={() => setSelectedProduct(product)}
+                              >
+                                <div className="aspect-square overflow-hidden">
+                                  <img 
+                                    src={product.image} 
+                                    alt={product.name} 
+                                    className="object-cover w-full h-full"
+                                  />
+                                </div>
+                                <div className="p-2">
+                                  <p className="text-xs truncate font-medium">{product.name}</p>
+                                  <div className="flex justify-between items-center mt-1">
+                                    <span className="text-xs text-gray-500">{product.brand}</span>
+                                    <span className="text-xs font-medium">{product.price}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {filteredProducts.length > 6 && (
+                            <p className="text-xs text-gray-500 text-center mt-3">
+                              + {filteredProducts.length - 6} meer resultaten
+                            </p>
+                          )}
+                        </>
+                      ) : (
+                        <p className="text-sm text-gray-500 text-center py-4">
+                          Geen producten gevonden voor "{productSearchQuery}"
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  
+                  {selectedProduct && (
+                    <div className="flex items-center p-3 bg-gray-50 rounded-lg">
+                      <div className="h-12 w-12 rounded overflow-hidden">
+                        <img src={selectedProduct.image} alt={selectedProduct.name} className="h-full w-full object-cover" />
+                      </div>
+                      <div className="ml-3 flex-1">
+                        <p className="font-medium">{selectedProduct.name}</p>
+                        <p className="text-xs text-gray-500">{selectedProduct.brand} • {selectedProduct.price}</p>
+                      </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8"
+                        onClick={() => {
+                          setSelectedProduct(null);
+                          form.setValue('title', '');
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  {(!selectedProduct && productSearchQuery.length === 0) && (
+                    <div className="text-center p-4 border border-dashed border-gray-300 rounded-lg">
+                      <Search className="h-10 w-10 mx-auto text-gray-300 mb-2" />
+                      <p className="text-sm text-gray-500">
+                        Zoek een bestaand product of maak een eigen aanbieding
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {/* Type-ahead for category selection */}
               <div className="mb-6">
                 <label className="block text-sm font-medium mb-2">Categorie</label>
@@ -673,29 +801,24 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </Popover>
               </div>
 
-              {/* Title with AI generator */}
+              {/* Title field */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium">Titel</label>
-                  {photos.length >= 1 && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 text-xs flex gap-1 items-center"
-                      onClick={generateProductTitle}
-                      disabled={isGeneratingTitle}
-                    >
-                      <Sparkles className="h-3 w-3 mr-1" />
-                      {isGeneratingTitle ? "Genereren..." : "Genereer titel"}
-                    </Button>
-                  )}
-                </div>
+                <label className="block text-sm font-medium mb-2">Titel</label>
                 <Input 
                   placeholder="Bijv. Nike Air Force 1 Low White" 
-                  {...form.register('title')}
+                  value={selectedProduct ? selectedProduct.name : form.watch('title')}
+                  onChange={(e) => {
+                    if (!selectedProduct) {
+                      form.setValue('title', e.target.value);
+                    }
+                  }}
+                  disabled={!!selectedProduct}
+                  className={selectedProduct ? "bg-gray-100" : ""}
                 />
                 <p className="text-xs text-gray-500 mt-1">
-                  Een goede titel bevat merk, model en kleur
+                  {selectedProduct ? 
+                    "Titel is automatisch ingevuld op basis van je geselecteerde product" : 
+                    "Een goede titel bevat merk, model en kleur"}
                 </p>
               </div>
 
@@ -710,10 +833,13 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                         role="combobox"
                         aria-expanded={openBrandPopover}
                         className="w-full justify-between bg-white"
+                        disabled={!!selectedProduct}
                       >
-                        {form.watch('brand')
-                          ? brands.find((brand) => brand.value === form.watch('brand'))?.label || customBrand || "Nike"
-                          : "Selecteer een merk..."}
+                        {selectedProduct ? 
+                          selectedProduct.brand : 
+                          (form.watch('brand')
+                            ? brands.find((brand) => brand.value === form.watch('brand'))?.label || customBrand || "Nike"
+                            : "Selecteer een merk...")}
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`ml-2 h-4 w-4 transition-transform ${openBrandPopover ? "rotate-180" : ""}`}>
                           <path d="m6 9 6 6 6-6"/>
                         </svg>
@@ -741,7 +867,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     </PopoverContent>
                   </Popover>
                   
-                  {form.watch('brand') === 'other' && (
+                  {form.watch('brand') === 'other' && !selectedProduct && (
                     <Input
                       className="mt-2" 
                       placeholder="Voer merknaam in"
@@ -808,9 +934,21 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
               )}
 
-              {/* Description */}
+              {/* Description with AI generator */}
               <div>
-                <label className="block text-sm font-medium mb-2">Beschrijving</label>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium">Beschrijving</label>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-xs flex gap-1 items-center"
+                    onClick={generateProductDescription}
+                    disabled={isGeneratingDescription}
+                  >
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    {isGeneratingDescription ? "Genereren..." : "Genereer beschrijving"}
+                  </Button>
+                </div>
                 <Textarea 
                   placeholder="Beschrijf je item: materiaal, pasvorm, wanneer gekocht, defecten, etc."
                   className="min-h-[100px]"
@@ -941,7 +1079,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 <div className="w-16 h-16 bg-gray-100 rounded overflow-hidden">
                   <AspectRatio ratio={1/1}>
                     <img 
-                      src={photos.length > 0 && photos[0].type === 'image' ? photos[0].url : 'https://placehold.co/150x150?text=No+Image'} 
+                      src={selectedProduct ? selectedProduct.image : (photos.length > 0 && photos[0].type === 'image' ? photos[0].url : 'https://placehold.co/150x150?text=No+Image')} 
                       alt="Product" 
                       className="object-cover w-full h-full" 
                     />
@@ -949,7 +1087,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                 </div>
                 <div className="ml-4 flex-1">
                   <div className="font-medium flex justify-between">
-                    <span>{form.getValues('title') || "Jouw product"}</span>
+                    <span>{selectedProduct ? selectedProduct.name : (form.getValues('title') || "Jouw product")}</span>
                     <Button 
                       variant="ghost" 
                       size="sm" 
@@ -960,7 +1098,7 @@ const AddOfferFlow = ({ open, onClose }: { open: boolean; onClose: () => void })
                     </Button>
                   </div>
                   <div className="text-sm text-gray-500">
-                    {form.getValues('brand') || customBrand || "Eigen merk"}
+                    {selectedProduct ? selectedProduct.brand : (form.getValues('brand') || customBrand || "Eigen merk")}
                   </div>
                   <div className="text-sm mt-1">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-600`}>
