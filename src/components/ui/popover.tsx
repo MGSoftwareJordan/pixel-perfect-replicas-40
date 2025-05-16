@@ -22,10 +22,11 @@ const PopoverContent = React.forwardRef<
         className
       )}
       style={{
-        width: props.style?.width || 'var(--radix-popover-trigger-width)',
-        minWidth: props.style?.minWidth || 'var(--radix-popover-trigger-width)',
-        maxWidth: props.style?.maxWidth || undefined,
-        maxHeight: props.style?.maxHeight || undefined
+        width: props.style?.width,
+        minWidth: props.style?.minWidth,
+        maxWidth: props.style?.maxWidth || 'calc(100vw - 32px)',
+        maxHeight: props.style?.maxHeight || 'calc(80vh)',
+        overflowY: 'auto'
       }}
       {...props}
     />

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Heart, Bell, Package } from 'lucide-react';
+import { ShoppingBag, Heart, Bell, Package, Repeat, Search } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const AccountOverview: React.FC = () => {
@@ -70,7 +70,7 @@ const AccountOverview: React.FC = () => {
         </Card>
       </div>
       
-      {/* Recent orders and combined listings section */}
+      {/* Recent orders and resell/secondhand section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent orders */}
         <Card className="border-gray-100">
@@ -99,7 +99,7 @@ const AccountOverview: React.FC = () => {
           </CardContent>
         </Card>
         
-        {/* Combined Listings */}
+        {/* Resell and Secondhand section */}
         <Card className="border-gray-100">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
@@ -110,28 +110,42 @@ const AccountOverview: React.FC = () => {
             </div>
             
             <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="bg-gray-100 p-4 rounded-full mb-3">
-                <Package className="h-6 w-6 text-gray-400" />
-              </div>
-              <h3 className="font-medium text-[#00262F] mb-2">
-                Nog geen aanbiedingen
-              </h3>
-              <p className="text-gray-500 text-sm mb-4 max-w-xs">
-                Verkoop je eigen items tweedehands of maak een aanbieding aan voor een product
-              </p>
-              <div className="flex gap-3">
-                <Link 
-                  to="/account/listings" 
-                  className="bg-[#1EC0A3] text-white px-4 py-2 rounded-lg text-sm"
-                >
-                  Item verkopen
-                </Link>
-                <Link 
-                  to="/account/listings/new" 
-                  className="border border-[#00262F] text-[#00262F] px-4 py-2 rounded-lg text-sm"
-                >
-                  Aanbieding maken
-                </Link>
+              <div className="flex gap-6 mb-6">
+                <div className="text-center flex flex-col items-center">
+                  <div className="bg-blue-50 p-4 rounded-full mb-3">
+                    <Repeat className="h-6 w-6 text-blue-500" />
+                  </div>
+                  <h3 className="font-medium text-[#00262F] mb-2">
+                    Resell
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-4 max-w-[150px]">
+                    Verkoop items uit bestaand assortiment
+                  </p>
+                  <Link 
+                    to="/account/listings/new" 
+                    className="bg-[#1EC0A3] text-white px-4 py-2 rounded-lg text-sm w-full"
+                  >
+                    Resell item
+                  </Link>
+                </div>
+                
+                <div className="text-center flex flex-col items-center">
+                  <div className="bg-amber-50 p-4 rounded-full mb-3">
+                    <Package className="h-6 w-6 text-amber-500" />
+                  </div>
+                  <h3 className="font-medium text-[#00262F] mb-2">
+                    Tweedehands
+                  </h3>
+                  <p className="text-gray-500 text-sm mb-4 max-w-[150px]">
+                    Verkoop je eigen items tweedehands
+                  </p>
+                  <Link 
+                    to="/account/listings" 
+                    className="border border-[#00262F] text-[#00262F] hover:bg-gray-50 px-4 py-2 rounded-lg text-sm w-full"
+                  >
+                    Item verkopen
+                  </Link>
+                </div>
               </div>
             </div>
           </CardContent>
