@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import AddOfferFlow from '@/components/account/AddOfferFlow';
@@ -20,6 +19,7 @@ const MOCK_PRODUCTS = [
 const DetailpageBoxstock: React.FC = () => {
   const [offerModalOpen, setOfferModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  // Keep selectedProduct state but don't pass it to AddOfferFlow if the component doesn't accept it
   const [selectedProduct, setSelectedProduct] = useState<typeof MOCK_PRODUCTS[0] | null>(null);
   
   // Filter products based on search query
@@ -131,7 +131,7 @@ const DetailpageBoxstock: React.FC = () => {
         <AddOfferFlow 
           open={offerModalOpen} 
           onClose={() => setOfferModalOpen(false)}
-          selectedProduct={selectedProduct}
+          // Remove the selectedProduct prop since AddOfferFlow doesn't accept it
         />
       </div>
     </div>
