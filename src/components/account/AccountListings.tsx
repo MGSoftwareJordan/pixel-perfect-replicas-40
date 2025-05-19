@@ -10,13 +10,13 @@ const AccountListings: React.FC = () => {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#00262F]">Jouw Aanbiedingen</h1>
+          <h1 className="text-2xl font-bold text-[#1A1F2C]">Jouw Aanbiedingen</h1>
           <p className="text-gray-500">
             Bekijk hier al je huidige, gepauzeerde en eerdere aanbiedingen hier.
           </p>
         </div>
         
-        <span className="px-4 py-2 bg-[#00262F] text-white rounded-full text-center font-bold">
+        <span className="px-4 py-2 bg-[#1A1F2C] text-white rounded-full text-center font-bold">
           00 Aanbiedingen
         </span>
       </div>
@@ -53,15 +53,15 @@ const AccountListings: React.FC = () => {
         </Button>
       </div>
       
-      <div className="text-center py-16 bg-white rounded-xl border border-gray-100 mb-8">
-        <div className="mx-auto w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-          <Package size={32} className="text-gray-400" />
+      <div className="text-center py-16 bg-white rounded-xl border border-gray-100 mb-8 hover:shadow-md transition-shadow">
+        <div className="mx-auto w-16 h-16 bg-[#E5DEFF] rounded-full flex items-center justify-center mb-6">
+          <Package size={32} className="text-[#9b87f5]" />
         </div>
-        <h2 className="text-xl font-medium text-[#00262F] mb-2">0 Aanbiedingen</h2>
+        <h2 className="text-xl font-medium text-[#1A1F2C] mb-2">0 Aanbiedingen</h2>
         <p className="text-gray-500 mb-6 max-w-md mx-auto">
           Je hebt nog geen aanbiedingen. Maak een nieuwe aanbieding aan voor je tweedehands items.
         </p>
-        <Button className="bg-[#1EC0A3] hover:bg-[#18a88f] flex items-center gap-2">
+        <Button className="bg-[#9b87f5] hover:bg-[#7E69AB] flex items-center gap-2 transition-colors">
           <Plus size={18} />
           <span>Nieuwe Aanbieding Toevoegen</span>
         </Button>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Check, CheckCircle } from 'lucide-react';
+import { CheckCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 const AccountBrands: React.FC = () => {
@@ -35,7 +35,7 @@ const AccountBrands: React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#00262F]">Jouw Merken</h1>
+        <h1 className="text-2xl font-bold text-[#1A1F2C]">Jouw Merken</h1>
       </div>
       
       <p className="text-gray-500 mb-6">
@@ -44,7 +44,7 @@ const AccountBrands: React.FC = () => {
       
       <div className="grid gap-4">
         {brands.map((brand) => (
-          <Card key={brand.id} className="border-gray-100">
+          <Card key={brand.id} className="border-gray-100 hover:shadow-md transition-shadow">
             <div className="p-5 flex items-center justify-between">
               <div className="flex items-center gap-6">
                 <div className="h-12 w-24 flex items-center">
@@ -55,12 +55,12 @@ const AccountBrands: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <h3 className="font-medium text-[#00262F]">{brand.name}</h3>
+                  <h3 className="font-medium text-[#1A1F2C]">{brand.name}</h3>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2 text-[#1EC0A3]">
-                <CheckCircle size={16} className="fill-[#1EC0A3] text-white" />
+              <div className="flex items-center gap-2 text-[#9b87f5]">
+                <CheckCircle size={16} className="fill-[#9b87f5] text-white" />
                 <span className="font-medium">Volgend</span>
               </div>
             </div>

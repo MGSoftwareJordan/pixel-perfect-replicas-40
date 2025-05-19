@@ -38,7 +38,7 @@ const AccountFavorites: React.FC = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-[#00262F]">Jouw Favorieten</h1>
+        <h1 className="text-2xl font-bold text-[#1A1F2C]">Jouw Favorieten</h1>
       </div>
       
       <p className="text-gray-500 mb-6">
@@ -46,19 +46,29 @@ const AccountFavorites: React.FC = () => {
       </p>
       
       <Tabs defaultValue="products" className="mb-8">
-        <TabsList className="mb-6">
-          <TabsTrigger value="products" className="px-8">Producten</TabsTrigger>
-          <TabsTrigger value="releases" className="px-8">Releases</TabsTrigger>
+        <TabsList className="mb-6 bg-[#E5DEFF]">
+          <TabsTrigger 
+            value="products" 
+            className="px-8 data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+          >
+            Producten
+          </TabsTrigger>
+          <TabsTrigger 
+            value="releases" 
+            className="px-8 data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+          >
+            Releases
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="products">
           {favorites.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {favorites.map((product) => (
-                <Card key={product.id} className="overflow-hidden group border-gray-100 relative">
+                <Card key={product.id} className="overflow-hidden group border-gray-100 relative hover:shadow-md transition-all">
                   <button 
                     onClick={() => removeFromFavorites(product.id)}
-                    className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-red-500 z-10 hover:bg-white"
+                    className="absolute top-2 right-2 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-[#9b87f5] z-10 hover:bg-white"
                   >
                     <Heart className="h-4 w-4 fill-current" />
                   </button>
@@ -72,18 +82,18 @@ const AccountFavorites: React.FC = () => {
                   </div>
                   
                   <div className="p-4">
-                    <h3 className="font-medium text-[#00262F] mb-2">{product.name}</h3>
-                    <p className="font-bold text-[#E41A36]">{product.price}</p>
+                    <h3 className="font-medium text-[#1A1F2C] mb-2">{product.name}</h3>
+                    <p className="font-bold text-[#9b87f5]">{product.price}</p>
                   </div>
                 </Card>
               ))}
             </div>
           ) : (
             <div className="text-center py-16 bg-gray-50 rounded-xl">
-              <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                <Heart size={24} className="text-gray-400" />
+              <div className="mx-auto w-12 h-12 bg-[#E5DEFF] rounded-full flex items-center justify-center mb-4">
+                <Heart size={24} className="text-[#9b87f5]" />
               </div>
-              <h3 className="font-medium text-[#00262F] mb-1">Geen favorieten</h3>
+              <h3 className="font-medium text-[#1A1F2C] mb-1">Geen favorieten</h3>
               <p className="text-gray-500">Je hebt nog geen producten toegevoegd aan je favorieten.</p>
             </div>
           )}
@@ -91,10 +101,10 @@ const AccountFavorites: React.FC = () => {
         
         <TabsContent value="releases">
           <div className="text-center py-16 bg-gray-50 rounded-xl">
-            <div className="mx-auto w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <Heart size={24} className="text-gray-400" />
+            <div className="mx-auto w-12 h-12 bg-[#E5DEFF] rounded-full flex items-center justify-center mb-4">
+              <Heart size={24} className="text-[#9b87f5]" />
             </div>
-            <h3 className="font-medium text-[#00262F] mb-1">Geen releases</h3>
+            <h3 className="font-medium text-[#1A1F2C] mb-1">Geen releases</h3>
             <p className="text-gray-500">Je hebt nog geen releases toegevoegd aan je favorieten.</p>
           </div>
         </TabsContent>
