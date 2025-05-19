@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// The Attic specific colors
+				attic: {
+					teal: '#00BFA5',
+					pink: '#FF0084',
+					black: '#1F1F1F',
+					white: '#FFFFFF',
 				}
 			},
 			borderRadius: {
