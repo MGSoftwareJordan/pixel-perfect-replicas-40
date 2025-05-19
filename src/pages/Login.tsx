@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
-import Header from "@/components/boxstock/Header";
-import Footer from "@/components/boxstock/Footer";
+import Header from "@/components/attic/Header";
+import Footer from "@/components/attic/Footer";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -20,32 +20,32 @@ const Login: React.FC = () => {
     
     // Basic validation
     if (!email || !password) {
-      toast.error("Vul alle velden in");
+      toast.error("Please fill in all fields");
       return;
     }
     
     // Mock login success
-    toast.success("Succesvol ingelogd");
+    toast.success("Successfully logged in");
     navigate("/");
   };
 
   return (
     <>
       <Header />
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-attic-gray">
         <Card className="w-full max-w-lg bg-white shadow-sm">
           <CardContent className="p-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-[#00262F] mb-3">Inloggen</h1>
-              <p className="text-gray-600">
-                Log in op je Boxstock-account om je items te beheren en te verkopen
+              <h1 className="text-3xl font-bold text-attic-black mb-3">Login</h1>
+              <p className="text-attic-dark-gray">
+                Sign in to your The Attic account to manage your items and make purchases
               </p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                  E-mail
+                  Email
                 </label>
                 <Input
                   id="email"
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
 
               <div className="space-y-2">
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                  Wachtwoord
+                  Password
                 </label>
                 <div className="relative">
                   <Input
@@ -78,24 +78,24 @@ const Login: React.FC = () => {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-[#002E3B] hover:bg-[#00262F]">
-                Inloggen
+              <Button type="submit" className="w-full bg-attic-teal hover:bg-opacity-90 text-white">
+                LOG IN
               </Button>
               
               <div className="text-center text-sm">
-                <span className="text-gray-500 mr-1">Of</span>
+                <span className="text-gray-500 mr-1">Or</span>
                 <Link to="/login" className="flex justify-center items-center gap-2 mt-3 border border-gray-300 rounded-md p-2 hover:bg-gray-50 transition-colors">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-5 h-5" />
-                  <span className="text-gray-700">Inloggen met Google</span>
+                  <span className="text-gray-700">Login with Google</span>
                 </Link>
               </div>
 
               <div className="flex items-center justify-between mt-6 text-sm">
-                <Link to="/reset-password" className="text-gray-600 hover:text-gray-800">
-                  Wachtwoord vergeten?
+                <Link to="/reset-password" className="text-attic-dark-gray hover:text-attic-black">
+                  Forgot password?
                 </Link>
-                <Link to="/register" className="text-[#E41A36] hover:underline font-medium">
-                  Registreren
+                <Link to="/register" className="text-attic-pink hover:underline font-medium">
+                  Create account
                 </Link>
               </div>
             </form>

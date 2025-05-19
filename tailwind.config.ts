@@ -1,5 +1,5 @@
 
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwind/config";
 
 export default {
 	darkMode: ["class"],
@@ -69,6 +69,9 @@ export default {
 					pink: '#FF0084',
 					black: '#1F1F1F',
 					white: '#FFFFFF',
+					gray: '#F7F7F7',
+					'light-gray': '#F0F0F0',
+					'dark-gray': '#666666',
 				}
 			},
 			borderRadius: {
@@ -92,11 +95,20 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'slow-zoom': {
+					'0%': {
+						transform: 'scale(1)'
+					},
+					'100%': {
+						transform: 'scale(1.1)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'slow-zoom': 'slow-zoom 25s ease-in-out infinite alternate'
 			}
 		}
 	},
