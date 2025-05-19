@@ -13,8 +13,6 @@ import AccountSettings from '@/components/account/AccountSettings';
 import AccountBrands from '@/components/account/AccountBrands';
 import AccountRecentlyViewed from '@/components/account/AccountRecentlyViewed';
 import OfferDetailView from '@/components/account/OfferDetailView';
-import AccountListings from '@/components/account/AccountListings';
-import AccountPackingSlips from '@/components/account/AccountPackingSlips';
 
 const Account: React.FC = () => {
   const { section = "overview", id } = useParams();
@@ -39,10 +37,6 @@ const Account: React.FC = () => {
         return <AccountRecentlyViewed />;
       case "offers":
         return <AccountOffers />;
-      case "listings":
-        return <AccountListings />;
-      case "packing-slips":
-        return <AccountPackingSlips />;
       case "orders":
         return <AccountOrders />;
       case "settings":

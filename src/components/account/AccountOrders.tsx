@@ -33,19 +33,19 @@ const AccountOrders: React.FC = () => {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-[#1A1F2C]">Jouw Bestellingen</h1>
+          <h1 className="text-2xl font-bold text-[#00262F]">Jouw Bestellingen</h1>
           <p className="text-gray-500">Bekijk al je bestelde kledingitems hier.</p>
         </div>
         
-        <span className="px-4 py-2 bg-[#1A1F2C] text-white rounded-full text-center font-bold">
+        <span className="px-4 py-2 bg-[#00262F] text-white rounded-full text-center font-bold">
           07 Producten
         </span>
       </div>
       
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow className="bg-[#E5DEFF]">
+            <TableRow className="bg-gray-50">
               <TableHead className="font-medium">Nummer</TableHead>
               <TableHead className="font-medium">Datum</TableHead>
               <TableHead className="font-medium">Status</TableHead>
@@ -55,13 +55,13 @@ const AccountOrders: React.FC = () => {
           </TableHeader>
           <TableBody>
             {orders.map((order) => (
-              <TableRow key={order.id} className="hover:bg-gray-50 transition-colors">
-                <TableCell className="font-medium text-[#9b87f5]">#{order.id}</TableCell>
+              <TableRow key={order.id}>
+                <TableCell className="font-medium text-[#E41A36]">#{order.id}</TableCell>
                 <TableCell>{order.date}</TableCell>
                 <TableCell className={getStatusColor(order.status)}>{order.status}</TableCell>
                 <TableCell className="text-right">{order.total}</TableCell>
                 <TableCell className="text-right">
-                  <button className="p-2 text-gray-400 hover:text-[#9b87f5] transition-colors">
+                  <button className="p-2 text-gray-400 hover:text-[#1EC0A3] transition-colors">
                     <Eye size={18} />
                   </button>
                 </TableCell>

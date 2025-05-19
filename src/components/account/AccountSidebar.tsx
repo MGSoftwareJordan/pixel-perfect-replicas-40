@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { User, Bell, Heart, CheckCircle, ShoppingBag, FileText, Eye, Settings, Package } from 'lucide-react';
+import { User, Bell, Heart, CheckCircle, ShoppingBag, FileText, Eye, Settings } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface AccountSidebarProps {
@@ -11,8 +11,8 @@ interface AccountSidebarProps {
 const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overview" }) => {
   // Mock user data
   const user = {
-    name: "Mike TheAttic",
-    email: "administrator@thiottoattic.com",
+    name: "Mike Boxstock",
+    email: "administrator@mgsoftware.nl",
     avatar: "M"
   };
   
@@ -22,8 +22,6 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
     { id: "favorites", name: "Favorieten", icon: Heart, path: "/account/favorites" },
     { id: "brands", name: "Merken", icon: CheckCircle, path: "/account/brands" },
     { id: "offers", name: "Aanbiedingen", icon: FileText, path: "/account/offers", count: 5 },
-    { id: "listings", name: "Mijn Items", icon: Package, path: "/account/listings" },
-    { id: "packing-slips", name: "Pakbonnen", icon: FileText, path: "/account/packing-slips" },
     { id: "recently-viewed", name: "Recent Bekeken", icon: Eye, path: "/account/recently-viewed" },
     { id: "orders", name: "Bestellingen", icon: ShoppingBag, path: "/account/orders", count: 7 },
     { id: "settings", name: "Instellingen", icon: Settings, path: "/account/settings" },
@@ -34,11 +32,11 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
       {/* User profile */}
       <div className="px-6 py-5 border-b border-gray-100">
         <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 bg-[#9b87f5]/10 text-[#9b87f5]">
+          <Avatar className="h-12 w-12 bg-[#1EC0A3]/10 text-[#1EC0A3]">
             <AvatarFallback>{user.avatar}</AvatarFallback>
           </Avatar>
           <div>
-            <h3 className="font-medium text-[#1A1F2C]">{user.name}</h3>
+            <h3 className="font-medium text-[#00262F]">{user.name}</h3>
             <p className="text-sm text-gray-500">{user.email}</p>
           </div>
         </div>
@@ -52,8 +50,8 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
             to={item.path}
             className={`flex items-center justify-between px-4 py-3 rounded-lg mb-1 ${
               activeSection === item.id 
-                ? "bg-[#9b87f5]/10 text-[#9b87f5]" 
-                : "text-[#1A1F2C] hover:bg-gray-50"
+                ? "bg-[#1EC0A3]/10 text-[#1EC0A3]" 
+                : "text-[#00262F] hover:bg-gray-50"
             }`}
           >
             <div className="flex items-center gap-3">
@@ -63,7 +61,7 @@ const AccountSidebar: React.FC<AccountSidebarProps> = ({ activeSection = "overvi
             {item.count !== undefined && (
               <span className={`text-xs px-2 py-0.5 rounded-full ${
                 activeSection === item.id
-                  ? "bg-[#9b87f5]/20"
+                  ? "bg-[#1EC0A3]/20"
                   : "bg-gray-100"
               }`}>
                 {item.count}
