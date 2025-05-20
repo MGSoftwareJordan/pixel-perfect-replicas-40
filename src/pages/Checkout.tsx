@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, CreditCard, ShieldCheck, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -17,6 +17,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { useForm } from "react-hook-form";
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
+import CheckoutAddons, { Addon } from '@/components/checkout/CheckoutAddons';
+import PostcodeChecker from '@/components/checkout/PostcodeChecker';
 
 // Mock cart data - in a real app this would come from context or state management
 const cartItems = [
@@ -29,6 +31,22 @@ const cartItems = [
     image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e1ad84d1ff291f4f339854893a1c0bfa59bc73ca?placeholderIfAbsent=true',
     quantity: 1
   }
+];
+
+// Province data for Netherlands
+const provinces = [
+  { value: "drenthe", label: "Drenthe" },
+  { value: "flevoland", label: "Flevoland" },
+  { value: "friesland", label: "Friesland" },
+  { value: "gelderland", label: "Gelderland" },
+  { value: "groningen", label: "Groningen" },
+  { value: "limburg", label: "Limburg" },
+  { value: "noord-brabant", label: "Noord-Brabant" },
+  { value: "noord-holland", label: "Noord-Holland" },
+  { value: "overijssel", label: "Overijssel" },
+  { value: "utrecht", label: "Utrecht" },
+  { value: "zeeland", label: "Zeeland" },
+  { value: "zuid-holland", label: "Zuid-Holland" },
 ];
 
 type CheckoutFormValues = {
@@ -45,6 +63,7 @@ type CheckoutFormValues = {
 
 const Checkout = () => {
   const [step, setStep] = useState(1);
+  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const form = useForm<CheckoutFormValues>({
     defaultValues: {
       country: "nederland"
@@ -54,10 +73,36 @@ const Checkout = () => {
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shipping = 10.00;
   const serviceCharges = 10.00;
-  const total = subtotal + shipping + serviceCharges;
+  
+  // Calculate addons cost
+  const addonCosts = selectedAddons.reduce((total, addonId) => {
+    const addonPrices: Record<string, number> = {
+      'giftWrapping': 4.95,
+      'express': 9.95,
+      'insurance': 5.95,
+    };
+    return total + (addonPrices[addonId] || 0);
+  }, 0);
+  
+  const total = subtotal + shipping + serviceCharges + addonCosts;
+
+  const handleAddonToggle = (addonId: string) => {
+    setSelectedAddons(prev => 
+      prev.includes(addonId) 
+        ? prev.filter(id => id !== addonId)
+        : [...prev, addonId]
+    );
+  };
+
+  const handleAddressFound = (addressData: { street: string; city: string; province: string }) => {
+    form.setValue('address', addressData.street);
+    form.setValue('city', addressData.city);
+    form.setValue('province', addressData.province);
+  };
 
   const onSubmit = (data: CheckoutFormValues) => {
     console.log("Form submitted:", data);
+    console.log("Selected addons:", selectedAddons);
     // In a real app, this would process the order and redirect to a payment gateway
     // For now, we'll simulate going to a success page
     setStep(2);
@@ -80,122 +125,142 @@ const Checkout = () => {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
               {/* Shipping information form */}
               <div className="lg:col-span-3">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-                  <h2 className="text-xl font-semibold text-[#00262F] mb-6">Verzendgegevens</h2>
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                  <h2 className="text-xl font-semibold text-[#00262F] mb-4">Verzendgegevens</h2>
                   
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="firstName" className="text-gray-700">Voornaam</Label>
-                          <Input 
-                            id="firstName"
-                            placeholder="Vul je voornaam in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('firstName', { required: true })}
-                          />
+                  <PostcodeChecker onAddressFound={handleAddressFound} />
+                  
+                  <div className="mt-6">
+                    <Form {...form}>
+                      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="firstName" className="text-gray-700">Voornaam</Label>
+                            <Input 
+                              id="firstName"
+                              placeholder="Vul je voornaam in"
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('firstName', { required: true })}
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="lastName" className="text-gray-700">Achternaam</Label>
+                            <Input 
+                              id="lastName"
+                              placeholder="Vul je achternaam in" 
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('lastName', { required: true })}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="email" className="text-gray-700">E-mail</Label>
+                            <Input 
+                              id="email"
+                              type="email"
+                              placeholder="Vul je e-mail in"
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('email', { required: true })}
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="phone" className="text-gray-700">Telefoonnummer</Label>
+                            <Input 
+                              id="phone"
+                              placeholder="Vul je telefoonnummer in"
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('phone', { required: true })}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="country" className="text-gray-700">Land</Label>
+                            <Select onValueChange={(value) => form.setValue('country', value)} defaultValue="nederland">
+                              <SelectTrigger id="country" className="border-gray-200 focus:ring-[#1EC0A3]">
+                                <SelectValue placeholder="Selecteer een land" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="nederland">Nederland</SelectItem>
+                                <SelectItem value="belgie">België</SelectItem>
+                                <SelectItem value="duitsland">Duitsland</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="province" className="text-gray-700">Provincie</Label>
+                            <Select 
+                              onValueChange={(value) => form.setValue('province', value)} 
+                              defaultValue={form.getValues().province}
+                            >
+                              <SelectTrigger id="province" className="border-gray-200 focus:ring-[#1EC0A3]">
+                                <SelectValue placeholder="Selecteer een provincie" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {provinces.map((province) => (
+                                  <SelectItem key={province.value} value={province.value}>
+                                    {province.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
                         
                         <div className="space-y-2">
-                          <Label htmlFor="lastName" className="text-gray-700">Achternaam</Label>
+                          <Label htmlFor="address" className="text-gray-700">Adres</Label>
                           <Input 
-                            id="lastName"
-                            placeholder="Vul je achternaam in" 
+                            id="address"
+                            placeholder="Vul je adres in"
                             className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('lastName', { required: true })}
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="email" className="text-gray-700">E-mail</Label>
-                          <Input 
-                            id="email"
-                            type="email"
-                            placeholder="Vul je e-mail in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('email', { required: true })}
+                            {...form.register('address', { required: true })}
                           />
                         </div>
                         
-                        <div className="space-y-2">
-                          <Label htmlFor="phone" className="text-gray-700">Telefoonnummer</Label>
-                          <Input 
-                            id="phone"
-                            placeholder="Vul je telefoonnummer in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('phone', { required: true })}
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="country" className="text-gray-700">Land</Label>
-                          <Select onValueChange={(value) => form.setValue('country', value)} defaultValue="nederland">
-                            <SelectTrigger id="country" className="border-gray-200 focus:ring-[#1EC0A3]">
-                              <SelectValue placeholder="Selecteer een land" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="nederland">Nederland</SelectItem>
-                              <SelectItem value="belgie">België</SelectItem>
-                              <SelectItem value="duitsland">Duitsland</SelectItem>
-                            </SelectContent>
-                          </Select>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor="city" className="text-gray-700">Stad</Label>
+                            <Input 
+                              id="city"
+                              placeholder="Vul je stad in"
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('city', { required: true })}
+                            />
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
+                            <Input 
+                              id="postalCode"
+                              placeholder="Vul je postcode in" 
+                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              {...form.register('postalCode', { required: true })}
+                            />
+                          </div>
                         </div>
                         
-                        <div className="space-y-2">
-                          <Label htmlFor="province" className="text-gray-700">Provincie</Label>
-                          <Input 
-                            id="province"
-                            placeholder="Vul je provincie in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('province', { required: true })}
-                          />
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="address" className="text-gray-700">Adres</Label>
-                        <Input 
-                          id="address"
-                          placeholder="Vul je adres in"
-                          className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                          {...form.register('address', { required: true })}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="city" className="text-gray-700">Stad</Label>
-                          <Input 
-                            id="city"
-                            placeholder="Vul je stad in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('city', { required: true })}
+                        <div className="border-t border-gray-100 pt-6 mt-2">
+                          <CheckoutAddons 
+                            selectedAddons={selectedAddons} 
+                            onAddonToggle={handleAddonToggle} 
                           />
                         </div>
                         
-                        <div className="space-y-2">
-                          <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
-                          <Input 
-                            id="postalCode"
-                            placeholder="Vul je postcode in" 
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                            {...form.register('postalCode', { required: true })}
-                          />
-                        </div>
-                      </div>
-                      
-                      <Button 
-                        type="submit" 
-                        className="w-full bg-[#00262F] hover:bg-[#001a24] h-11 rounded-lg font-medium mt-4"
-                      >
-                        Ga verder naar betaling
-                      </Button>
-                    </form>
-                  </Form>
+                        <Button 
+                          type="submit" 
+                          className="w-full bg-[#00262F] hover:bg-[#001a24] h-11 rounded-lg font-medium mt-4"
+                        >
+                          Ga verder naar betaling
+                        </Button>
+                      </form>
+                    </Form>
+                  </div>
                 </div>
                 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
@@ -282,6 +347,30 @@ const Checkout = () => {
                         <span className="text-gray-600">Servicekosten</span>
                         <span className="font-medium">€{serviceCharges.toFixed(2)}</span>
                       </div>
+                      
+                      {/* Show addon costs if any are selected */}
+                      {selectedAddons.length > 0 && (
+                        <>
+                          {selectedAddons.includes('giftWrapping') && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-600">Cadeauverpakking</span>
+                              <span className="font-medium">€4.95</span>
+                            </div>
+                          )}
+                          {selectedAddons.includes('express') && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-600">Express verzending</span>
+                              <span className="font-medium">€9.95</span>
+                            </div>
+                          )}
+                          {selectedAddons.includes('insurance') && (
+                            <div className="flex justify-between items-center">
+                              <span className="text-gray-600">Verzekerde verzending</span>
+                              <span className="font-medium">€5.95</span>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
                     
                     <div className="border-t border-gray-100 pt-4">
