@@ -18,6 +18,7 @@ import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import CheckoutAddons, { Addon } from '@/components/checkout/CheckoutAddons';
 import PostcodeChecker from '@/components/checkout/PostcodeChecker';
+import DeliveryEstimator from '@/components/checkout/DeliveryEstimator';
 import { useToast } from '@/hooks/use-toast';
 
 // Mock cart data - in a real app this would come from context or state management
@@ -31,6 +32,40 @@ const cartItems = [
     image: 'https://cdn.builder.io/api/v1/image/assets/TEMP/e1ad84d1ff291f4f339854893a1c0bfa59bc73ca?placeholderIfAbsent=true',
     quantity: 1
   }
+];
+
+// European countries data
+const countries = [
+  { value: "nederland", label: "Nederland" },
+  { value: "belgie", label: "België" },
+  { value: "duitsland", label: "Deutschland" },
+  { value: "france", label: "France" },
+  { value: "italie", label: "Italia" },
+  { value: "espagne", label: "España" },
+  { value: "portugal", label: "Portugal" },
+  { value: "royaume-uni", label: "United Kingdom" },
+  { value: "irlande", label: "Ireland" },
+  { value: "danemark", label: "Danmark" },
+  { value: "suede", label: "Sverige" },
+  { value: "finlande", label: "Suomi" },
+  { value: "norvege", label: "Norge" },
+  { value: "autriche", label: "Österreich" },
+  { value: "suisse", label: "Schweiz" },
+  { value: "pologne", label: "Polska" },
+  { value: "republique-tcheque", label: "Česká republika" },
+  { value: "slovaquie", label: "Slovensko" },
+  { value: "hongrie", label: "Magyarország" },
+  { value: "roumanie", label: "România" },
+  { value: "bulgarie", label: "България" },
+  { value: "grece", label: "Ελλάδα" },
+  { value: "croatie", label: "Hrvatska" },
+  { value: "slovenie", label: "Slovenija" },
+  { value: "estonie", label: "Eesti" },
+  { value: "lettonie", label: "Latvija" },
+  { value: "lituanie", label: "Lietuva" },
+  { value: "luxembourg", label: "Luxembourg" },
+  { value: "malte", label: "Malta" },
+  { value: "chypre", label: "Κύπρος" },
 ];
 
 // Province data for Netherlands
@@ -47,6 +82,40 @@ const provinces = [
   { value: "utrecht", label: "Utrecht" },
   { value: "zeeland", label: "Zeeland" },
   { value: "zuid-holland", label: "Zuid-Holland" },
+];
+
+// Belgian provinces
+const belgiumProvinces = [
+  { value: "antwerpen", label: "Antwerpen" },
+  { value: "hainaut", label: "Hainaut" },
+  { value: "limburg-be", label: "Limburg" },
+  { value: "liege", label: "Liège" },
+  { value: "luxembourg-be", label: "Luxembourg" },
+  { value: "namur", label: "Namur" },
+  { value: "oost-vlaanderen", label: "Oost-Vlaanderen" },
+  { value: "vlaams-brabant", label: "Vlaams-Brabant" },
+  { value: "brabant-wallon", label: "Brabant Wallon" },
+  { value: "west-vlaanderen", label: "West-Vlaanderen" },
+];
+
+// German states
+const germanStates = [
+  { value: "baden-wurttemberg", label: "Baden-Württemberg" },
+  { value: "bayern", label: "Bayern" },
+  { value: "berlin", label: "Berlin" },
+  { value: "brandenburg", label: "Brandenburg" },
+  { value: "bremen", label: "Bremen" },
+  { value: "hamburg", label: "Hamburg" },
+  { value: "hessen", label: "Hessen" },
+  { value: "mecklenburg-vorpommern", label: "Mecklenburg-Vorpommern" },
+  { value: "niedersachsen", label: "Niedersachsen" },
+  { value: "nordrhein-westfalen", label: "Nordrhein-Westfalen" },
+  { value: "rheinland-pfalz", label: "Rheinland-Pfalz" },
+  { value: "saarland", label: "Saarland" },
+  { value: "sachsen", label: "Sachsen" },
+  { value: "sachsen-anhalt", label: "Sachsen-Anhalt" },
+  { value: "schleswig-holstein", label: "Schleswig-Holstein" },
+  { value: "thuringen", label: "Thüringen" },
 ];
 
 type CheckoutFormValues = {
@@ -73,8 +142,52 @@ const Checkout = () => {
     }
   });
   
+  const selectedCountry = form.watch('country');
+  
+  // Show the appropriate regions/provinces based on country selection
+  const getRegionOptions = () => {
+    switch (selectedCountry) {
+      case 'nederland':
+        return provinces;
+      case 'belgie':
+        return belgiumProvinces;
+      case 'duitsland':
+        return germanStates;
+      default:
+        return [];
+    }
+  };
+  
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const shipping = 10.00;
+  
+  // Calculate shipping costs based on country
+  const getShippingCost = () => {
+    switch (selectedCountry) {
+      case 'nederland':
+        return 5.00;
+      case 'belgie':
+      case 'duitsland':
+        return 7.50;
+      case 'france':
+      case 'italie':
+      case 'espagne':
+      case 'portugal':
+      case 'royaume-uni':
+      case 'irlande':
+      case 'danemark':
+      case 'suede':
+      case 'finlande':
+      case 'norvege':
+      case 'autriche':
+      case 'suisse':
+      case 'luxembourg':
+        return 9.95;
+      default:
+        return 12.95; // Rest of Europe
+    }
+  };
+  
+  const shipping = getShippingCost();
   const serviceCharges = 10.00;
   
   // Calculate addons cost
@@ -102,6 +215,7 @@ const Checkout = () => {
     city: string; 
     province: string;
     postalCode: string;
+    country: string;
   }) => {
     form.setValue('address', addressData.street);
     form.setValue('city', addressData.city);
@@ -109,8 +223,16 @@ const Checkout = () => {
     form.setValue('postalCode', addressData.postalCode);
     setAddressLookedUp(true);
     
+    const countryLabels: Record<string, string> = {
+      "nederland": "Nederland",
+      "belgie": "België",
+      "duitsland": "Duitsland"
+    };
+    
     toast({
-      title: "Adres gevonden",
+      title: selectedCountry === "nederland" ? "Adres gevonden" : 
+             selectedCountry === "belgie" ? "Adresse trouvée" :
+             selectedCountry === "duitsland" ? "Adresse gefunden" : "Address found",
       description: `${addressData.street}, ${addressData.city}`,
     });
   };
@@ -121,6 +243,19 @@ const Checkout = () => {
     // In a real app, this would process the order and redirect to a payment gateway
     // For now, we'll simulate going to a success page
     setStep(2);
+  };
+  
+  const getProvinceLabel = () => {
+    switch (selectedCountry) {
+      case 'nederland':
+        return 'Provincie';
+      case 'belgie':
+        return 'Provincie / Province';
+      case 'duitsland':
+        return 'Bundesland';
+      default:
+        return 'Region / State';
+    }
   };
 
   return (
@@ -137,14 +272,76 @@ const Checkout = () => {
               <h1 className="text-2xl font-bold text-[#00262F]">Checkout</h1>
             </div>
             
+            {/* Checkout progress indicator */}
+            <div className="mb-6 bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-[#1EC0A3] flex items-center justify-center text-white">
+                    <Check size={16} />
+                  </div>
+                  <span className="text-xs mt-1 text-gray-600">Winkelwagen</span>
+                </div>
+                <div className="flex-grow h-1 mx-2 bg-gray-100 relative">
+                  <div className="absolute inset-0 bg-[#1EC0A3] w-full"></div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-[#1EC0A3] flex items-center justify-center text-white">
+                    <span className="text-sm">2</span>
+                  </div>
+                  <span className="text-xs mt-1 font-medium text-[#00262F]">Gegevens</span>
+                </div>
+                <div className="flex-grow h-1 mx-2 bg-gray-100"></div>
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    <span className="text-sm">3</span>
+                  </div>
+                  <span className="text-xs mt-1 text-gray-400">Betaling</span>
+                </div>
+                <div className="flex-grow h-1 mx-2 bg-gray-100"></div>
+                <div className="flex flex-col items-center">
+                  <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                    <span className="text-sm">4</span>
+                  </div>
+                  <span className="text-xs mt-1 text-gray-400">Bevestiging</span>
+                </div>
+              </div>
+            </div>
+            
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
               {/* Shipping information form */}
               <div className="lg:col-span-3">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                   <h2 className="text-xl font-semibold text-[#00262F] mb-4">Verzendgegevens</h2>
                   
+                  <div className="mb-6">
+                    <Label htmlFor="country" className="text-gray-700 mb-2 block">Land</Label>
+                    <Select 
+                      onValueChange={(value) => form.setValue('country', value)} 
+                      defaultValue={form.getValues().country}
+                    >
+                      <SelectTrigger id="country" className="border-gray-200 focus:ring-[#1EC0A3]">
+                        <SelectValue placeholder="Selecteer een land" />
+                      </SelectTrigger>
+                      <SelectContent className="max-h-[300px]">
+                        {countries.map((country) => (
+                          <SelectItem key={country.value} value={country.value}>
+                            {country.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  {/* Delivery date estimator */}
+                  <div className="mb-6 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                    <DeliveryEstimator country={selectedCountry} />
+                  </div>
+                  
                   {/* Postcode Checker */}
-                  <PostcodeChecker onAddressFound={handleAddressFound} />
+                  <PostcodeChecker 
+                    onAddressFound={handleAddressFound} 
+                    selectedCountry={selectedCountry} 
+                  />
                   
                   <div className="mt-6">
                     <Form {...form}>
@@ -189,48 +386,35 @@ const Checkout = () => {
                               id="phone"
                               placeholder="Vul je telefoonnummer in"
                               className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                              inputMode="tel"
                               {...form.register('phone', { required: true })}
                             />
                           </div>
                         </div>
                         
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Region/province selection */}
+                        {['nederland', 'belgie', 'duitsland'].includes(selectedCountry) && (
                           <div className="space-y-2">
-                            <Label htmlFor="country" className="text-gray-700">Land</Label>
-                            <Select onValueChange={(value) => form.setValue('country', value)} defaultValue="nederland">
-                              <SelectTrigger id="country" className="border-gray-200 focus:ring-[#1EC0A3]">
-                                <SelectValue placeholder="Selecteer een land" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="nederland">Nederland</SelectItem>
-                                <SelectItem value="belgie">België</SelectItem>
-                                <SelectItem value="duitsland">Duitsland</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          
-                          <div className="space-y-2">
-                            <Label htmlFor="province" className="text-gray-700">Provincie</Label>
+                            <Label htmlFor="province" className="text-gray-700">{getProvinceLabel()}</Label>
                             <Select 
                               onValueChange={(value) => form.setValue('province', value)} 
                               defaultValue={form.getValues().province}
                             >
                               <SelectTrigger id="province" className="border-gray-200 focus:ring-[#1EC0A3]">
-                                <SelectValue placeholder="Selecteer een provincie" />
+                                <SelectValue placeholder={`Selecteer ${getProvinceLabel().toLowerCase()}`} />
                               </SelectTrigger>
                               <SelectContent>
-                                {provinces.map((province) => (
-                                  <SelectItem key={province.value} value={province.value}>
-                                    {province.label}
+                                {getRegionOptions().map((region) => (
+                                  <SelectItem key={region.value} value={region.value}>
+                                    {region.label}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
                           </div>
-                        </div>
+                        )}
                         
-                        {/* We no longer need these visible address fields as they're handled by the PostcodeChecker */}
-                        {/* We keep them in the form but they're hidden and auto-filled */}
+                        {/* We keep these hidden fields for form submission */}
                         <div className="hidden">
                           <Input 
                             id="address"
@@ -247,6 +431,7 @@ const Checkout = () => {
                         </div>
                         
                         <div className="border-t border-gray-100 pt-6 mt-2">
+                          <h3 className="font-medium text-lg mb-4">Extra opties</h3>
                           <CheckoutAddons 
                             selectedAddons={selectedAddons} 
                             onAddonToggle={handleAddonToggle} 
@@ -341,7 +526,12 @@ const Checkout = () => {
                         <span className="font-medium">€{subtotal.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-600">Verzending</span>
+                        <span className="text-gray-600">Verzending ({
+                          selectedCountry === "nederland" ? "Nederland" :
+                          selectedCountry === "belgie" ? "België" :
+                          selectedCountry === "duitsland" ? "Duitsland" :
+                          "Europa"
+                        })</span>
                         <span className="font-medium">€{shipping.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between items-center">
