@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Check, Loader2, MapPin, AlertCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Check, Loader2, MapPin, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PostcodeCheckerProps {
@@ -21,7 +21,6 @@ const PostcodeChecker: React.FC<PostcodeCheckerProps> = ({ onAddressFound }) => 
   const [isChecking, setIsChecking] = useState(false);
   const [addressFound, setAddressFound] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showManualAddress, setShowManualAddress] = useState(false);
   const { toast } = useToast();
   
   const handleCheck = (e: React.FormEvent) => {
@@ -92,7 +91,7 @@ const PostcodeChecker: React.FC<PostcodeCheckerProps> = ({ onAddressFound }) => 
       
       toast({
         title: "Adres gevonden",
-        description: `${mockAddressData.street}, ${mockAddressData.city}`,
+        description: "We hebben je adres gevonden, controleer of het correct is",
         variant: "default"
       });
     }, 1000);
@@ -102,10 +101,6 @@ const PostcodeChecker: React.FC<PostcodeCheckerProps> = ({ onAddressFound }) => 
     setAddressFound(false);
     setPostcode('');
     setHouseNumber('');
-  };
-  
-  const toggleManualAddress = () => {
-    setShowManualAddress(!showManualAddress);
   };
 
   return (
@@ -117,43 +112,33 @@ const PostcodeChecker: React.FC<PostcodeCheckerProps> = ({ onAddressFound }) => 
       
       <p className="text-sm text-gray-600 mb-4">
         Vul je postcode en huisnummer in om automatisch je adresgegevens in te vullen.
+        Je kunt je gegevens daarna nog aanpassen indien nodig.
       </p>
       
       <form onSubmit={handleCheck} className="space-y-4">
-        <div className="flex gap-3">
-          <div className="flex-1">
-            <div className="relative">
-              <Input
-                id="postcode"
-                placeholder="1234 AB"
-                value={postcode}
-                onChange={(e) => setPostcode(e.target.value)}
-                className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                disabled={addressFound}
-                inputMode="text"
-                pattern="\d{4}\s?[a-zA-Z]{2}"
-              />
-              <Label htmlFor="postcode" className="absolute -top-2 left-2 px-1 text-xs bg-gray-50 text-gray-600">
-                Postcode
-              </Label>
-            </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-2">
+            <Label htmlFor="postcode" className="text-gray-700">Postcode</Label>
+            <Input
+              id="postcode"
+              placeholder="1234 AB"
+              value={postcode}
+              onChange={(e) => setPostcode(e.target.value)}
+              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+              disabled={addressFound}
+            />
           </div>
           
-          <div className="w-1/3">
-            <div className="relative">
-              <Input
-                id="houseNumber"
-                placeholder="123"
-                value={houseNumber}
-                onChange={(e) => setHouseNumber(e.target.value)}
-                className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                disabled={addressFound}
-                inputMode="numeric"
-              />
-              <Label htmlFor="houseNumber" className="absolute -top-2 left-2 px-1 text-xs bg-gray-50 text-gray-600">
-                Huisnummer
-              </Label>
-            </div>
+          <div className="space-y-2">
+            <Label htmlFor="houseNumber" className="text-gray-700">Huisnummer</Label>
+            <Input
+              id="houseNumber"
+              placeholder="123"
+              value={houseNumber}
+              onChange={(e) => setHouseNumber(e.target.value)}
+              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+              disabled={addressFound}
+            />
           </div>
         </div>
         
@@ -164,63 +149,41 @@ const PostcodeChecker: React.FC<PostcodeCheckerProps> = ({ onAddressFound }) => 
           </div>
         )}
         
-        <div className="flex justify-between">
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={toggleManualAddress}
-            className="text-sm text-gray-500 px-0 flex items-center gap-1"
-            disabled={addressFound}
+        <div className="flex justify-end gap-2">
+          {addressFound && (
+            <Button 
+              type="button"
+              variant="outline"
+              onClick={handleReset}
+              className="border-gray-200"
+            >
+              Opnieuw invullen
+            </Button>
+          )}
+          
+          <Button 
+            type="submit"
+            disabled={isChecking || (addressFound && !error) || !postcode || !houseNumber}
+            className={`${
+              addressFound && !error
+                ? 'bg-green-100 text-green-700 hover:bg-green-100' 
+                : 'bg-[#1EC0A3] hover:bg-[#19a88e]'
+            }`}
           >
-            {showManualAddress ? (
+            {isChecking ? (
               <>
-                <ChevronUp size={16} />
-                Verberg handmatige invoer
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Zoeken...
+              </>
+            ) : addressFound && !error ? (
+              <>
+                <Check className="mr-2 h-4 w-4" />
+                Adres gevonden
               </>
             ) : (
-              <>
-                <ChevronDown size={16} />
-                Handmatig adres invullen
-              </>
+              'Zoek adres'
             )}
           </Button>
-
-          <div className="flex gap-2">
-            {addressFound && (
-              <Button 
-                type="button"
-                variant="outline"
-                onClick={handleReset}
-                className="border-gray-200"
-              >
-                Opnieuw invullen
-              </Button>
-            )}
-            
-            <Button 
-              type="submit"
-              disabled={isChecking || (addressFound && !error) || !postcode || !houseNumber}
-              className={`${
-                addressFound && !error
-                  ? 'bg-green-100 text-green-700 hover:bg-green-100' 
-                  : 'bg-[#1EC0A3] hover:bg-[#19a88e]'
-              }`}
-            >
-              {isChecking ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Zoeken...
-                </>
-              ) : addressFound && !error ? (
-                <>
-                  <Check className="mr-2 h-4 w-4" />
-                  Adres gevonden
-                </>
-              ) : (
-                'Zoek adres'
-              )}
-            </Button>
-          </div>
         </div>
       </form>
     </div>

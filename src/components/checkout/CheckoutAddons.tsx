@@ -15,13 +15,11 @@ export interface Addon {
 interface CheckoutAddonsProps {
   selectedAddons: string[];
   onAddonToggle: (addonId: string) => void;
-  className?: string;
 }
 
 const CheckoutAddons: React.FC<CheckoutAddonsProps> = ({ 
   selectedAddons, 
-  onAddonToggle,
-  className = ''
+  onAddonToggle 
 }) => {
   const availableAddons: Addon[] = [
     {
@@ -49,7 +47,7 @@ const CheckoutAddons: React.FC<CheckoutAddonsProps> = ({
   ];
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div className="space-y-4">
       <h3 className="text-lg font-medium text-[#00262F]">Extra opties</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {availableAddons.map((addon) => {
@@ -67,19 +65,9 @@ const CheckoutAddons: React.FC<CheckoutAddonsProps> = ({
             >
               <div className="flex justify-between items-start">
                 <div className="flex gap-3 items-center">
-                  {addon.image ? (
-                    <div className="w-16 h-16 rounded-md bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100">
-                      <img 
-                        src={addon.image} 
-                        alt={addon.name} 
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 rounded-md bg-gray-50 flex items-center justify-center border border-gray-100">
-                      {addon.icon}
-                    </div>
-                  )}
+                  <div className="w-16 h-16 rounded-md bg-gray-50 flex items-center justify-center border border-gray-100">
+                    {addon.icon}
+                  </div>
                   <div>
                     <Label className="font-medium text-[#00262F] hover:cursor-pointer">
                       {addon.name}
