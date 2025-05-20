@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Check, CreditCard, ShieldCheck, Truck } from 'lucide-react';
@@ -230,38 +229,21 @@ const Checkout = () => {
                           </div>
                         </div>
                         
-                        <div className="space-y-2">
-                          <Label htmlFor="address" className="text-gray-700">Adres</Label>
+                        {/* We no longer need these visible address fields as they're handled by the PostcodeChecker */}
+                        {/* We keep them in the form but they're hidden and auto-filled */}
+                        <div className="hidden">
                           <Input 
                             id="address"
-                            placeholder="Vul je adres in"
-                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
                             {...form.register('address', { required: true })}
                           />
-                        </div>
-                        
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                          <div className="space-y-2">
-                            <Label htmlFor="city" className="text-gray-700">Stad</Label>
-                            <Input 
-                              id="city"
-                              placeholder="Vul je stad in"
-                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                              {...form.register('city', { required: true })}
-                            />
-                          </div>
-                          
-                          {!addressLookedUp && (
-                            <div className="space-y-2">
-                              <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
-                              <Input 
-                                id="postalCode"
-                                placeholder="Vul je postcode in" 
-                                className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                                {...form.register('postalCode', { required: true })}
-                              />
-                            </div>
-                          )}
+                          <Input 
+                            id="city"
+                            {...form.register('city', { required: true })}
+                          />
+                          <Input 
+                            id="postalCode"
+                            {...form.register('postalCode', { required: true })}
+                          />
                         </div>
                         
                         <div className="border-t border-gray-100 pt-6 mt-2">
