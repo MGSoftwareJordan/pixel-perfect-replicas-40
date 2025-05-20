@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Search, User, ShoppingBag, Heart, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LanguageSwitcher from './LanguageSwitcher';
+import MobileMenu from './MobileMenu';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -19,6 +20,23 @@ const Header: React.FC = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // Close mobile menu
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
+  // Get current active section
+  const getActiveSection = () => {
+    const path = location.pathname;
+    if (path.includes('/sneakers')) return 'sneakers';
+    if (path.includes('/accessories')) return 'accessories';
+    if (path.includes('/clothing')) return 'clothing';
+    if (path.includes('/bags')) return 'bags';
+    if (path.includes('/brands')) return 'brands';
+    if (path.includes('/pre-owned')) return 'pre-owned';
+    return '';
+  };
+
   return (
     <header className="w-full bg-white">
       {/* Top navigation */}
@@ -26,16 +44,16 @@ const Header: React.FC = () => {
         <div className="container mx-auto max-w-6xl px-4 py-2">
           <div className="flex items-center justify-end gap-5 text-sm">
             <LanguageSwitcher />
-            <Link to="/blog" className="text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
+            <Link to="/blog" className="hidden sm:inline text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
               Blog
             </Link>
-            <Link to="/sell" className="text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
+            <Link to="/sell" className="hidden sm:inline text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
               Verkopen
             </Link>
-            <Link to="/about" className="text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
+            <Link to="/about" className="hidden sm:inline text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
               Over Boxstock
             </Link>
-            <Link to="/customer-service" className="text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
+            <Link to="/customer-service" className="hidden sm:inline text-[#00262f] font-medium hover:text-[#1EC0A3] transition-colors">
               Klantenservice
             </Link>
           </div>
@@ -75,10 +93,10 @@ const Header: React.FC = () => {
               <Link to="/cart" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
                 <ShoppingBag size={20} />
               </Link>
-              <Link to="/profile/1" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
+              <Link to="/profile/1" className="hidden sm:flex p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
                 <User size={20} />
               </Link>
-              <Button className="bg-[#E41A36] hover:bg-[#c01730] text-white ml-2" asChild>
+              <Button className="hidden sm:flex bg-[#E41A36] hover:bg-[#c01730] text-white ml-2" asChild>
                 <Link to="/login">Login</Link>
               </Button>
               <Button 
@@ -138,87 +156,12 @@ const Header: React.FC = () => {
         </div>
       </div>
       
-      {/* Mobile menu (conditionally rendered) */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white border-b border-gray-200 py-4">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col space-y-3">
-              <Link 
-                to="/sneakers"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sneakers
-              </Link>
-              <Link 
-                to="/accessories"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Accessoires
-              </Link>
-              <Link 
-                to="/clothing"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Kleding
-              </Link>
-              <Link 
-                to="/bags"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Tassen
-              </Link>
-              <Link 
-                to="/brands"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Merken
-              </Link>
-              <Link 
-                to="/pre-owned"
-                className="py-2 px-3 hover:bg-gray-100 rounded-md font-medium text-[#00262F]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Pre-owned
-              </Link>
-              <div className="border-t border-gray-100 mt-2 pt-2">
-                <Link 
-                  to="/blog"
-                  className="py-2 px-3 hover:bg-gray-100 rounded-md text-[#00262F]"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Blog
-                </Link>
-                <Link 
-                  to="/sell"
-                  className="py-2 px-3 hover:bg-gray-100 rounded-md text-[#00262F]"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Verkopen
-                </Link>
-                <Link 
-                  to="/about"
-                  className="py-2 px-3 hover:bg-gray-100 rounded-md text-[#00262F]"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Over Boxstock
-                </Link>
-                <Link 
-                  to="/customer-service"
-                  className="py-2 px-3 hover:bg-gray-100 rounded-md text-[#00262F]"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Klantenservice
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {/* Mobile Menu */}
+      <MobileMenu 
+        isOpen={isMenuOpen} 
+        onClose={closeMenu}
+        activeSection={getActiveSection()}
+      />
     </header>
   );
 };
