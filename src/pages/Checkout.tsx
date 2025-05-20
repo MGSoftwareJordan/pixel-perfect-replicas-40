@@ -19,6 +19,7 @@ import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import CheckoutAddons, { Addon } from '@/components/checkout/CheckoutAddons';
 import PostcodeChecker from '@/components/checkout/PostcodeChecker';
+import { useToast } from '@/hooks/use-toast';
 
 // Mock cart data - in a real app this would come from context or state management
 const cartItems = [
@@ -64,6 +65,9 @@ type CheckoutFormValues = {
 const Checkout = () => {
   const [step, setStep] = useState(1);
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [addressLookedUp, setAddressLookedUp] = useState(false);
+  const { toast } = useToast();
+  
   const form = useForm<CheckoutFormValues>({
     defaultValues: {
       country: "nederland"
@@ -77,9 +81,9 @@ const Checkout = () => {
   // Calculate addons cost
   const addonCosts = selectedAddons.reduce((total, addonId) => {
     const addonPrices: Record<string, number> = {
-      'giftWrapping': 4.95,
-      'express': 9.95,
-      'insurance': 5.95,
+      'safeGrailSpray': 20.00,
+      'kiwiProtector': 20.00,
+      'safegrailLaces': 20.00,
     };
     return total + (addonPrices[addonId] || 0);
   }, 0);
@@ -94,10 +98,22 @@ const Checkout = () => {
     );
   };
 
-  const handleAddressFound = (addressData: { street: string; city: string; province: string }) => {
+  const handleAddressFound = (addressData: { 
+    street: string; 
+    city: string; 
+    province: string;
+    postalCode: string;
+  }) => {
     form.setValue('address', addressData.street);
     form.setValue('city', addressData.city);
     form.setValue('province', addressData.province);
+    form.setValue('postalCode', addressData.postalCode);
+    setAddressLookedUp(true);
+    
+    toast({
+      title: "Adres gevonden",
+      description: `${addressData.street}, ${addressData.city}`,
+    });
   };
 
   const onSubmit = (data: CheckoutFormValues) => {
@@ -128,6 +144,7 @@ const Checkout = () => {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                   <h2 className="text-xl font-semibold text-[#00262F] mb-4">Verzendgegevens</h2>
                   
+                  {/* Postcode Checker */}
                   <PostcodeChecker onAddressFound={handleAddressFound} />
                   
                   <div className="mt-6">
@@ -234,15 +251,17 @@ const Checkout = () => {
                             />
                           </div>
                           
-                          <div className="space-y-2">
-                            <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
-                            <Input 
-                              id="postalCode"
-                              placeholder="Vul je postcode in" 
-                              className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
-                              {...form.register('postalCode', { required: true })}
-                            />
-                          </div>
+                          {!addressLookedUp && (
+                            <div className="space-y-2">
+                              <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
+                              <Input 
+                                id="postalCode"
+                                placeholder="Vul je postcode in" 
+                                className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                                {...form.register('postalCode', { required: true })}
+                              />
+                            </div>
+                          )}
                         </div>
                         
                         <div className="border-t border-gray-100 pt-6 mt-2">
@@ -351,22 +370,22 @@ const Checkout = () => {
                       {/* Show addon costs if any are selected */}
                       {selectedAddons.length > 0 && (
                         <>
-                          {selectedAddons.includes('giftWrapping') && (
+                          {selectedAddons.includes('safeGrailSpray') && (
                             <div className="flex justify-between items-center">
-                              <span className="text-gray-600">Cadeauverpakking</span>
-                              <span className="font-medium">€4.95</span>
+                              <span className="text-gray-600">SafeGrail Protection spray</span>
+                              <span className="font-medium">€20.00</span>
                             </div>
                           )}
-                          {selectedAddons.includes('express') && (
+                          {selectedAddons.includes('kiwiProtector') && (
                             <div className="flex justify-between items-center">
-                              <span className="text-gray-600">Express verzending</span>
-                              <span className="font-medium">€9.95</span>
+                              <span className="text-gray-600">KIWI Sneaker protector</span>
+                              <span className="font-medium">€20.00</span>
                             </div>
                           )}
-                          {selectedAddons.includes('insurance') && (
+                          {selectedAddons.includes('safegrailLaces') && (
                             <div className="flex justify-between items-center">
-                              <span className="text-gray-600">Verzekerde verzending</span>
-                              <span className="font-medium">€5.95</span>
+                              <span className="text-gray-600">Safegrail premium laces</span>
+                              <span className="font-medium">€20.00</span>
                             </div>
                           )}
                         </>

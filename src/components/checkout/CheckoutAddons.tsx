@@ -9,6 +9,7 @@ export interface Addon {
   description: string;
   price: number;
   icon: React.ReactNode;
+  image?: string;
 }
 
 interface CheckoutAddonsProps {
@@ -22,25 +23,26 @@ const CheckoutAddons: React.FC<CheckoutAddonsProps> = ({
 }) => {
   const availableAddons: Addon[] = [
     {
-      id: 'giftWrapping',
-      name: 'Cadeauverpakking',
-      description: 'Laat je product mooi inpakken als cadeau',
-      price: 4.95,
-      icon: <span className="text-[#1EC0A3] text-xl">🎁</span>
+      id: 'safeGrailSpray',
+      name: 'SafeGrail Protection spray',
+      description: 'Bescherm je schoenen tegen water en vuil',
+      price: 20.00,
+      icon: <span className="text-[#1EC0A3] text-xl">🛡️</span>,
+      image: '/lovable-uploads/2863bc9a-cccc-4063-a65f-b87896d92811.png'
     },
     {
-      id: 'express',
-      name: 'Express verzending',
-      description: 'Ontvang je bestelling de volgende werkdag',
-      price: 9.95,
-      icon: <span className="text-[#1EC0A3] text-xl">⚡</span>
+      id: 'kiwiProtector',
+      name: 'KIWI Sneaker protector',
+      description: 'Premium bescherming voor je sneakers',
+      price: 20.00,
+      icon: <span className="text-[#1EC0A3] text-xl">✨</span>
     },
     {
-      id: 'insurance',
-      name: 'Verzekerde verzending',
-      description: 'Extra verzekering tot €1000',
-      price: 5.95,
-      icon: <span className="text-[#1EC0A3] text-xl">🔒</span>
+      id: 'safegrailLaces',
+      name: 'Safegrail premium laces',
+      description: 'Hoge kwaliteit schoenveters voor je sneakers',
+      price: 20.00,
+      icon: <span className="text-[#1EC0A3] text-xl">👟</span>
     },
   ];
 
@@ -63,7 +65,7 @@ const CheckoutAddons: React.FC<CheckoutAddonsProps> = ({
             >
               <div className="flex justify-between items-start">
                 <div className="flex gap-3 items-center">
-                  <div className="w-9 h-9 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center">
+                  <div className="w-16 h-16 rounded-md bg-gray-50 flex items-center justify-center border border-gray-100">
                     {addon.icon}
                   </div>
                   <div>
