@@ -1,9 +1,11 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowLeft, Check, CreditCard, ShieldCheck, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -43,7 +45,11 @@ type CheckoutFormValues = {
 
 const Checkout = () => {
   const [step, setStep] = useState(1);
-  const form = useForm<CheckoutFormValues>();
+  const form = useForm<CheckoutFormValues>({
+    defaultValues: {
+      country: "nederland"
+    }
+  });
   
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shipping = 10.00;
@@ -58,192 +64,255 @@ const Checkout = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       <Header />
       
-      <main className="flex-grow container mx-auto max-w-6xl px-4 py-8">
+      <main className="flex-grow container mx-auto max-w-6xl px-4 py-12">
         {step === 1 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            {/* Shipping information form */}
-            <div className="lg:col-span-3">
-              <h1 className="text-2xl font-bold text-[#00262F] mb-6">Verzendgegevens</h1>
-              
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">Voornaam</Label>
-                      <Input 
-                        id="firstName"
-                        placeholder="Vul je voornaam in"
-                        {...form.register('firstName', { required: true })}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Achternaam</Label>
-                      <Input 
-                        id="lastName"
-                        placeholder="Vul je achternaam in" 
-                        {...form.register('lastName', { required: true })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">E-mail</Label>
-                      <Input 
-                        id="email"
-                        type="email"
-                        placeholder="Vul je e-mail in" 
-                        {...form.register('email', { required: true })}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Telefoonnummer</Label>
-                      <Input 
-                        id="phone"
-                        placeholder="Vul je telefoonnummer in" 
-                        {...form.register('phone', { required: true })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="country">Land</Label>
-                      <Select onValueChange={(value) => form.setValue('country', value)} defaultValue="nederland">
-                        <SelectTrigger id="country">
-                          <SelectValue placeholder="Selecteer een land" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="nederland">Nederland</SelectItem>
-                          <SelectItem value="belgie">België</SelectItem>
-                          <SelectItem value="duitsland">Duitsland</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="province">Provincie</Label>
-                      <Input 
-                        id="province"
-                        placeholder="Vul je provincie in" 
-                        {...form.register('province', { required: true })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="address">Adres</Label>
-                    <Input 
-                      id="address"
-                      placeholder="Vul je adres in" 
-                      {...form.register('address', { required: true })}
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="city">Stad</Label>
-                      <Input 
-                        id="city"
-                        placeholder="Vul je stad in" 
-                        {...form.register('city', { required: true })}
-                      />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="postalCode">Postcode</Label>
-                      <Input 
-                        id="postalCode"
-                        placeholder="Vul je postcode in" 
-                        {...form.register('postalCode', { required: true })}
-                      />
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-[#00262F] hover:bg-[#001a24]"
-                  >
-                    Doorgaan
-                  </Button>
-                </form>
-              </Form>
-              
-              <div className="mt-8">
-                <h2 className="text-xl font-semibold text-[#00262F] mb-4">Snelle toevoegingen</h2>
-                {/* This would be where quick add options could go */}
-              </div>
-              
-              <div className="mt-8">
-                <h2 className="text-xl font-semibold text-[#00262F] mb-4">Controleer je bestelling</h2>
-                {/* Order verification section */}
-              </div>
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center gap-2 mb-6">
+              <Link to="/cart" className="text-[#00262F] hover:text-[#1EC0A3] transition-colors">
+                <ArrowLeft size={20} />
+              </Link>
+              <h1 className="text-2xl font-bold text-[#00262F]">Checkout</h1>
             </div>
             
-            {/* Order summary */}
-            <div className="lg:col-span-2">
-              <div className="border border-gray-200 rounded-lg p-6 sticky top-24">
-                <h2 className="text-xl font-semibold text-[#00262F] mb-6">In je winkelmand</h2>
-                
-                {/* Cart items summary */}
-                <div className="space-y-4 mb-6">
-                  {cartItems.map(item => (
-                    <div key={item.id} className="flex gap-4">
-                      <div className="w-20 h-20 rounded-md bg-gray-100 overflow-hidden flex-shrink-0">
-                        <img 
-                          src={item.image} 
-                          alt={item.name} 
-                          className="w-full h-full object-contain"
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+              {/* Shipping information form */}
+              <div className="lg:col-span-3">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+                  <h2 className="text-xl font-semibold text-[#00262F] mb-6">Verzendgegevens</h2>
+                  
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName" className="text-gray-700">Voornaam</Label>
+                          <Input 
+                            id="firstName"
+                            placeholder="Vul je voornaam in"
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('firstName', { required: true })}
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName" className="text-gray-700">Achternaam</Label>
+                          <Input 
+                            id="lastName"
+                            placeholder="Vul je achternaam in" 
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('lastName', { required: true })}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="email" className="text-gray-700">E-mail</Label>
+                          <Input 
+                            id="email"
+                            type="email"
+                            placeholder="Vul je e-mail in"
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('email', { required: true })}
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="phone" className="text-gray-700">Telefoonnummer</Label>
+                          <Input 
+                            id="phone"
+                            placeholder="Vul je telefoonnummer in"
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('phone', { required: true })}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="country" className="text-gray-700">Land</Label>
+                          <Select onValueChange={(value) => form.setValue('country', value)} defaultValue="nederland">
+                            <SelectTrigger id="country" className="border-gray-200 focus:ring-[#1EC0A3]">
+                              <SelectValue placeholder="Selecteer een land" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="nederland">Nederland</SelectItem>
+                              <SelectItem value="belgie">België</SelectItem>
+                              <SelectItem value="duitsland">Duitsland</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="province" className="text-gray-700">Provincie</Label>
+                          <Input 
+                            id="province"
+                            placeholder="Vul je provincie in"
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('province', { required: true })}
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="address" className="text-gray-700">Adres</Label>
+                        <Input 
+                          id="address"
+                          placeholder="Vul je adres in"
+                          className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                          {...form.register('address', { required: true })}
                         />
                       </div>
-                      <div className="flex-grow">
-                        <h3 className="font-medium text-sm">{item.name}</h3>
-                        <p className="text-sm text-gray-600">
-                          Maat: {item.size}
-                        </p>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="city" className="text-gray-700">Stad</Label>
+                          <Input 
+                            id="city"
+                            placeholder="Vul je stad in"
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('city', { required: true })}
+                          />
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <Label htmlFor="postalCode" className="text-gray-700">Postcode</Label>
+                          <Input 
+                            id="postalCode"
+                            placeholder="Vul je postcode in" 
+                            className="border-gray-200 focus-visible:ring-[#1EC0A3] focus-visible:ring-offset-0"
+                            {...form.register('postalCode', { required: true })}
+                          />
+                        </div>
+                      </div>
+                      
+                      <Button 
+                        type="submit" 
+                        className="w-full bg-[#00262F] hover:bg-[#001a24] h-11 rounded-lg font-medium mt-4"
+                      >
+                        Ga verder naar betaling
+                      </Button>
+                    </form>
+                  </Form>
+                </div>
+                
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  <h2 className="text-xl font-semibold text-[#00262F] mb-6">Betaal in alle vertrouwen</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                    <div className="p-4 rounded-lg border border-gray-100">
+                      <div className="mx-auto w-10 h-10 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center mb-3">
+                        <ShieldCheck className="w-5 h-5 text-[#1EC0A3]" />
+                      </div>
+                      <h3 className="font-medium text-[#00262F] mb-1">Veilige betaling</h3>
+                      <p className="text-sm text-gray-500">Betaal veilig met onze beveiligde betaalproviders</p>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg border border-gray-100">
+                      <div className="mx-auto w-10 h-10 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center mb-3">
+                        <Truck className="w-5 h-5 text-[#1EC0A3]" />
+                      </div>
+                      <h3 className="font-medium text-[#00262F] mb-1">Snelle levering</h3>
+                      <p className="text-sm text-gray-500">Wij verzenden binnen 24 uur na ontvangst van betaling</p>
+                    </div>
+                    
+                    <div className="p-4 rounded-lg border border-gray-100">
+                      <div className="mx-auto w-10 h-10 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center mb-3">
+                        <CreditCard className="w-5 h-5 text-[#1EC0A3]" />
+                      </div>
+                      <h3 className="font-medium text-[#00262F] mb-1">Diverse betaalmethoden</h3>
+                      <p className="text-sm text-gray-500">Kies uit verschillende betaalopties</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Order summary */}
+              <div className="lg:col-span-2">
+                <Card className="border border-gray-100 shadow-sm sticky top-24">
+                  <CardHeader className="pb-2 border-b border-gray-100">
+                    <CardTitle className="text-xl text-[#00262F]">Je bestelling</CardTitle>
+                  </CardHeader>
+                  
+                  <CardContent className="pt-6 space-y-6">
+                    {/* Cart items summary */}
+                    <div className="space-y-4">
+                      {cartItems.map(item => (
+                        <div key={item.id} className="flex gap-4 pb-4 border-b border-gray-100 last:border-0">
+                          <div className="w-20 h-20 rounded-md bg-gray-50 overflow-hidden flex-shrink-0 border border-gray-100">
+                            <img 
+                              src={item.image} 
+                              alt={item.name} 
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          <div className="flex-grow">
+                            <div className="flex justify-between">
+                              <div>
+                                <h3 className="font-medium text-[#00262F]">{item.name}</h3>
+                                <div className="flex gap-2 mt-1">
+                                  <span className="text-xs py-0.5 px-1.5 bg-gray-100 rounded-full text-gray-700">
+                                    Maat: {item.size}
+                                  </span>
+                                  <span className="text-xs py-0.5 px-1.5 bg-gray-100 rounded-full text-gray-700">
+                                    Aantal: {item.quantity}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="font-medium text-[#00262F]">€{item.price.toFixed(2)}</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Price breakdown */}
+                    <div className="space-y-3 text-sm pt-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Subtotaal</span>
+                        <span className="font-medium">€{subtotal.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Verzending</span>
+                        <span className="font-medium">€{shipping.toFixed(2)}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-gray-600">Servicekosten</span>
+                        <span className="font-medium">€{serviceCharges.toFixed(2)}</span>
                       </div>
                     </div>
-                  ))}
-                </div>
-                
-                {/* Price breakdown */}
-                <div className="space-y-3 text-sm mb-6">
-                  <div className="flex justify-between">
-                    <span>Subtotaal</span>
-                    <span>€{subtotal.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Verzending</span>
-                    <span>€{shipping.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Servicekosten</span>
-                    <span>€{serviceCharges.toFixed(2)}</span>
-                  </div>
-                </div>
-                
-                <div className="border-t border-gray-200 pt-4 mb-6">
-                  <div className="flex justify-between text-base font-semibold">
-                    <span>Totaal</span>
-                    <span>€{total.toFixed(2)}</span>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">Inclusief BTW</p>
-                </div>
+                    
+                    <div className="border-t border-gray-100 pt-4">
+                      <div className="flex justify-between items-center text-[#00262F]">
+                        <span className="font-bold">Totaal</span>
+                        <span className="font-bold text-lg">€{total.toFixed(2)}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1 text-right">Inclusief BTW</p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
         ) : (
-          <div className="max-w-lg mx-auto text-center py-12">
-            <h1 className="text-2xl font-bold text-[#00262F] mb-4">Bestelling geplaatst!</h1>
-            <p className="mb-6">Dank je wel voor je bestelling. We hebben een bevestigingsmail gestuurd.</p>
-            <Button asChild className="bg-[#1EC0A3] hover:bg-[#19a88e]">
-              <Link to="/">Terug naar homepage</Link>
-            </Button>
+          <div className="max-w-lg mx-auto text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <div className="w-16 h-16 bg-[#1EC0A3]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="w-8 h-8 text-[#1EC0A3]" />
+            </div>
+            <h1 className="text-2xl font-bold text-[#00262F] mb-4">Bestelling succesvol geplaatst!</h1>
+            <p className="text-gray-600 mb-8">
+              Bedankt voor je bestelling. We hebben een bevestigingsmail gestuurd naar het opgegeven e-mailadres.
+            </p>
+            <div className="space-y-3">
+              <Button asChild className="w-full bg-[#1EC0A3] hover:bg-[#19a88e] h-11 rounded-lg font-medium">
+                <Link to="/">Ga naar homepage</Link>
+              </Button>
+              <Button asChild variant="outline" className="w-full border-gray-200 h-11 rounded-lg font-medium">
+                <Link to="/account/orders">Bekijk bestellingen</Link>
+              </Button>
+            </div>
           </div>
         )}
       </main>

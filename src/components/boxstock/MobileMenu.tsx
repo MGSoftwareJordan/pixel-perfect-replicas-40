@@ -53,7 +53,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
             <Link 
               to="/wishlist" 
               onClick={onClose}
-              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50"
+              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <Heart size={20} />
               <span>Favorieten</span>
@@ -62,14 +62,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
             <Link 
               to="/cart" 
               onClick={onClose}
-              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50 relative"
+              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50 transition-colors relative"
             >
-              <ShoppingBag size={20} />
-              {cartItemCount > 0 && (
-                <span className="absolute top-1 left-1 bg-[#E41A36] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
+              <div className="relative">
+                <ShoppingBag size={20} />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-[#E41A36] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </div>
               <span>Winkelwagen</span>
             </Link>
           </div>
@@ -102,7 +104,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
                   key={link.id}
                   to={link.path}
                   onClick={onClose}
-                  className={`block w-full rounded-lg py-3 px-4 transition-colors text-[#00262F] hover:bg-gray-50`}
+                  className="block w-full rounded-lg py-3 px-4 transition-colors text-[#00262F] hover:bg-gray-50"
                 >
                   {link.name}
                 </Link>
@@ -111,16 +113,21 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
           </div>
         </div>
         
-        <DrawerFooter className="border-t border-gray-100">
-          <div className="flex justify-between">
-            <Link 
-              to="/login" 
-              onClick={onClose}
-              className="w-full rounded-lg bg-[#E41A36] px-4 py-2.5 text-center font-medium text-white"
-            >
-              Login
-            </Link>
-          </div>
+        <DrawerFooter className="border-t border-gray-100 gap-2">
+          <Link 
+            to="/login" 
+            onClick={onClose}
+            className="w-full rounded-lg bg-[#E41A36] px-4 py-2.5 text-center font-medium text-white"
+          >
+            Login
+          </Link>
+          <Link 
+            to="/register" 
+            onClick={onClose}
+            className="w-full rounded-lg border border-gray-200 px-4 py-2.5 text-center font-medium text-[#00262F]"
+          >
+            Registreren
+          </Link>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
