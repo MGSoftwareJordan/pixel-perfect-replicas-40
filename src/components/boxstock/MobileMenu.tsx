@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { X, Heart, ShoppingBag } from 'lucide-react';
 import {
   Drawer,
   DrawerClose,
@@ -35,6 +35,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
     { id: "customer-service", name: "Klantenservice", path: "/customer-service" },
   ];
 
+  // Mock cart count - in a real app, this would come from context or state management
+  const cartItemCount = 1;
+
   if (!isOpen) return null;
   
   return (
@@ -46,6 +49,31 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose, activeSection 
         </DrawerHeader>
         
         <div className="flex-1 overflow-auto p-4">
+          <div className="flex justify-between items-center mb-6">
+            <Link 
+              to="/wishlist" 
+              onClick={onClose}
+              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50"
+            >
+              <Heart size={20} />
+              <span>Favorieten</span>
+            </Link>
+            
+            <Link 
+              to="/cart" 
+              onClick={onClose}
+              className="flex items-center gap-2 text-[#00262F] p-3 rounded-lg hover:bg-gray-50 relative"
+            >
+              <ShoppingBag size={20} />
+              {cartItemCount > 0 && (
+                <span className="absolute top-1 left-1 bg-[#E41A36] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartItemCount}
+                </span>
+              )}
+              <span>Winkelwagen</span>
+            </Link>
+          </div>
+          
           <div className="mb-6">
             <h3 className="mb-3 font-semibold text-[#00262F]">Categorieën</h3>
             <div className="space-y-2">

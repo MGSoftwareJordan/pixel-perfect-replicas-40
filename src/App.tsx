@@ -22,6 +22,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +50,8 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           
           {/* Account pages */}
           <Route path="/account" element={<Account />} />

@@ -10,6 +10,9 @@ const Header: React.FC = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
+  // Mock cart count - in a real app, this would come from context or state management
+  const cartItemCount = 1;
+  
   // Function to determine if a link is active
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -90,8 +93,13 @@ const Header: React.FC = () => {
               <Link to="/wishlist" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
                 <Heart size={20} />
               </Link>
-              <Link to="/cart" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
+              <Link to="/cart" className="p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors relative">
                 <ShoppingBag size={20} />
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#E41A36] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
               </Link>
               <Link to="/profile/1" className="hidden sm:flex p-2 text-[#00262F] hover:text-[#1EC0A3] transition-colors">
                 <User size={20} />
