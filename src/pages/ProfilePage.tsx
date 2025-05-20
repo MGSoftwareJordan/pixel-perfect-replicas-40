@@ -3,13 +3,12 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, MapPin, Calendar, MessageCircle, Heart } from 'lucide-react';
-import Header from '@/components/attic/Header';
-import Footer from '@/components/attic/Footer';
+import { Star, MapPin, Calendar, MessageCircle, Heart, ShoppingBag } from 'lucide-react';
+import Header from '@/components/boxstock/Header';
+import Footer from '@/components/boxstock/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Newsletter from '@/components/attic/Newsletter';
 
 const ProfilePage: React.FC = () => {
   const { sellerId } = useParams();
@@ -109,17 +108,17 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       
       <div className="container mx-auto max-w-6xl px-4 py-6">
         <div className="mb-8">
           <Link 
             to="/pre-owned" 
-            className="inline-flex items-center text-attic-black hover:text-attic-teal transition-colors"
+            className="inline-flex items-center text-[#00262F] hover:text-[#1EC0A3] transition-colors"
           >
             <span className="mr-2">‹</span>
-            <span>Back to Pre-owned</span>
+            <span>Terug naar Pre-owned</span>
           </Link>
         </div>
         
@@ -127,22 +126,22 @@ const ProfilePage: React.FC = () => {
         <div className="bg-white rounded-xl p-6 shadow-sm mb-8 border border-gray-100">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-attic-teal/10 flex items-center justify-center text-3xl font-bold text-attic-teal">
+              <div className="w-20 h-20 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-3xl font-bold text-[#1EC0A3]">
                 {seller.avatar}
               </div>
               <div>
                 <div className="flex items-center flex-wrap gap-2">
-                  <h1 className="text-2xl font-bold text-attic-black">{seller.name}</h1>
+                  <h1 className="text-2xl font-bold text-[#00262F]">{seller.name}</h1>
                   {seller.verified && (
-                    <Badge variant="outline" className="bg-attic-teal/10 text-attic-teal border-attic-teal/20">
-                      Verified
+                    <Badge variant="outline" className="bg-[#1EC0A3]/10 text-[#1EC0A3] border-[#1EC0A3]/20">
+                      Geverifieerd
                     </Badge>
                   )}
                 </div>
                 <div className="flex items-center mt-1">
                   <div className="flex items-center">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400 mr-1" />
-                    <span>{seller.rating} · {seller.sales} sales</span>
+                    <span>{seller.rating} · {seller.sales} verkopen</span>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-x-4 mt-2 text-sm text-gray-600">
@@ -152,19 +151,19 @@ const ProfilePage: React.FC = () => {
                   </div>
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-1" />
-                    <span>Member since {seller.joinedDate}</span>
+                    <span>Lid sinds {seller.joinedDate}</span>
                   </div>
                 </div>
               </div>
             </div>
-            <Button className="flex items-center gap-2 bg-attic-teal hover:bg-opacity-90 text-white">
+            <Button className="flex items-center gap-2 bg-[#1EC0A3] hover:bg-[#18a88f]">
               <MessageCircle className="h-4 w-4" />
-              Contact seller
+              Contact verkoper
             </Button>
           </div>
           
           <div className="mt-6">
-            <h3 className="font-medium text-attic-black mb-2">About {seller.name}</h3>
+            <h3 className="font-medium text-[#00262F] mb-2">Over {seller.name}</h3>
             <p className="text-gray-600">{seller.bio}</p>
           </div>
         </div>
@@ -185,7 +184,7 @@ const ProfilePage: React.FC = () => {
                 >
                   <Link to={`/pre-owned/${listing.id}`} className="block">
                     <div className="relative">
-                      <Badge className="absolute top-2 left-2 z-10 bg-attic-teal text-white text-xs">
+                      <Badge className="absolute top-2 left-2 z-10 bg-[#1EC0A3] text-white text-xs">
                         PRE-OWNED
                       </Badge>
                       <AspectRatio ratio={1/1} className="bg-gray-50">
@@ -195,16 +194,16 @@ const ProfilePage: React.FC = () => {
                           className="h-full w-full object-cover transition-transform group-hover:scale-105 duration-300"
                         />
                       </AspectRatio>
-                      <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-attic-pink transition-colors">
+                      <button className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm rounded-full shadow-sm text-gray-600 hover:text-red-500 transition-colors">
                         <Heart className="h-4 w-4" />
                       </button>
                     </div>
                     
                     <CardContent className="p-3">
                       <div className="text-xs text-gray-600">{listing.brand}</div>
-                      <h3 className="font-medium text-attic-black line-clamp-1">{listing.name}</h3>
+                      <h3 className="font-medium text-[#00262F] line-clamp-1">{listing.name}</h3>
                       <div className="flex items-center justify-between mt-2">
-                        <div className="font-bold text-attic-pink">{listing.price}</div>
+                        <div className="font-bold text-[#E41A36]">{listing.price}</div>
                         <div className="text-sm font-medium">{listing.size}</div>
                       </div>
                     </CardContent>
@@ -238,7 +237,6 @@ const ProfilePage: React.FC = () => {
         </Tabs>
       </div>
       
-      <Newsletter />
       <Footer />
     </div>
   );

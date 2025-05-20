@@ -4,11 +4,10 @@ import { useParams, Link } from 'react-router-dom';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Heart, ArrowLeft, Star, User } from 'lucide-react';
-import Header from '@/components/attic/Header';
-import Footer from '@/components/attic/Footer';
+import Header from '@/components/boxstock/Header';
+import Footer from '@/components/boxstock/Footer';
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import Newsletter from '@/components/attic/Newsletter';
 
 const PreOwnedListings: React.FC = () => {
   const { productId } = useParams();
@@ -105,17 +104,17 @@ const PreOwnedListings: React.FC = () => {
   const totalListingsCount = sellers.reduce((total, seller) => total + seller.listings.length, 0);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <Header />
       
       <div className="container mx-auto max-w-6xl px-4 py-6">
         <div className="mb-6">
           <Link 
             to="/product" 
-            className="inline-flex items-center text-attic-black hover:text-attic-teal transition-colors"
+            className="inline-flex items-center text-[#00262F] hover:text-[#1EC0A3] transition-colors"
           >
             <ArrowLeft className="h-4 w-4 mr-1" />
-            <span>Back to product</span>
+            <span>Terug naar product</span>
           </Link>
         </div>
         
@@ -130,16 +129,16 @@ const PreOwnedListings: React.FC = () => {
             </div>
             <div>
               <div className="text-gray-600">{product.brand}</div>
-              <h1 className="text-2xl font-bold text-attic-black">{product.name}</h1>
+              <h1 className="text-2xl font-bold text-[#00262F]">{product.name}</h1>
               <div className="text-sm text-gray-500 mt-1">
-                Pre-owned listings · {totalListingsCount} available
+                Pre-owned aanbod · {totalListingsCount} beschikbaar
               </div>
             </div>
           </div>
         </div>
         
-        <h2 className="text-xl font-bold text-attic-black mb-4">
-          {totalListingsCount} pre-owned {product.name} available
+        <h2 className="text-xl font-bold text-[#00262F] mb-4">
+          {totalListingsCount} pre-owned {product.name} beschikbaar
         </h2>
         
         <div className="space-y-10 mb-16">
@@ -149,15 +148,15 @@ const PreOwnedListings: React.FC = () => {
               <div className="p-5 border-b border-gray-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full bg-attic-teal/10 flex items-center justify-center text-lg font-medium text-attic-teal">
+                    <div className="w-12 h-12 rounded-full bg-[#1EC0A3]/10 flex items-center justify-center text-lg font-medium text-[#1EC0A3]">
                       {seller.avatar}
                     </div>
                     <div>
                       <div className="flex items-center">
-                        <h3 className="font-bold text-lg text-attic-black">{seller.name}</h3>
+                        <h3 className="font-bold text-lg text-[#00262F]">{seller.name}</h3>
                         {seller.verified && (
-                          <Badge variant="outline" className="bg-attic-teal/10 text-attic-teal border-attic-teal/20 ml-2">
-                            Verified
+                          <Badge variant="outline" className="bg-[#1EC0A3]/10 text-[#1EC0A3] border-[#1EC0A3]/20 ml-2">
+                            Geverifieerd
                           </Badge>
                         )}
                       </div>
@@ -169,7 +168,7 @@ const PreOwnedListings: React.FC = () => {
                         <span className="mx-1.5">·</span>
                         <span>{seller.location}</span>
                         <span className="mx-1.5">·</span>
-                        <span>Member since {seller.joinedDate}</span>
+                        <span>Lid sinds {seller.joinedDate}</span>
                       </div>
                     </div>
                   </div>
@@ -181,14 +180,14 @@ const PreOwnedListings: React.FC = () => {
                   >
                     <Link to={`/profile/${seller.id}`}>
                       <User className="h-4 w-4" />
-                      View profile
+                      Bekijk profiel
                     </Link>
                   </Button>
                 </div>
                 <p className="text-sm text-gray-600 mt-3 line-clamp-2">{seller.bio}</p>
               </div>
               
-              {/* Seller listings */}
+              {/* Seller listings - Simplified as requested (only image and size) */}
               <div className="p-4">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {seller.listings.map((listing) => (
@@ -232,7 +231,6 @@ const PreOwnedListings: React.FC = () => {
         </div>
       </div>
       
-      <Newsletter />
       <Footer />
     </div>
   );
