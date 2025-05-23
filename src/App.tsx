@@ -24,6 +24,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Account from "./pages/Account";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import About from "./pages/About";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/about" element={<About />} />
           
           {/* Account pages */}
           <Route path="/account" element={<Account />} />
