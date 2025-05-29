@@ -1,20 +1,14 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Package, Shield, Truck, CheckCircle, Search, Heart, ShoppingCart } from 'lucide-react';
+import { ArrowRight, Package, Shield, Truck, CheckCircle, Search, Heart, ShoppingCart, Euro, Camera, Upload } from 'lucide-react';
 import Header from '@/components/boxstock/Header';
 import Footer from '@/components/boxstock/Footer';
 import Breadcrumbs from '@/components/boxstock/Breadcrumbs';
 import Newsletter from '@/components/boxstock/Newsletter';
-import PostcodeChecker from '@/components/checkout/PostcodeChecker';
-import DeliveryEstimator from '@/components/checkout/DeliveryEstimator';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
 const HoeWerktHet: React.FC = () => {
-  const [selectedPostcode, setSelectedPostcode] = useState('');
-  const [selectedCountry, setSelectedCountry] = useState('');
-
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <Header />
@@ -40,10 +34,10 @@ const HoeWerktHet: React.FC = () => {
         <div className="container mx-auto max-w-6xl px-4 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-              Hoe werkt Boxstock?
+              Verkopen op Boxstock
             </h1>
             <p className="text-xl md:text-2xl text-gray-100 leading-relaxed">
-              Ontdek hoe eenvoudig het is om authentieke sneakers en urban fashion te kopen en verkopen op Boxstock.
+              Ontdek hoe eenvoudig het is om je sneakers en urban fashion te verkopen op Boxstock. Van resell tot tweedehands - wij helpen je.
             </p>
           </div>
         </div>
@@ -53,151 +47,139 @@ const HoeWerktHet: React.FC = () => {
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-[#00262F]">Simpel in 4 stappen</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#00262F]">Verkopen in 4 stappen</h2>
             <p className="text-xl text-gray-700">
-              Van zoeken tot bezorging - zo werkt het op Boxstock
+              Van product uploaden tot uitbetaling - zo verkoop je op Boxstock
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {/* Step 1 - Search */}
+            {/* Step 1 - Upload Product */}
             <div className="text-center">
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
-                <Search className="w-8 h-8" />
+                <Upload className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">1. Zoek & Vind</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">1. Upload Product</h3>
               <p className="text-gray-600 mb-4">
-                Doorzoek onze uitgebreide collectie sneakers, kleding en accessoires van topmerken.
+                Voeg je sneakers, kleding of accessoires toe met foto's en productinformatie.
               </p>
-              <Link to="/sneakers" className="text-[#1EC0A3] font-medium hover:underline">
-                Bekijk collectie →
+              <Link to="/account/listings" className="text-[#1EC0A3] font-medium hover:underline">
+                Start verkopen →
               </Link>
             </div>
             
-            {/* Step 2 - Check Delivery */}
+            {/* Step 2 - Set Price */}
             <div className="text-center">
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
-                <Truck className="w-8 h-8" />
+                <Euro className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">2. Check Levering</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">2. Prijs Bepalen</h3>
               <p className="text-gray-600 mb-4">
-                Bekijk wanneer je bestelling wordt bezorgd en of express levering mogelijk is.
+                Stel je verkoopprijs in. Wij adviseren op basis van marktprijzen en conditie.
               </p>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button variant="outline" className="text-[#1EC0A3] border-[#1EC0A3] hover:bg-[#1EC0A3] hover:text-white">
-                    Test postcode →
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Check je postcode</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <PostcodeChecker
-                      onPostcodeChange={setSelectedPostcode}
-                      onCountryChange={setSelectedCountry}
-                    />
-                    {selectedPostcode && selectedCountry && (
-                      <DeliveryEstimator
-                        postcode={selectedPostcode}
-                        country={selectedCountry}
-                      />
-                    )}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <span className="text-[#1EC0A3] font-medium">
+                Automatisch advies ✓
+              </span>
             </div>
             
-            {/* Step 3 - Secure Payment */}
+            {/* Step 3 - Verification */}
             <div className="text-center">
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 <Shield className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">3. Veilig Betalen</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">3. Verificatie</h3>
               <p className="text-gray-600 mb-4">
-                Betaal veilig met iDEAL, creditcard of andere vertrouwde betaalmethoden.
+                Onze experts controleren authenticiteit en conditie voor de hoogste vertrouwbaarheid.
               </p>
-              <Link to="/checkout" className="text-[#1EC0A3] font-medium hover:underline">
-                Bekijk opties →
-              </Link>
+              <span className="text-[#1EC0A3] font-medium">
+                100% betrouwbaar ✓
+              </span>
             </div>
             
-            {/* Step 4 - Receive */}
+            {/* Step 4 - Get Paid */}
             <div className="text-center">
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6">
                 <Package className="w-8 h-8" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">4. Ontvang</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">4. Uitbetaling</h3>
               <p className="text-gray-600 mb-4">
-                Ontvang je authentieke items veilig verpakt binnen 1-3 werkdagen.
+                Zodra je item verkocht is, ontvang je direct je geld via je gekozen betaalmethode.
               </p>
               <span className="text-[#1EC0A3] font-medium">
-                100% authentiek ✓
+                Snelle uitbetaling ✓
               </span>
             </div>
           </div>
         </div>
       </section>
       
-      {/* Interactive Demo Section */}
+      {/* Selling Options */}
       <section className="py-16 md:py-24 bg-gray-50">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl font-bold mb-6 text-[#00262F]">Probeer het uit</h2>
+            <h2 className="text-3xl font-bold mb-6 text-[#00262F]">Wat kun je verkopen?</h2>
             <p className="text-xl text-gray-700">
-              Test onze tools om te zien hoe eenvoudig het is
+              Van limited editions tot je favoriete tweedehands items
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Delivery Checker Card */}
+            {/* Resell Card */}
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
-                <Truck className="w-6 h-6 text-[#1EC0A3] mr-3" />
-                <h3 className="text-xl font-bold text-[#00262F]">Leveringscheck</h3>
+                <Package className="w-6 h-6 text-[#1EC0A3] mr-3" />
+                <h3 className="text-xl font-bold text-[#00262F]">Resell Items</h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Voer je postcode in om te zien wanneer je bestelling wordt bezorgd en welke opties beschikbaar zijn.
+                Verkoop nieuwe, ongedragen sneakers en limited edition items voor de beste prijzen.
               </p>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full bg-[#1EC0A3] hover:bg-[#1EC0A3]/90">
-                    Check mijn postcode
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>Leveringsinformatie</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-4">
-                    <PostcodeChecker
-                      onPostcodeChange={setSelectedPostcode}
-                      onCountryChange={setSelectedCountry}
-                    />
-                    {selectedPostcode && selectedCountry && (
-                      <DeliveryEstimator
-                        postcode={selectedPostcode}
-                        country={selectedCountry}
-                      />
-                    )}
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Nieuwe, ongedragen items
+                </li>
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Limited editions & hyped releases
+                </li>
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Hoogste marktprijzen
+                </li>
+              </ul>
+              <Link to="/account/listings">
+                <Button className="w-full bg-[#1EC0A3] hover:bg-[#1EC0A3]/90">
+                  Start met resellen
+                </Button>
+              </Link>
             </div>
             
-            {/* Shopping Demo Card */}
+            {/* Second Hand Card */}
             <div className="bg-white p-8 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
-                <ShoppingCart className="w-6 h-6 text-[#1EC0A3] mr-3" />
-                <h3 className="text-xl font-bold text-[#00262F]">Shop Demo</h3>
+                <Heart className="w-6 h-6 text-[#1EC0A3] mr-3" />
+                <h3 className="text-xl font-bold text-[#00262F]">Tweedehands</h3>
               </div>
               <p className="text-gray-600 mb-6">
-                Bekijk onze populairste items en ervaar hoe eenvoudig het is om te winkelen op Boxstock.
+                Geef je gedragen items een tweede leven en verdien er nog geld mee ook.
               </p>
-              <Link to="/sneakers">
+              <ul className="space-y-2 mb-6">
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Gedragen maar goede kwaliteit
+                </li>
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Sneakers, kleding & accessoires
+                </li>
+                <li className="flex items-center text-sm text-gray-600">
+                  <CheckCircle className="w-4 h-4 text-[#1EC0A3] mr-2" />
+                  Eerlijke prijzen op basis van conditie
+                </li>
+              </ul>
+              <Link to="/account/listings">
                 <Button className="w-full bg-[#00262F] hover:bg-[#00262F]/90">
-                  Bekijk sneakers
+                  Verkoop tweedehands
                 </Button>
               </Link>
             </div>
@@ -208,16 +190,26 @@ const HoeWerktHet: React.FC = () => {
       {/* Features */}
       <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto max-w-6xl px-4">
-          <h2 className="text-3xl font-bold mb-12 text-[#00262F] text-center">Waarom Boxstock kiezen?</h2>
+          <h2 className="text-3xl font-bold mb-12 text-[#00262F] text-center">Waarom verkopen via Boxstock?</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-white" />
+                <Shield className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">100% Authentiek</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">Veilig verkopen</h3>
               <p className="text-gray-600">
-                Alle items worden gecontroleerd door onze experts om authenticiteit te garanderen.
+                Bescherming voor verkopers en kopers met onze verificatie en betalingsgarantie.
+              </p>
+            </div>
+            
+            <div className="text-center p-6">
+              <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Euro className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">Beste prijzen</h3>
+              <p className="text-gray-600">
+                Krijg de beste prijs voor je items dankzij onze marktanalyse en grote community.
               </p>
             </div>
             
@@ -225,19 +217,9 @@ const HoeWerktHet: React.FC = () => {
               <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center mx-auto mb-4">
                 <Truck className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">Snelle levering</h3>
+              <h3 className="text-xl font-bold mb-3 text-[#00262F]">Geen gedoe</h3>
               <p className="text-gray-600">
-                Levering binnen 1-3 werkdagen door heel Europa met tracking.
-              </p>
-            </div>
-            
-            <div className="text-center p-6">
-              <div className="w-16 h-16 bg-[#1EC0A3] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-white" />
-              </div>
-              <h3 className="text-xl font-bold mb-3 text-[#00262F]">Veilige betaling</h3>
-              <p className="text-gray-600">
-                Meerdere veilige betaalopties met bescherming voor kopers.
+                Wij regelen verzending, betalingen en customer service. Jij hoeft alleen te verkopen.
               </p>
             </div>
           </div>
@@ -248,14 +230,14 @@ const HoeWerktHet: React.FC = () => {
       <section className="py-16 bg-[#00262F] text-white">
         <div className="container mx-auto max-w-6xl px-4">
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4">Klaar om te beginnen?</h2>
+            <h2 className="text-3xl font-bold mb-4">Klaar om te verkopen?</h2>
             <p className="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
-              Ontdek de nieuwste sneakers en urban fashion items op Boxstock
+              Start vandaag nog met verkopen op Boxstock en ontdek hoe eenvoudig het is
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/sneakers">
+              <Link to="/account/listings">
                 <Button size="lg" className="bg-[#1EC0A3] hover:bg-[#1EC0A3]/90 text-white">
-                  Shop nu
+                  Start met verkopen
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
